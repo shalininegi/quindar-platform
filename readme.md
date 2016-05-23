@@ -8,7 +8,7 @@ The overall Quindar project aims to create a modern, browser based, real time da
 
 # Features
 This Quindar-platform project provides the platform services to support Quindar widgetes to consume, e.g.
-* Telemetry data generator - this plugin will generate random data for mission operations application and Quindar widgets (there is separate Ephemeris data generator using GMAT which will provide real orbit trajectory data points).
+* Telemetry data generator - this plugin will generate random data for mission operations application and Quindar widgets (there is separate Ephemeris data generator using GMAT (http://gmatcentral.org/) which will provide real orbit trajectory data points).
 * Data services REST API - read/write events and telemetry data to MongoDB 
 * WebSockets server - data streaming of telemetry data
 * RabbitMQ gateway - guaranteed messaging for data generator 
