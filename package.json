@@ -1,0 +1,31 @@
+{
+  "name": "lesson3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "express.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.4.1",
+    "apidoc": "^0.16.1",
+    "body-parser": "^1.15.1",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.2",
+    "express": "^4.13.4",
+    "express-mongoose-docs": "^0.3.1",
+    "express-session": "^1.13.0",
+    "file-stream-rotator": "0.0.6",
+    "jsonwebtoken": "^7.0.0",
+    "line-by-line": "^0.1.4",
+    "mongoose": "^4.4.19",
+    "morgan": "^1.7.0",
+    "node-rest-client": "^1.8.0",
+    "path": "^0.12.7",
+    "randomstring": "^1.1.5",
+    "when": "^3.7.7",
+    "winston": "^2.2.0"
+  }
+}
