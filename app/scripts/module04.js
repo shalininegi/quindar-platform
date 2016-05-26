@@ -1,7 +1,7 @@
 // Program: module04.js
 // Purpose: send telemetry attitude data to MQ topic, exposed REST API
 // Author:  Ray Lai
-// Updated: May 25, 2016
+// Updated: May 26, 2016
 // License: MIT license
 //
 module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
@@ -20,9 +20,10 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   var serverEndpoint = systemSettings.serverEndpoint;
 
   /**
-  * @api {post} /services/v1/simulation/attitude/:topic/:numberOfItems  send to MQ with numberOfItems of attitude data points 
+  * @api {post} /services/v1/simulation/messaging/attitude/:topic/:numberOfItems  attitude/topic/numberOfItems
   * @apiVersion 0.1.0
   * @apiName postAttitudeSimulation(topic, numberOfItems)
+  * @apiDescription send to MQ with numberOfItems of attitude data points 
   * @apiGroup Telemetry
   *
   * @apiParam {String} topic   RabbitMQ topic, e.g. audacy.telemetry.attitude, customer1.vehicle1.attitude
@@ -41,14 +42,14 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   *    "data":[{"_id":"56f312e98caf28f687482b5f","vehicleId":"IBEX","timestamp":1457726400,
   *    "q1":0.651781,"q2":-0.29526,"q3":-0.268266,"q4":0.645009}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json}  internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
+  * @apiErrorExample {json} Error-Response:
   *     HTTP/1.1 500 Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
   **/
-  app.post('/services/v1/simulation/attitude/:topic/:nTimes', function(req, res) {
+  app.post('/services/v1/simulation/messaging/attitude/:topic/:nTimes', function(req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -82,9 +83,10 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   });
 
   /**
-  * @api {post} /services/v1/position/:topic/:numberOfItems  send to MQ with numberOfItems of position data points 
+  * @api {post} /services/v1/simulation/messaging/position/:topic/:numberOfItems  position/topic/numberOfItems
   * @apiVersion 0.1.0
   * @apiName postPositionSimulation(topic, numberOfItems)
+  * @apiDescription send to MQ with numberOfItems of position data points 
   * @apiGroup Telemetry
   *
   * @apiParam {String} topic   RabbitMQ topic, e.g. audacy.telemetry.position, customer1.vehicle1.position
@@ -105,14 +107,14 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   * "data":[{"_id":"56f3123e8caf28f687480f42","vehicleId":"IBEX","timestamp":1457640420,"x":236294.1956,
   * "y":116196.8879,"z":-34379.67682,"vx":-0.675287,"vy":0.508343,"vz":0.434496}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json}  internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
+  * @apiErrorExample {json} Error-Response:
   *     HTTP/1.1 500 Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
   **/ 
-  app.post('/services/v1/simulation/position/:topic/:nTimes', function(req, res) {
+  app.post('/services/v1/simulation/messaging/position/:topic/:nTimes', function(req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -146,9 +148,10 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   });
 
   /**
-  * @api {post} /services/v1/vehicle/:topic/:numberOfItems  send to MQ with numberOfItems of vehicle data points 
+  * @api {post} /services/v1/simulation/messaging/vehicle/:topic/:numberOfItems  vehicle/topic/numberOfItems
   * @apiVersion 0.1.0
   * @apiName postVehicleSimulation(topic, numberOfItems)
+  * @apiDescription send to MQ with numberOfItems of vehicle data points
   * @apiGroup Telemetry
   *
   * @apiParam {String} topic   RabbitMQ topic, e.g. audacy.telemetry.vehicle, customer1.vehicle1.vehicle
@@ -174,14 +177,14 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   * "value":315,"calibrationFactor":"T = 3*x - 4*x^2 + 2","uom":"Kelvin","alertHigh":330,
   * "warnHigh":321,"alertLow":280,"warnLow":274,"deviceId":"Battery01Temp"}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json}  internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
+  * @apiErrorExample {json} Error-Response:
   *     HTTP/1.1 500 Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
   **/
-  app.post('/services/v1/simulation/vehicle/:topic/:nTimes', function(req, res) {
+  app.post('/services/v1/simulation/messaging/vehicle/:topic/:nTimes', function(req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -215,9 +218,10 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   });
 
   /**
-  * @api {post} /services/v1/orbit/:topic/:numberOfItems  send to MQ with numberOfItems of orbit trajectory data points 
+  * @api {post} /services/v1/simulation/messaging/orbit/:topic/:numberOfItems orbit/topic/numberOfItems
   * @apiVersion 0.1.0
   * @apiName postOrbitSimulation(topic, numberOfItems)
+  * @apiDescription send to MQ with numberOfItems of orbit trajectory data points 
   * @apiGroup Telemetry
   *
   * @apiParam {String} topic   RabbitMQ topic, e.g. audacy.telemetry.orbit, customer1.vehicle1.orbit
@@ -233,14 +237,14 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   * "data":[{"_id":"56f315e98caf28f687483230","vehicleId":"IBEX","timestamp":1457726400,
   * "value": [ 10,20...]}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json}  internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
+  * @apiErrorExample {json} Error-Response:
   *     HTTP/1.1 500 Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
   **/ 
-  app.post('/services/v1/simulation/orbit/:topic/:nTimes', function(req, res) {
+  app.post('/services/v1/simulation/messaging/orbit/:topic/:nTimes', function(req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -270,9 +274,10 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
 
 
   /**
-  * @api {post} /services/v1/simulation/attitude/:topic  send attitude data points to MQ
+  * @api {post} /services/v1/messaging/attitude/:topic  attitude/topic
   * @apiVersion 0.1.0
-  * @apiName postAttitudeSimulation(topic)
+  * @apiName postAttitude(topic)
+  * @apiDescription send attitude data points to MQ
   * @apiGroup Telemetry
   *
   * @apiParam {String} topic   RabbitMQ topic, e.g. audacy.telemetry.attitude, customer1.vehicle1.attitude
@@ -290,14 +295,14 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   *    "data":[{"_id":"56f312e98caf28f687482b5f","vehicleId":"IBEX","timestamp":1457726400,
   *    "q1":0.651781,"q2":-0.29526,"q3":-0.268266,"q4":0.645009}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json}  internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
+  * @apiErrorExample {json} Error-Response:
   *     HTTP/1.1 500 Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
   **/
-  app.post('/services/v1/simulation/attitude/:topic', function(req, res) {
+  app.post('/services/v1/messaging/attitude/:topic', function(req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -317,9 +322,10 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   });
 
   /**
-  * @api {post} /services/v1/position/:topic  send position data points to MQ
+  * @api {post} /services/v1/messaging/position/:topic  position/topic
   * @apiVersion 0.1.0
-  * @apiName postPositionSimulation(topic)
+  * @apiName postPosition(topic)
+  * @apiDescription send position data points to MQ
   * @apiGroup Telemetry
   *
   * @apiParam {String} topic   RabbitMQ topic, e.g. audacy.telemetry.position, customer1.vehicle1.position
@@ -339,14 +345,14 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   * "data":[{"_id":"56f3123e8caf28f687480f42","vehicleId":"IBEX","timestamp":1457640420,"x":236294.1956,
   * "y":116196.8879,"z":-34379.67682,"vx":-0.675287,"vy":0.508343,"vz":0.434496}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json}  internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
+  * @apiErrorExample {json} Error-Response:
   *     HTTP/1.1 500 Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
   **/ 
-  app.post('/services/v1/simulation/position/:topic', function(req, res) {
+  app.post('/services/v1/messaging/position/:topic', function(req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -365,9 +371,10 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   });
 
  /**
-  * @api {post} /services/v1/vehicle/:topic  send vehicle data points to MQ
+  * @api {post} /services/v1/messaging/vehicle/:topic  send vehicle data points to MQ
   * @apiVersion 0.1.0
-  * @apiName postVehicleSimulation(topic)
+  * @apiName postVehicle(topic)
+  * @apiDescription 
   * @apiGroup Telemetry
   *
   * @apiParam {String} topic   RabbitMQ topic, e.g. audacy.telemetry.vehicle, customer1.vehicle1.vehicle
@@ -392,14 +399,14 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   * "value":315,"calibrationFactor":"T = 3*x - 4*x^2 + 2","uom":"Kelvin","alertHigh":330,
   * "warnHigh":321,"alertLow":280,"warnLow":274,"deviceId":"Battery01Temp"}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json}  internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
+  * @apiErrorExample {json} Error-Response:
   *     HTTP/1.1 500 Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
   **/
-  app.post('/services/v1/simulation/vehicle/:topic', function(req, res) {
+  app.post('/services/v1/messaging/vehicle/:topic', function(req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -419,9 +426,10 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   });
 
   /**
-  * @api {post} /services/v1/orbit/:topic  send orbit trajectory data points to MQ
+  * @api {post} /services/v1/messaging/orbit/:topic  orbit/topic
   * @apiVersion 0.1.0
   * @apiName postOrbitSimulation(topic)
+  * @apiDescription send orbit trajectory data points to MQ
   * @apiGroup Telemetry
   *
   * @apiParam {String} topic   RabbitMQ topic, e.g. audacy.telemetry.orbit, customer1.vehicle1.orbit
@@ -436,14 +444,14 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   * "data":[{"_id":"56f315e98caf28f687483230","vehicleId":"IBEX","timestamp":1457726400,
   * "value": [ 10,20...]}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json}  internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
+  * @apiErrorExample {json} Error-Response:
   *     HTTP/1.1 500 Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
   **/ 
-  app.post('/services/v1/simulation/orbit/:topic', function(req, res) {
+  app.post('/services/v1/messaging/orbit/:topic', function(req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");

@@ -28,5 +28,12 @@ module.exports = {
     'pass': 'race2space',
     'server': 'data04.audacy.space',
     'queue': 'develop'
+  },
+  // when starting NodeJS server, we can disable/enable modules
+  'serverStartupOptions': {
+    'apiHttp': true,
+    'apiHttps': true,
+    'socketHttp': true,
+    'socketHttps': true
   }
 };

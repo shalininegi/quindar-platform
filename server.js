@@ -24,6 +24,7 @@ var fs		 			= require('fs');
 var https    			= require('https');
 var http     			= require('http');
 var helper   			= require('./app/scripts/module05.js');
+var systemSettings = require('./config/systemSettings.js');
 
 // read SSL cert (self-signed cert for testing)
 var quindarKey = fs.readFileSync(__dirname + '/keys/quindar-key.pem');
@@ -84,12 +85,20 @@ require('./app/scripts/module02.js')(app, mongoose, syslogger, logger);
 require('./app/scripts/module03.js')(app, bodyParser, mongoose, fs, syslogger, logger, helper);
 require('./app/scripts/module04.js')(app, bodyParser, fs, syslogger, logger, helper);
 
-var server = http.createServer(app);
-server.listen(port, function() {
-	console.log('Express Web server listening on port ' + port);
-});
+if (systemSettings.serverStartupOptions.apiHttp) {
+	var server = http.createServer(app);
+		server.listen(port, function() {
+		console.log('Express Web server listening on port ' + port);
+	});
+} else {
+	console.log('Express Web server with port ' + port + ' is disabled.');
+};
 
-var secureServer = https.createServer(sslOptions, app);
-secureServer.listen(securePort, function() {
-	console.log('Express Web server listening on port ' + securePort + ' over HTTPS');
-});	
+if (systemSettings.serverStartupOptions.apiHttps) {
+	var secureServer = https.createServer(sslOptions, app);
+		secureServer.listen(securePort, function() {
+		console.log('Express Web server listening on port ' + securePort + ' over HTTPS');
+	});	
+} else {
+	console.log('Express Web server with SSL port ' + port + ' is disabled.');
+};

@@ -2,7 +2,7 @@
 // Previous: upsertapi2.js
 // Purpose: Data API to write telemetry data into MongoDB
 // Author:  Ray Lai
-// Updated: May 24, 2016
+// Updated: May 26, 2016
 // License: MIT license
 //
 module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, helper) {
@@ -45,9 +45,10 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   });
 
 /**
-  * @api {post} /services/v1/attitude  upsert attitude data points
+  * @api {post} /services/v1/attitude  attitude
   * @apiVersion 0.1.0
   * @apiName postAttitude
+  * @apiDescription upsert attitude data points
   * @apiGroup Telemetry
   *
   * @apiParam {String} vehicleId   spacecraft vehicle id
@@ -64,9 +65,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *        "data":[{"_id":"56f312e98caf28f687482b5f","vehicleId":"IBEX",
   *        "timestamp":1457726400,"q1":0.651781,"q2":-0.29526,"q3":-0.268266,"q4":0.645009}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json} internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
+  * @apiErrorExample {json} Error-Response:
   *     HTTP/1.1 500 Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
@@ -89,9 +90,10 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   })
 
   /**
-  * @api {post} /services/v1/attitude/:vehicleId/:numberOfItems  upsert attitude data points by vehicleId limited by numberOfItems
+  * @api {post} /services/v1/attitude/:vehicleId/:numberOfItems  attitude by vehicleId/numberOfItems
   * @apiVersion 0.1.0
   * @apiName postAttitude(vehicleId, numberOfItems)
+  * @apiDescription upsert attitude data points by vehicleId limited by numberOfItems
   * @apiGroup Telemetry
   *
   * @apiParam {String} vehicleId   spacecraft vehicle id
@@ -109,9 +111,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *    "data":[{"_id":"56f312e98caf28f687482b5f","vehicleId":"IBEX","timestamp":1457726400,
   *    "q1":0.651781,"q2":-0.29526,"q3":-0.268266,"q4":0.645009}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json} internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
+  * @apiErrorExample {json} Error-Response:
   *     HTTP/1.1 500 Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
@@ -151,9 +153,10 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   });
 
   /**
-  * @api {post} /services/v1/position  upsert position data points
+  * @api {post} /services/v1/position position
   * @apiVersion 0.1.0
   * @apiName postPosition
+  * @apiDescription upsert position data points
   * @apiGroup Telemetry
   *
   * @apiSuccess {array} data array of position data points (x,y,z,vx,vy,vz)
@@ -173,9 +176,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   * "data":[{"_id":"56f3123e8caf28f687480f42","vehicleId":"IBEX","timestamp":1457640420,"x":236294.1956,
   * "y":116196.8879,"z":-34379.67682,"vx":-0.675287,"vy":0.508343,"vz":0.434496}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json} internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
+  * @apiErrorExample {json} Error-Response:
   *     HTTP/1.1 500 Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
@@ -200,9 +203,10 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   })
 
   /**
-  * @api {post} /services/v1/position/:vehicleId/:numberOfItems  upsert position data points by vehicleId limited by numberOfItems
+  * @api {post} /services/v1/position/:vehicleId/:numberOfItems  position by vehicleId/numberOfItems
   * @apiVersion 0.1.0
   * @apiName postPosition(vehicleId, numberOfItems)
+  * @apiDescription upsert position data points by vehicleId limited by numberOfItems
   * @apiGroup Telemetry
   *
   * @apiParam {String} vehicleId   spacecraft vehicle id
@@ -222,9 +226,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   * "data":[{"_id":"56f3123e8caf28f687480f42","vehicleId":"IBEX","timestamp":1457640420,"x":236294.1956,
   * "y":116196.8879,"z":-34379.67682,"vx":-0.675287,"vy":0.508343,"vz":0.434496}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json} internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
+  * @apiErrorExample {json} Error-Response:
   *     HTTP/1.1 500 Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
@@ -264,9 +268,10 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   })
 
   /**
-  * @api {post} /services/v1/vehicle  upsert vehicle data points
+  * @api {post} /services/v1/vehicle  vehicle
   * @apiVersion 0.1.0
   * @apiName postVehicle
+  * @apiDescription upsert vehicle data points
   * @apiGroup Telemetry
   *
   * @apiParam {String} vehicleId   spacecraft vehicle id
@@ -288,9 +293,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   * "value":315,"calibrationFactor":"T = 3*x - 4*x^2 + 2","uom":"Kelvin","alertHigh":330,
   * "warnHigh":321,"alertLow":280,"warnLow":274,"deviceId":"Battery01Temp"}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json} internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
+  * @apiErrorExample {json} Error-Response:
   *     HTTP/1.1 500 Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
@@ -315,9 +320,10 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   })
 
   /**
-  * @api {post} /services/v1/vehicle/:vehicleId/:numberOfItems  upsert vehicle data points by vehicleId limited by numberOfItems
+  * @api {post} /services/v1/vehicle/:vehicleId/:numberOfItems  vehicle by vehicleId/numberOfItems
   * @apiVersion 0.1.0
   * @apiName postVehicle(vehicleId, numberOfItems)
+  * @apiDescription upsert vehicle data points by vehicleId limited by numberOfItems
   * @apiGroup Telemetry
   *
   * @apiParam {String} vehicleId   spacecraft vehicle id
@@ -342,9 +348,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   * "value":315,"calibrationFactor":"T = 3*x - 4*x^2 + 2","uom":"Kelvin","alertHigh":330,
   * "warnHigh":321,"alertLow":280,"warnLow":274,"deviceId":"Battery01Temp"}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json} internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
+  * @apiErrorExample {json} Error-Response:
   *     HTTP/1.1 500 Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
@@ -384,9 +390,10 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   })
 
   /**
-  * @api {post} /services/v1/orbit  upsert orbit data points
+  * @api {post} /services/v1/orbit  orbit
   * @apiVersion 0.1.0
   * @apiName postOrbit
+  * @apiDescription upsert orbit data points
   * @apiGroup Telemetry
   *
   * @apiParam {String} vehicleId   spacecraft vehicle id
@@ -400,9 +407,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   * "data":[{"_id":"56f315e98caf28f687483228","vehicleId":"IBEX","timestamp":1457726400,
   * "value": [ 10,20...]}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json} internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
+  * @apiErrorExample {json} Error-Response:
   *     HTTP/1.1 500 Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
@@ -428,9 +435,10 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
 
   /**
-  * @api {post} /services/v1/orbit/:vehicleId/:numberOfItems  upserts orbit trajectory data points by vehicleId, limited by numberOfItems
+  * @api {post} /services/v1/orbit/:vehicleId/:numberOfItems  orbit by vehicleId/numberOfItems
   * @apiVersion 0.1.0
   * @apiName postOrbit
+  * @apiDescription upserts orbit trajectory data points by vehicleId, limited by numberOfItems
   * @apiGroup Telemetry
   *
   * @apiParam {String} vehicleId   spacecraft vehicle id
@@ -445,9 +453,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   * "data":[{"_id":"56f315e98caf28f687483230","vehicleId":"IBEX","timestamp":1457726400,
   * "value": [ 10,20...]}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json} internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
+  * @apiErrorExample {json} Error-Response:
   *     HTTP/1.1 500 Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
@@ -485,94 +493,6 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       });  
     });
   });
-
-/**
-  // test data generator - attitude
-  function getAttitudeData(high, low) {
-    var testData= {};
-    var q1 =  Math.random() * (high - low) + low;
-    var q2 =  Math.random() * (high - low) + low;
-    var q3 =  Math.random() * (high - low) + low;
-    var q4 =  Math.random() * (high - low) + low;
-    var timestamp = Math.floor(new Date());
-
-    var vehicleId = getVehicleId();
-
-    testData = { "vehicleId": vehicleId, "q1": Number(q1.toFixed(6)), "q2": Number(q2.toFixed(6)),
-	   "q3": Number(q3.toFixed(6)), "q4": Number(q4.toFixed(6)), "timestamp": timestamp};
-    return testData;
-  };
-
-  // test data generator - position
-  function getPositionData(high, low, velocityHigh, velocityLow) {
-    var testData = {};
-    var x = Math.random() * (high - low) + low;
-    var y = Math.random() * (high - low) + low;
-    var z = Math.random() * (high - low) + low;
-    var vx = Math.random() * (velocityHigh - velocityLow) + velocityLow;
-    var vy = Math.random() * (velocityHigh - velocityLow) + velocityLow;
-    var vz = Math.random() * (velocityHigh - velocityLow) + velocityLow;
-    var timestamp = Math.floor(new Date());
-
-    var vehicleId = getVehicleId();
-
-    testData = { "vehicleId": vehicleId, "x": Number(x.toFixed(4)), "y": Number(y.toFixed(4)), "z": Number(z.toFixed(4)),
-      "vx": Number(vx.toFixed(6)), "vy": Number(vy.toFixed(6)), "vz": Number(vz.toFixed(6)),
-      "timestamp": timestamp };
-    return testData;
-  };
-
-  // test data generator - vehicles
-  function getVehiclesData(high, low) {
-    var testData = {};
-    var vehicleId = getVehicleId();
-    var calibrationHigh = 0.99999;
-    var calibrationLow = -0.99999;
-
-    var value = Math.random() * (high - low) + low;
-    var alertHigh = (Math.random() * (high - low) + low) * 1.12;
-    var alertLow = (Math.random() * (high - low) + low) * 0.85;
-    var warnHigh = (Math.random() * (high - low) + low) * 1.09;
-    var warnLow = (Math.random() * (high - low) + low) * 0.92;
-    var uom = "Kevin";
-    var calibrationFactor = (Math.random() * (calibrationHigh - calibrationLow) + calibrationLow).toString();
-    var deviceId = "Battery-" + randomstring.generate({ length: 3,
-      charset: 'alphabetic'});
-    var timestamp = Math.floor(new Date());
-
-    testData = { "vehicleId": vehicleId, "value": value, "uom": uom, "alertHigh": alertHigh, "alertLow": alertLow,
-	     "warnHigh": warnHigh, "warnLow": warnLow, "calibrationFactor": calibrationFactor, 
-	     "timestamp": timestamp };
-    return testData;
-  }
-
-  // get orbit trajectory
-  function getOrbit(initX, initY, nTimes) {
-    var orbitPayload = { };
-    var nData = [];
-    var x = initX, y = initY; 
-    var topic = "audacy.orbit";
-    var timestamp = Math.floor(new Date());
-    var vehicleId = getVehicleId();
-
-    for (var i=0; i < nTimes; i++) {
-      x = x + 7 * Math.random() * 0.3 ;
-      y = 45 * Math.sin(2 * x / 180 * Math.PI);
-      nData.push([x, y]);
-    }
-    orbitPayload = { "vehicleId": vehicleId, "timestamp": timestamp,
-       "trajectory": nData};
-    return orbitPayload;
-  }
-
-  // get vehicleId
-  function getVehicleId() {
-    var vehicles = systemSettings.vehicles;
-    var x = Math.round((Math.random() * vehicles.length) - 1);
-
-    return vehicles[x];
-  }
-**/
 
 // end of module
 };

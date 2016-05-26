@@ -8,9 +8,10 @@ module.exports = function(app) {
   var mongoose = require('mongoose');
 
 	/**
-	* @api {get} /verifyMe verify if system is alive
+	* @api {get} /verifyMe system heartbeat
 	* @apiVersion 0.1.0
   * @apiName verifyMe
+  * @apiDescription verify if system is alive
   * @apiGroup System
  	*
  	* @apiSuccess {String} message system status about the platform
@@ -24,9 +25,9 @@ module.exports = function(app) {
  	*       "message": "Quindar platform is alive"
  	*     }
  	*
- 	* @apiError N/A Not applicable
+ 	* @apiError (Error 500) {json} N/A Not applicable
  	*
- 	* @apiErrorExample Error-Response:
+ 	* @apiErrorExample {json} Error-Response:
  	*     HTTP/1.1 500 Not Found
  	*     {
  	*       "error": "Internal system error. Please check with system administrator to restart servers."

@@ -8,7 +8,14 @@
 var systemSettings = require('../../config/systemSettings.js');
 var randomstring = require('randomstring');
 
-// test data generator - attitude
+/**
+ * @api {javascript} getAttitudeData randomize attitude
+ * @apiVersion 0.1.0
+ * @apiName getAttitudeData
+ * @apiDescription generate random attitude data (mock or testing)
+ * @apiGroup Helper
+ *
+ **/
 exports.getAttitudeData = function(high, low) {
   var testData= {};
 
@@ -24,7 +31,14 @@ exports.getAttitudeData = function(high, low) {
   return testData;
 };
 
-// test data generator - position
+/**
+ * @api {javascript} getPositionData randomize position
+ * @apiVersion 0.1.0
+ * @apiName getPositionData
+ * @apiDescription generate random position data (mock or testing)
+ * @apiGroup Helper
+ *
+ **/
 exports.getPositionData = function(high, low, velocityHigh, velocityLow) {
   var testData = {};
   var vehicleId = exports.getVehicleId();
@@ -42,7 +56,14 @@ exports.getPositionData = function(high, low, velocityHigh, velocityLow) {
   return testData;
 };
 
-// test data generator - vehicles
+/**
+ * @api  {javascript} getVehicleData randomize vehicle
+ * @apiVersion 0.1.0
+ * @apiName getVehicleData
+ * @apiDescription generate random vehicle data (mock or testing)
+ * @apiGroup Helper
+ *
+ **/
 exports.getVehiclesData = function(high, low) {
   var testData = {};
   var vehicleId = exports.getVehicleId();
@@ -66,7 +87,14 @@ exports.getVehiclesData = function(high, low) {
   return testData;
 }
 
-// get orbit data
+/**
+ * @api  {javascript} getOrbitData randomize orbit trajectory
+ * @apiVersion 0.1.0
+ * @apiName getOrbitData
+ * @apiDescription generate random orbit trajectory data (mock or testing)
+ * @apiGroup Helper
+ *
+ **/
 exports.getOrbit = function(initX, initY, nTimes) {
   var nData = [];
   var x = initX, y = initY; 
@@ -80,7 +108,14 @@ exports.getOrbit = function(initX, initY, nTimes) {
   return nData;
 }
 
-// get vehicleId
+/**
+ * @api  {javascript} getVehicleId randomize satellite vehicleId
+ * @apiVersion 0.1.0
+ * @apiName getVehicleId
+ * @apiDescription generate random satellite vehicle id based on historic names (mock or testing)
+ * @apiGroup Helper
+ *
+ **/
 exports.getVehicleId = function() {
   var vehicles = systemSettings.vehicles;
   var x = Math.round((Math.random() * vehicles.length) - 1);

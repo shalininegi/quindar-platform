@@ -51,13 +51,11 @@ module.exports = function(app, mongoose, syslogger, logger) {
   });
 
   /**
-  * @api {get} /services/v1/attitude  return all attitude data points
+  * @api {get} /services/v1/attitude  attitude
   * @apiVersion 0.1.0
   * @apiName getAttitude
+  * @apiDescription return all attitude data points
   * @apiGroup Telemetry
-  *
-  * @apiExample {curl} Example usage:
-  * curl -X GET http://localhost:3000/verifyMe
   *
   * @apiSuccess {array} data array of attitude quaternion q1/q2/q3/q4 data points
   *
@@ -70,10 +68,10 @@ module.exports = function(app, mongoose, syslogger, logger) {
   *        "data":[{"_id":"56f312e98caf28f687482b5f","vehicleId":"IBEX",
   *        "timestamp":1457726400,"q1":0.651781,"q2":-0.29526,"q3":-0.268266,"q4":0.645009}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json} message internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
-  *     HTTP/1.1 500 Internal system error encoutered
+  * @apiErrorExample {json} Error-Response:
+  *     HTTP/1.1 message Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
   **/
@@ -94,9 +92,10 @@ module.exports = function(app, mongoose, syslogger, logger) {
   });
 
   /**
-  * @api {get} /services/v1/attitude/:vehicleId/:numberOfItems  return attitude data points by vehicleId limited by numberOfItems
+  * @api {get} /services/v1/attitude/:vehicleId/:numberOfItems  attitude by vehicleId/numberOfItems
   * @apiVersion 0.1.0
   * @apiName getAttitude(vehicleId, numberOfItems)
+  * @apiDescription return attitude data points by vehicleId limited by numberOfItems
   * @apiGroup Telemetry
   *
   * @apiParam {String} vehicleId   spacecraft vehicle id
@@ -113,9 +112,9 @@ module.exports = function(app, mongoose, syslogger, logger) {
   *    "data":[{"_id":"56f312e98caf28f687482b5f","vehicleId":"IBEX","timestamp":1457726400,
   *    "q1":0.651781,"q2":-0.29526,"q3":-0.268266,"q4":0.645009}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json} internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
+  * @apiErrorExample {json} Error-Response:
   *     HTTP/1.1 500 Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
@@ -147,9 +146,10 @@ module.exports = function(app, mongoose, syslogger, logger) {
     });
 
  /**
-  * @api {get} /services/v1/attitude/:vehicleId/:fromTime/:toTime  return attitude data points from time/to time by vehicleId
+  * @api {get} /services/v1/attitude/:vehicleId/:fromTime/:toTime attitude by vehicleId/from/to
   * @apiVersion 0.1.0
   * @apiName getAttitude(vehicleId, fromTime, toTime)
+  * @apiDescription return attitude data points from time/to time by vehicleId
   * @apiGroup Telemetry
   *
   * @apiParam {String} vehicleId   spacecraft vehicle id
@@ -170,9 +170,9 @@ module.exports = function(app, mongoose, syslogger, logger) {
   * "q2":-0.295319,"q3":-0.268371,"q4":0.645017},{"_id":"56f312e98caf28f687482b5d","vehicleId":"IBEX",
   * "timestamp":1457726280,"q1":0.651624,"q2":-0.295378,"q3":-0.268475,"q4":0.645026}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json} internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
+  * @apiErrorExample {json} Error-Response:
   *     HTTP/1.1 500 Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
@@ -212,9 +212,10 @@ module.exports = function(app, mongoose, syslogger, logger) {
   });
 
   /**
-  * @api {get} /services/v1/position  return all position data points
+  * @api {get} /services/v1/position  position
   * @apiVersion 0.1.0
   * @apiName getPosition
+  * @apiDescription return all position data points
   * @apiGroup Telemetry
   *
   * @apiSuccess {array} data array of position data points (x,y,z,vx,vy,vz)
@@ -228,9 +229,9 @@ module.exports = function(app, mongoose, syslogger, logger) {
   * "data":[{"_id":"56f3123e8caf28f687480f42","vehicleId":"IBEX","timestamp":1457640420,"x":236294.1956,
   * "y":116196.8879,"z":-34379.67682,"vx":-0.675287,"vy":0.508343,"vz":0.434496}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json} internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
+  * @apiErrorExample {json} Error-Response:
   *     HTTP/1.1 500 Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
@@ -253,9 +254,10 @@ module.exports = function(app, mongoose, syslogger, logger) {
   })
 
 /**
-  * @api {get} /services/v1/position/:vehicleId/:numberOfItems  return position data points by vehicleId limited by numberOfItems
+  * @api {get} /services/v1/position/:vehicleId/:numberOfItems  position by vehicleId/numberOfItems
   * @apiVersion 0.1.0
   * @apiName getPosition(vehicleId, numberOfItems)
+  * @apiDescription return position data points by vehicleId limited by numberOfItems
   * @apiGroup Telemetry
   *
   * @apiParam {String} vehicleId   spacecraft vehicle id
@@ -272,9 +274,9 @@ module.exports = function(app, mongoose, syslogger, logger) {
   * "data":[{"_id":"56f3123e8caf28f6874814e2","vehicleId":"IBEX","timestamp":1457726400,
   * "x":158565.2009,"y":148104.098,"z":5207.584894,"vx":-1.151578,"vy":0.17722,"vz":0.46557}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json} internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
+  * @apiErrorExample {json} Error-Response:
   *     HTTP/1.1 500 Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
@@ -308,9 +310,10 @@ module.exports = function(app, mongoose, syslogger, logger) {
   })
 
 /**
-  * @api {get} /services/v1/position/:vehicleId/:fromTime/:toTime  return position data points from time/to time by vehicleId
+  * @api {get} /services/v1/position/:vehicleId/:fromTime/:toTime  position by vehicleId/from/to
   * @apiVersion 0.1.0
   * @apiName getPosition(vehicleId, fromTime, toTime)
+  * @apiDescription return position data points from time/to time by vehicleId
   * @apiGroup Telemetry
   *
   * @apiParam {String} vehicleId   spacecraft vehicle id
@@ -328,9 +331,9 @@ module.exports = function(app, mongoose, syslogger, logger) {
   * "data":[{"_id":"56f3123e8caf28f6874814e1","vehicleId":"IBEX","timestamp":1457726340,
   * "x":158634.2476,"y":148093.1597,"z":5179.409783,"vx":-1.151208,"vy":0.177567,"vz":0.465583}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json} internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
+  * @apiErrorExample {json} Error-Response:
   *     HTTP/1.1 500 Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
@@ -370,9 +373,10 @@ module.exports = function(app, mongoose, syslogger, logger) {
   })
 
  /**
-  * @api {get} /services/v1/vehicle  return all vehicle data points
+  * @api {get} /services/v1/vehicle  vehicle
   * @apiVersion 0.1.0
   * @apiName getVehicle
+  * @apiDescription return all vehicle data points
   * @apiGroup Telemetry
   *
   * @apiSuccess {array} data array of vehicle data points from sensors in the satellite , e.g. temperature value, warnHigh, alertHigh
@@ -387,9 +391,9 @@ module.exports = function(app, mongoose, syslogger, logger) {
   * "value":315,"calibrationFactor":"T = 3*x - 4*x^2 + 2","uom":"Kelvin","alertHigh":330,
   * "warnHigh":321,"alertLow":280,"warnLow":274,"deviceId":"Battery01Temp"}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json} internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
+  * @apiErrorExample {json} Error-Response:
   *     HTTP/1.1 500 Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
@@ -411,9 +415,10 @@ module.exports = function(app, mongoose, syslogger, logger) {
   })
 
 /**
-  * @api {get} /services/v1/vehicle/:vehicleId/:numberOfItems  return vehicle data points by vehicleId limited by numberOfItems
+  * @api {get} /services/v1/vehicle/:vehicleId/:numberOfItems  vehicle by vehicleId/numberOfItems
   * @apiVersion 0.1.0
   * @apiName getVehicle(vehicleId, numberOfItems)
+  * @apiDescription return vehicle data points by vehicleId limited by numberOfItems
   * @apiGroup Telemetry
   *
   * @apiParam {String} vehicleId   spacecraft vehicle id
@@ -431,9 +436,9 @@ module.exports = function(app, mongoose, syslogger, logger) {
   * "value":315,"calibrationFactor":"T = 3*x - 4*x^2 + 2","uom":"Kelvin","alertHigh":330,
   * "warnHigh":321,"alertLow":280,"warnLow":274,"deviceId":"Battery01Temp"}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json} internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
+  * @apiErrorExample {json} Error-Response:
   *     HTTP/1.1 500 Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
@@ -467,9 +472,10 @@ module.exports = function(app, mongoose, syslogger, logger) {
   })
 
 /**
-  * @api {get} /services/v1/vehicle/:vehicleId/:fromTime/:toTime  return vehicle data points from time/to time by vehicleId
+  * @api {get} /services/v1/vehicle/:vehicleId/:fromTime/:toTime  vehicle by vehicleId/from/to
   * @apiVersion 0.1.0
   * @apiName getVegucke(vehicleId, fromTime, toTime)
+  * @apiDescription return vehicle data points from time/to time by vehicleId
   * @apiGroup Telemetry
   *
   * @apiParam {String} vehicleId   spacecraft vehicle id
@@ -488,9 +494,9 @@ module.exports = function(app, mongoose, syslogger, logger) {
   * "value":315,"calibrationFactor":"T = 3*x - 4*x^2 + 2","uom":"Kelvin","alertHigh":330,
   * "warnHigh":321,"alertLow":280,"warnLow":274,"deviceId":"Battery01Temp"}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json} internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
+  * @apiErrorExample {json} Error-Response:
   *     HTTP/1.1 500 Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
@@ -530,9 +536,10 @@ module.exports = function(app, mongoose, syslogger, logger) {
   })
 
 /**
-  * @api {get} /services/v1/orbit  return all orbit trajectory data points
+  * @api {get} /services/v1/orbit  orbit
   * @apiVersion 0.1.0
   * @apiName getOrbit
+  * @apiDescription return all orbit trajectory data points
   * @apiGroup Telemetry
   *
   * @apiSuccess {array} data array of orbit data points (which are a series of longitude and latitude data points, sometimes like a sine wave)
@@ -546,9 +553,9 @@ module.exports = function(app, mongoose, syslogger, logger) {
   * "data":[{"_id":"56f315e98caf28f687483230","vehicleId":"IBEX","timestamp":1457726400,
   * "value": [ 10,20...]}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json} internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
+  * @apiErrorExample {json} Error-Response:
   *     HTTP/1.1 500 Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
@@ -570,9 +577,10 @@ app.get('/services/v1/orbit', function(req, res) {
 });
 
 /**
-  * @api {get} /services/v1/orbit/:vehicleId/:numberOfItems  return all orbit trajectory data points by vehicleId, limited by numberOfItems
+  * @api {get} /services/v1/orbit/:vehicleId/:numberOfItems  orbit by vehicleId/numberOfItems
   * @apiVersion 0.1.0
   * @apiName getOrbit
+  * @apiDescription return all orbit trajectory data points by vehicleId, limited by numberOfItems
   * @apiGroup Telemetry
   *
   * @apiParam {String} vehicleId   spacecraft vehicle id
@@ -589,9 +597,9 @@ app.get('/services/v1/orbit', function(req, res) {
   * "data":[{"_id":"56f315e98caf28f687483230","vehicleId":"IBEX","timestamp":1457726400,
   * "value": [ 10,20...]}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json} internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
+  * @apiErrorExample {json} Error-Response:
   *     HTTP/1.1 500 Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
@@ -625,9 +633,10 @@ app.get('/services/v1/orbit/:vId/:nLimit', function(req, res) {
   })
 
 /**
-  * @api {get} /services/v1/orbit/:vehicleId/:numberOfItems  return orbit data points by vehicleId limited by numberOfItems
+  * @api {get} /services/v1/orbit/:vehicleId/:numberOfItems  orbit by vehicleId/numberOfItems
   * @apiVersion 0.1.0
   * @apiName getOrbit(vehicleId, numberOfItems)
+  * @apiDescription return orbit data points by vehicleId limited by numberOfItems
   * @apiGroup Telemetry
   *
   * @apiParam {String} vehicleId   spacecraft vehicle id
@@ -644,9 +653,9 @@ app.get('/services/v1/orbit/:vId/:nLimit', function(req, res) {
   * "data":[{"_id":"56f315e98caf28f687483230","vehicleId":"IBEX","timestamp":1457726400,
   * "value": [ 10,20...]}]}
   *
-  * @apiError 500 internal system error       The database is not ready to serve yet, e.g. after restart
+  * @apiError (Error 500) {json} internal system error       The database is not ready to serve yet, e.g. after restart
   *
-  * @apiErrorExample Error-Response:
+  * @apiErrorExample {json} Error-Response:
   *     HTTP/1.1 500 Internal system error encoutered
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
