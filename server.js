@@ -26,8 +26,8 @@ var http     			= require('http');
 var helper   			= require('./app/scripts/module05.js');
 
 // read SSL cert (self-signed cert for testing)
-var quindarKey = fs.readFileSync('./keys/quindar-key.pem');
-var quindarCert = fs.readFileSync('./keys/quindar-cert.pem');
+var quindarKey = fs.readFileSync(__dirname + '/keys/quindar-key.pem');
+var quindarCert = fs.readFileSync(__dirname + '/keys/quindar-cert.pem');
 var sslOptions = {
   key: quindarKey,
   cert: quindarCert

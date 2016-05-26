@@ -21,12 +21,12 @@ module.exports = {
   'exchange':'quindarExchange04',
   'exchangeType': 'topic',
   'mqAccessConfig': '../../config/mqAccess.json',
-  'serverURL': '104.239.241.170/develop',
-  'serverEndpoint': 'amqp://audacy:race2space@104.239.241.170/develop',
+  'serverURL': 'data04.audacy.space/develop',
+  'serverEndpoint': 'amqp://audacy:race2space@data04.audacy.space/develop',
   'mqConfig': {
     'user': 'audacy',
     'pass': 'race2space',
-    'server': '104.239.241.170',
+    'server': 'data04.audacy.space',
     'queue': 'develop'
   }
 };
