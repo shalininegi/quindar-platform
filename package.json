@@ -1,5 +1,5 @@
 {
-  "name": "Quindar Platform",
+  "name": "QuindarPlatform",
   "version": "0.1.0",
   "description": "Quindar platform consists of data services (REST API) and webSocket services for real time data streaming.",
   "main": "express.js",
@@ -26,6 +26,7 @@
     "node-rest-client": "^1.8.0",
     "path": "^0.12.7",
     "randomstring": "^1.1.5",
+    "socket.io": "^1.4.6",
     "when": "^3.7.7",
     "winston": "^2.2.0"
   }
