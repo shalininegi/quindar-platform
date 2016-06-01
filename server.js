@@ -122,5 +122,5 @@ require('./app/scripts/module01.js')(app);
 require('./app/scripts/module02.js')(app, mongoose, syslogger, logger);
 require('./app/scripts/module03.js')(app, bodyParser, mongoose, fs, syslogger, logger, helper);
 require('./app/scripts/module04.js')(app, bodyParser, fs, syslogger, logger, helper);
-require('./app/scripts/module06.js')(app, socketServer, socketPort, io, syslogger, logger, helper);
+require('./app/scripts/module06.js')(app, socketPort, syslogger, logger, helper);
 require('./app/scripts/module07.js')(app, secureSocketServer, secureSocketPort, io, syslogger, logger, helper);

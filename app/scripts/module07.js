@@ -10,7 +10,7 @@
 module.exports = function(app, secureSocketServer, secureSocketPort, io, syslogger, logger, helper) {
   var io = require('socket.io')(secureSocketServer);
   secureSocketServer.listen(secureSocketPort);
-  console.log('socket.io webSocket server with port ' + secureSocketPort);
+  console.log('socket.io webSocket server with secure port ' + secureSocketPort);
 
   var randomstring = require('randomstring');
 
