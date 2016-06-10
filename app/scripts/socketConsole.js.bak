@@ -1,0 +1,355 @@
+var socket = io('ws://platform.audacy.space:7904');
+
+socket.on('connection', function() {
+  //console.log("...connected");
+  //alert("connected");
+});
+
+socket.on('error', console.error.bind(console));
+
+// 4/28 RL testing broadcast behavior
+socket.on('attitude', function(telemetryData) {  
+      
+  alert("Masaki, server has just pushed orbit data here! " + telemetryData);
+});
+
+function notifyIt(dataType) {
+   socket.emit('attitude', {"type": dataType });
+   var timestamp = new Date();
+   document.getElementById("status").value = "Just sent '" + dataType + "' test data @" + timestamp;
+}
+
+function clearIt() {
+      document.getElementById("status").value = "";
+}
+
+//--- attitude
+function getAttitudeData() {
+  return JSON.stringify(getAttitude(0.999999, -0.000001));
+}
+
+function getAttitude(high, low) {
+   var testData= {};
+
+   var q1 =  Math.random() * (high - low) + low;
+   var q2 =  Math.random() * (high - low) + low;
+   var q3 =  Math.random() * (high - low) + low;
+   var q4 =  Math.random() * (high - low) + low;
+   var timestamp = Math.floor(new Date() / 1000);
+
+   document.getElementById("q1").value = q1;
+   document.getElementById("q2").value = q2;
+   document.getElementById("q3").value = q3;
+   document.getElementById("q4").value = q4;
+   var vehicleId1 = document.getElementById("vehicleId1").value;
+
+   testData = { "vehicleId": vehicleId1, "q1": Number(q1.toFixed(6)), "q2": Number(q2.toFixed(6)),
+  "q3": Number(q3.toFixed(6)), "q4": Number(q4.toFixed(6)), "timestamp": timestamp};
+   return testData;
+};
+
+
+function sendOneAttitudeData() {
+  var serviceEndpoint = "http://localhost:8081/services/v1/attitude/audacy.attitude";
+
+  var vehicleId1 = document.getElementById("vehicleId1").value;
+  var q1 = document.getElementById("q1").value;
+  var q2 = document.getElementById("q2").value;
+  var q3 = document.getElementById("q3").value;
+  var q4 = document.getElementById("q4").value;
+  var timestamp = Math.floor(new Date() / 1000);
+
+  var data = {"vehicleId": vehicleId1,"q1": q1,"q2": q2,"q3": q3,"q4": q4,"timestamp": timestamp};
+  $.ajax({
+    type: "POST",
+    url: serviceEndpoint,
+    data:  data,
+        //success: success,
+        dataType: "json"
+      }).then(function(data) {
+        alert('data=' + JSON.stringify(data));
+      });
+    }
+
+function sendOneAttitudeRandomData() {
+      var serviceEndpoint = "http://localhost:8081/services/v1/attitude/audacy.attitude";
+      var data = getAttitudeData(400000.0, -400000.0, 20.0, -20.0);
+      $.ajax({
+        type: "POST",
+        url: serviceEndpoint,
+        data:  data,
+        //success: success,
+        dataType: "json"
+      }).then(function(data) {
+        alert('data=' + JSON.stringify(data));
+      });
+}
+
+function sendBatchAttitudeRandomData() {
+      
+      var nItems1 = document.getElementById("nItems1").value;
+      var serviceEndpoint = "http://localhost:8081/services/v1/attitude/mock/audacy.attitude/" + nItems1;
+      $.ajax({
+        type: "GET",
+        url: serviceEndpoint,
+        //success: success,
+        dataType: "json"
+      }).then(function(data) {
+        alert('data=' + JSON.stringify(data));
+      });
+}  
+
+//--- position
+
+function positionRandomize() {
+  return JSON.stringify(getPositionData(400000.0, -400000.0, 20.0, -20.0));
+}
+
+function getPositionData(high, low, velocityHigh, velocityLow) {
+  var testData = {};
+
+  var x = Math.random() * (high - low) + low;
+  var y = Math.random() * (high - low) + low;
+  var z = Math.random() * (high - low) + low;
+  var vx = Math.random() * (velocityHigh - velocityLow) + velocityLow;
+  var vy = Math.random() * (velocityHigh - velocityLow) + velocityLow;
+  var vz = Math.random() * (velocityHigh - velocityLow) + velocityLow;
+  var timestamp = Math.floor(new Date() / 1000);
+  var vehicleId2 = document.getElementById("vehicleId2").value;
+
+  testData = { "vehicleId": vehicleId2, "x": Number(x.toFixed(4)), "y": Number(y.toFixed(4)), "z": Number(z.toFixed(4)), "vx": Number(vx.toFixed(6)), "vy": Number(vy.toFixed(6)), "vz": Number(vz.toFixed(6)),
+  "timestamp": timestamp };
+
+  document.getElementById("x").value = x;
+  document.getElementById("y").value = y;
+  document.getElementById("z").value = z;
+  document.getElementById("vx").value = vx;
+  document.getElementById("vy").value = vy;
+  document.getElementById("vz").value = vz;
+  return testData;
+};
+
+
+function sendOnePositionData() {
+  var serviceEndpoint = "http://localhost:8081/services/v1/position/audacy.position";
+
+  var vehicleId2 = document.getElementById("vehicleId2").value;
+  var x = document.getElementById("x").value;
+  var y = document.getElementById("y").value;
+  var z = document.getElementById("z").value;
+  var vx = document.getElementById("vx").value;
+  var vy = document.getElementById("vy").value;
+  var vz = document.getElementById("vz").value;
+  var timestamp = Math.floor(new Date() / 1000);
+
+  var data = {"vehicleId": vehicleId2,"x": x,"y": y,"z": z,"vx": vx,"vy": vy,"vz": vz,"timestamp": timestamp};
+  $.ajax({
+    type: "POST",
+    url: serviceEndpoint,
+    data:  data,
+        //success: success,
+        dataType: "json"
+      }).then(function(data) {
+        alert('data=' + JSON.stringify(data));
+      });
+    }
+
+function sendOnePositionRandomData() {
+      var serviceEndpoint = "http://localhost:8081/services/v1/position/audacy.position";
+      var data = getPositionData(400000.0, -400000.0, 20.0, -20.0);
+      $.ajax({
+        type: "POST",
+        url: serviceEndpoint,
+        data:  data,
+        //success: success,
+        dataType: "json"
+      }).then(function(data) {
+        alert('data=' + JSON.stringify(data));
+      });
+}
+
+function sendBatchPositionRandomData() {
+      
+      var nItems2 = document.getElementById("nItems2").value;
+      var serviceEndpoint = "http://localhost:8081/services/v1/position/mock/audacy.position/" + nItems2;
+      $.ajax({
+        type: "GET",
+        url: serviceEndpoint,
+        //success: success,
+        dataType: "json"
+      }).then(function(data) {
+        alert('data=' + JSON.stringify(data));
+      });
+}  
+
+// --- vehicle
+function vehicleRandomize() {
+  return JSON.stringify(getVehicleData(500.9999, -500.9999));
+}
+
+function getVehicleData(high, low) {
+    var testData = {};
+   //var vehicleId = "ISS-" + randomstring.generate({ length: 4,
+   //     charset: 'alphabetic'});
+
+   var calibrationHigh = 0.99999;
+   var calibrationLow = -0.99999;
+   var vehicleId3 = document.getElementById("vehicleId3").value;
+
+   var vehicleValue = Math.random() * (high - low) + low;
+   var alertHigh = (Math.random() * (high - low) + low) * 1.12;
+   var alertLow = (Math.random() * (high - low) + low) * 0.85;
+   var warnHigh = (Math.random() * (high - low) + low) * 1.09;
+   var warnLow = (Math.random() * (high - low) + low) * 0.92;
+   var uom = "Kevin";
+   var calibrationFactor = (Math.random() * (calibrationHigh - calibrationLow) + calibrationLow).toString();
+   var deviceId = "Battery-" + Math.random().toString(36).substring(3);
+   var timestamp = Math.floor(new Date() / 1000);
+
+   document.getElementById("vehicleValue").value = vehicleValue;
+   document.getElementById("uom").value = uom;
+   document.getElementById("alertHigh").value = alertHigh;
+   document.getElementById("alertLow").value = alertLow;
+   document.getElementById("warnHigh").value = warnHigh;
+   document.getElementById("warnLow").value = warnLow;
+   document.getElementById("calibrationFactor").value = calibrationFactor;
+   document.getElementById("deviceId").value = deviceId;
+
+   testData = { "vehicleId": vehicleId3, "value": vehicleValue, "uom": uom, "alertHigh": alertHigh, "alertLow": alertLow, "warnHigh": warnHigh, "warnLow": warnLow, "calibrationFactor": calibrationFactor,
+        "deviceId": deviceId, "timestamp": timestamp };
+   return testData;
+};
+
+
+function sendOneVehicleData() {
+  var serviceEndpoint = "http://localhost:8081/services/v1/vehicle/audacy.vehicle";
+
+  var vehicleId3 = document.getElementById("vehicleId3").value;
+  var vehicleValue = document.getElementById("vehicleValue").value;
+  var uom = document.getElementById("uom").value;
+  var alertHigh = document.getElementById("alertHigh").value;
+  var alertLow = document.getElementById("alertLow").value;
+  var warnHigh = document.getElementById("warnHigh").value;
+  var warnLow = document.getElementById("warnLow").value;
+  var calibrationFactor = document.getElementById("calibrationFactor").value;
+  var deviceId = document.getElementById("deviceId").value;
+  var timestamp = Math.floor(new Date() / 1000);
+
+  var data = {"vehicleId": vehicleId3,"value": vehicleValue,"uom": uom,"alertHigh": alertHigh,
+      "alertLow": alertLow,"warnHigh": warnLow,"calibrationFactor": calibrationFactor,
+      "deviceId": deviceId, "timestamp": timestamp};
+  $.ajax({
+    type: "POST",
+    url: serviceEndpoint,
+    data:  data,
+        //success: success,
+        dataType: "json"
+      }).then(function(data) {
+        alert('data=' + JSON.stringify(data));
+      });
+    }
+
+function sendOneVehicleRandomData() {
+      var serviceEndpoint = "http://localhost:8081/services/v1/vehicle/audacy.vehicle";
+      var data = getVehicleData(500.9999, -500.9999);
+      $.ajax({
+        type: "POST",
+        url: serviceEndpoint,
+        data:  data,
+        //success: success,
+        dataType: "json"
+      }).then(function(data) {
+        alert('data=' + JSON.stringify(data));
+      });
+}
+
+function sendBatchVehicleRandomData() {
+      
+      var nItems3 = document.getElementById("nItems3").value;
+      var serviceEndpoint = "http://localhost:8081/services/v1/vehicle/mock/audacy.vehicle/" + nItems3;
+      $.ajax({
+        type: "GET",
+        url: serviceEndpoint,
+        //success: success,
+        dataType: "json"
+      }).then(function(data) {
+        alert('data=' + JSON.stringify(data));
+      });
+} 
+
+// --- orbit trajectory
+function orbitRandomize() {
+  return JSON.stringify(getOrbitData(Math.random() * 0.2, Math.random() * 0.3, 350));
+}
+
+function getOrbitData(x, y, nItems) {
+   var testData = getOrbit(x, y, nItems);
+   document.getElementById("orbitTrajectory").value = JSON.stringify(testData);
+   return testData;
+};
+
+
+function sendOneOrbitData() {
+  /**
+  var serviceEndpoint = "http://localhost:8081/services/v1/orbit/audacy.orbit";
+  var timestamp = Math.floor(new Date() / 1000);
+
+  var nData = getOrbit(Math.random() * 0.2, Math.random() * 0.3, 350);
+  var data = {"orbitTrajectory": nData, "timestamp": timestamp};
+  
+  $.ajax({
+    type: "POST",
+    url: serviceEndpoint,
+    data:  data,
+        //success: success,
+        dataType: "json"
+      }).then(function(data) {
+        alert('data=' + JSON.stringify(data));
+      });
+  **/
+
+      var serviceEndpoint = "http://localhost:8081/services/v1/xxx/audacy.orbit";
+      var timestamp = Math.floor(new Date() / 1000);
+      var nData = getOrbit(Math.random() * 0.2, Math.random() * 0.3, 350);
+      var data = {"orbitTrajectory": nData, "timestamp": timestamp};
+      $.ajax({
+        type: "POST",
+        url: serviceEndpoint,
+        data:  data,
+        //success: success,
+        dataType: "json"
+      }).then(function(data) {
+        alert('data=' + JSON.stringify(data));
+      });  
+}
+
+function sendOneOrbitRandomData() {
+      var serviceEndpoint = "http://localhost:8081/services/v1/orbit/audacy.orbit";
+      var timestamp = Math.floor(new Date() / 1000);
+
+      var nData = getOrbit(Math.random() * 0.2, Math.random() * 0.3, 350);
+      var data = {"orbitTrajectory": nData, "timestamp": timestamp};
+      $.ajax({
+        type: "POST",
+        url: serviceEndpoint,
+        data:  data,
+        //success: success,
+        dataType: "json"
+      }).then(function(data) {
+        alert('data=' + JSON.stringify(data));
+      });
+}
+
+function sendBatchOrbitRandomData() {
+      
+      var nItems3 = document.getElementById("nItems3").value;
+      var serviceEndpoint = "http://localhost:8081/services/v1/orbit/mock/audacy.orbit/" + nItems3;
+      $.ajax({
+        type: "GET",
+        url: serviceEndpoint,
+        //success: success,
+        dataType: "json"
+      }).then(function(data) {
+        alert('data=' + JSON.stringify(data));
+      });
+}  

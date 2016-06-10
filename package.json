@@ -25,6 +25,7 @@
     "morgan": "^1.7.0",
     "node-rest-client": "^1.8.0",
     "path": "^0.12.7",
+    "q": "^1.4.1",
     "randomstring": "^1.1.5",
     "socket.io": "^1.4.6",
     "when": "^3.7.7",

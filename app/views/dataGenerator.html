@@ -1,0 +1,127 @@
+<div id="dataGeneratorPanel" class="container contentContainer col-md-8 col-xs-12 col-md-offset-2"
+  style="margin-top: 20px;" ng-controller="adminConsoleController">
+  <ul class="nav nav-tabs" id="dataList1">
+   <li class="active"><a data-target="#dataStreaming" data-toggle="tab">Data Streaming </a></li>
+   <li ><a data-target="#messagequeue" data-toggle="tab">Message Queue </a></li>
+   <li ><a data-target="#database" data-toggle="tab">Database </a></li>
+ </ul>
+
+ <div class="tab-content">
+  <div class="tab-pane active" id="dataStreaming">
+    <br />
+   <p>This tool will generate one random telemetry data point, and stream to our platform.audacy.space webSocket server. Please click the icon below to stream data changes.
+   </p>
+   <p>Benefits - It demonstrates pushing latest telemetry data to Quindar widgets in real time.
+   </p>
+   <p class="marginTop"></p>
+
+   <br />
+   
+    <div class="row col-md-12 col-md-offset-1">
+      <table class="tablel table-responsive" border="0">
+        <thead>
+          <tr>
+            <th><input type="image" src="images/Dash_Icons-03.png" 
+              width="160" height="160" 
+              ng-click="generateIt('attitude')" style="display: inline-block; height:auto; max-width: 100%;"></th>
+            <th><input type="image" src="images/Dash_Icons-02.png" 
+              width="160" height="160" 
+              ng-click="generateIt('position')" style="display: inline-block; height:auto; max-width: 100%;"></th>
+            <th><input type="image" src="images/Dash_Icons-01.png" 
+              width="160" height="160"
+              ng-click="generateIt('vehicle')" style="display: inline-block; height:auto; max-width: 100%;"></th>
+            <th><input type="image" src="images/Dash_Icons-04.png" 
+              width="160" height="160" 
+              ng-click="generateIt('orbit')" style="display: inline-block; height:auto; max-width: 100%;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><center>Attitude Change</center></td>
+            <td><center>Position Change</center></td>
+            <td><center>Vehicle Change</center></td>
+            <td><center>Orbit Trajectory Change</center></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <br />
+    <div class="row col-md-12" style="margin-top:40px;">
+      <p>Generated Data: <input type="text" id="generatedDataStreaming" ng-model="generatedDataStreaming" style="min-width: 80%;">
+      </p>
+      <p>Timestamp: <input type="text" id="statusStreaming" ng-model="statusStreaming" style="min-width: 40%;">
+      </p>
+      <p>
+        <button type="radio" id="clearItStreaming" ng-click="clearIt('streaming')" class="btn btn-warning ">
+          <i class="glyphicon glyphicon-trash btn-warning"></i> Clear
+        </button>
+      </p>
+    </div>
+
+  </div>
+  <!-- tab-pane active -->
+
+  <div class="tab-pane" id="messagequeue">
+    <br />
+    <p>This tool will generate one random telemetry data point, and write to our platform.audacy.space message queue server. Please click the icon below to push data changes to message queue.
+    </p>
+    <p>Benefits - Message queue (currently, RabbitMQ message queue) guarantees telemetry data is captured, stored and routed only to authorized recipients. In Quindar, message queue will write telemetry data to MongoDB database. It also supports large-scale messaging when high volume of telemetry data is transmitted.</p>
+    <p class="marginTop"></p>
+
+    <br />
+   
+    <div class="row col-md-12 col-md-offset-1">
+      <table class="tablel table-responsive" border="0">
+        <thead>
+          <tr>
+            <th><input type="image" src="images/Dash_Icons-03.png" 
+              width="160" height="160" 
+              ng-click="queueIt('attitude')" style="display: inline-block; height:auto; max-width: 100%;"></th>
+            <th><input type="image" src="images/Dash_Icons-02.png" 
+              width="160" height="160" 
+              ng-click="queueIt('position')" style="display: inline-block; height:auto; max-width: 100%;"></th>
+            <th><input type="image" src="images/Dash_Icons-01.png" 
+              width="160" height="160"
+              ng-click="queueIt('vehicle')" style="display: inline-block; height:auto; max-width: 100%;"></th>
+            <th><input type="image" src="images/Dash_Icons-04.png" 
+              width="160" height="160" 
+              ng-click="queueIt('orbit')" style="display: inline-block; height:auto; max-width: 100%;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><center>Attitude Change</center></td>
+            <td><center>Position Change</center></td>
+            <td><center>Vehicle Change</center></td>
+            <td><center>Orbit Trajectory Change</center></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <br />
+    <div class="row col-md-12" style="margin-top:40px;">
+      <p>Generated Data: <input type="text" id="generatedDataMQ" ng-model="generatedDataMQ" style="min-width: 80%;">
+      </p>
+      <p>Message Queue topic (for routing): <input type="text" id="topicMQ" ng-model="topicMQ" style="min-width: 30%;">
+      </p>
+      <p>Timestamp: <input type="text" id="statusMQ" ng-model="statusMQ" style="min-width: 40%;">
+      </p>
+      <p>
+        <button type="radio" id="clearItMQ" ng-click="clearIt('messagequeue')" class="btn btn-warning ">
+          <i class="glyphicon glyphicon-trash btn-warning"></i> Clear
+        </button>
+        <button type="radio" id="writeToMQ" ng-click="writeToMQ()" class="btn btn-success ">
+          <i class="glyphicon glyphicon-trash btn-success"></i> WriteToMQ
+        </button>
+        <button type="radio" id="getAttitudePartial" ng-click="getAttitudePartial('IBEX', 3)" class="btn btn-success ">
+          <i class="glyphicon glyphicon-trash btn-success"></i> getAttitudePartial
+        </button>
+      </p>
+    </div>
+
+  </div>
+  <!-- tab-pane active -->
+ </div>
+ <!-- tab-content -->

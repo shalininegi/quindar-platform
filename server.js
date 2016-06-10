@@ -15,6 +15,7 @@ var mongoose 			= require('mongoose');
 var flash    			= require('connect-flash');
 //var passport 			= require('passport');
 //var Strategy 			= require('passport-local').Strategy;
+var q                   = require('q');
 var syslogger			= require('morgan');
 var logger				= require('winston');
 var FileStreamRotator 	= require('file-stream-rotator');
@@ -124,3 +125,4 @@ require('./app/scripts/module03.js')(app, bodyParser, mongoose, fs, syslogger, l
 require('./app/scripts/module04.js')(app, bodyParser, fs, syslogger, logger, helper);
 require('./app/scripts/module06.js')(app, socketPort, syslogger, logger, helper);
 require('./app/scripts/module07.js')(app, secureSocketServer, secureSocketPort, io, syslogger, logger, helper);
+require('./app/scripts/module08.js')(app, bodyParser, mongoose, fs, syslogger, logger, helper);
