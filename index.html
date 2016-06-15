@@ -63,15 +63,14 @@
           <a ui-sref="dataGenerator"><i class="glyphicon glyphicon-th-large"></i>&nbsp;&nbsp;Data Generator </a>
         </li>
 
-        <!--
-        <li ui-sref-active="active">
-          <a ui-sref="dataInspector">Data Inspector </a>
-        </li>
-        -->
-
         <li ui-sref-active="active">
           <a ui-sref="dataBrowser" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;&nbsp;Data Browser </a>
         </li>  
+
+        <li ui-sref-active="active">
+          <a ui-sref="dataMetrics"><i class="glyphicon glyphicon-dashboard"></i>&nbsp;&nbsp;Metrics </a>
+        </li>
+
         <!-- /User dropdown -->
          
       </ul>
@@ -88,15 +87,13 @@
       <div ui-view="dataGenerator"></div>
     </div>   
 
-    <!--
-    <div class="container col-md-12 ">
-      <div ui-view="dataInspector"></div>
-    </div> 
-    -->
-
     <div class="container col-md-12 ">
       <div ui-view="dataBrowser"></div>
     </div>         
+
+    <div class="container col-md-12 ">
+      <div ui-view="dataMetrics"></div>
+    </div> 
   </div>
   
 </div>

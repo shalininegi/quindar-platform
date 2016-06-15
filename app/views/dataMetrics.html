@@ -1,74 +1,74 @@
-<div id="dataBrowserPanel" class="container contentContainer col-md-8 col-xs-12 col-md-offset-2"
+<div id="dataMetricsDashboard" class="container contentContainer col-md-8 col-xs-12 col-md-offset-2"
   style="margin-top: 20px;" ng-controller="adminConsoleController">
-  <ul class="nav nav-tabs" id="dataList2">
-   <li class="active"><a data-target="#browseAttitude" data-toggle="tab">Attitude </a></li>
-   <li ><a data-target="#browsePosition" data-toggle="tab">Position </a></li>
-   <li ><a data-target="#browseVehicle" data-toggle="tab">Vehicle </a></li>
-   <li ><a data-target="#browseOrbit" data-toggle="tab">Orbit </a></li>
+  <ul class="nav nav-tabs" id="dataList3">
+   <li class="active"><a data-target="#countAttitude" data-toggle="tab">Attitude </a></li>
+   <li ><a data-target="#countPosition" data-toggle="tab">Position </a></li>
+   <li ><a data-target="#countVehicle" data-toggle="tab">Vehicle </a></li>
+   <li ><a data-target="#countOrbit" data-toggle="tab">Orbit </a></li>
  </ul>
 
  <div class="tab-content">
-  <div class="tab-pane active" id="browseAttitude">
+  <div class="tab-pane active" id="countAttitude">
     <br />
-    <p>The data browser will browse attitude collection for verification. It will fetch the latest n records by vehicle id.
+    <p>The dashboard will report on metrics and trend for usage analytics. There are other metrics REST APIs available.
     </p>
     <p class="marginTop"></p>
 
     <br />
-   
-    <div class="row col-md-12 ">
-      <form>
-        <div class="form-group">
-          <div class="input-group">
-            <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i>
-            </div>
-            <input type="text" class="form-control" placeholder="Search..." ng-model="searchCriteria">
-          </div>      
-        </div>
-      </form>
-      <table class="table table-bordered table-striped table-condensed table-responsive flip-content" border="0">
-        <thead>
-          <tr>
-            <th><a href="#" ng-click="sortType = 'vehicleId'; sortReverse = !sortReverse">
-              Vehicle Id
-              <span ng-show="sortType == 'vehicleId' && !sortReverse" class="fa fa-caret-down"></span>
-              <span ng-show="sortType == 'vehicleId' && sortReverse" class="fa fa-caret-up"></span>
-            </th>
-            <th><a href="#" ng-click="sortType = 'q1'; sortReverse = !sortReverse">
-              Quaternion 1
-              <span ng-show="sortType == 'q1' && !sortReverse" class="fa fa-caret-down"></span>
-              <span ng-show="sortType == 'q1' && sortReverse" class="fa fa-caret-up"></span>
-            </th>
-            <th><a href="#" ng-click="sortType = 'q2'; sortReverse = !sortReverse">
-              Quaternion 2
-              <span ng-show="sortType == 'q2' && !sortReverse" class="fa fa-caret-down"></span>
-              <span ng-show="sortType == 'q2' && sortReverse" class="fa fa-caret-up"></span>
-            </th>
-            <th><a href="#" ng-click="sortType = 'q3'; sortReverse = !sortReverse">
-              Quaternion 3
-              <span ng-show="sortType == 'q3' && !sortReverse" class="fa fa-caret-down"></span>
-              <span ng-show="sortType == 'q3' && sortReverse" class="fa fa-caret-up"></span>
-            </th>
-            <th><a href="#" ng-click="sortType = 'q4'; sortReverse = !sortReverse">
-              Quaternion 4
-              <span ng-show="sortType == 'q4' && !sortReverse" class="fa fa-caret-down"></span>
-              <span ng-show="sortType == 'q4' && sortReverse" class="fa fa-caret-up"></span>
-            </th>
-            <th><a href="#" ng-click="sortType = 'timestamp'; sortReverse = !sortReverse">
-              Timestamp
-              <span ng-show="sortType == 'timestamp' && !sortReverse" class="fa fa-caret-down"></span>
-              <span ng-show="sortType == 'timestamp' && sortReverse" class="fa fa-caret-up"></span>
-            </th>
-          </tr>
-        </thead>
+
+    <div class="row col-md-12 col-md-offset-1"">
+      <table class="table table-responsive" border="0">
         <tbody>
-          <tr ng-repeat = "attitude in attitudeDataSet | orderBy:sortType:sortReverse | filter:searchCriteria">
-            <td>{{ attitude.vehicleId }}</td>
-            <td>{{ attitude.q1 }}</td>
-            <td>{{ attitude.q2 }}</td>
-            <td>{{ attitude.q3 }}</td>
-            <td>{{ attitude.q4 }}</td>
-            <td>{{ attitude.timestamp }}</td>
+          <tr>
+            <td><center><input type="image" src="/images/gauge.png" 
+              width="160" height="160" 
+              ng-init="getMetricsTotalAll('attitude')"
+              style="display: inline-block; height:auto; max-width: 100%;"></center>
+              <p><center>Data Volume</center></p>
+            </td>
+            <td>
+              # messages sent/received: {{ }}
+            </td>
+          </tr>
+          <tr>
+            <td><center><input type="image" src="/images/trending.jpg" 
+              width="160" height="160" 
+              style="display: inline-block; height:auto; max-width: 100%;"></center>
+              <p><center>Trending</center></p>
+            </td>
+            <td>
+              <form>
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Search..." ng-model="searchCriteria">
+                  </div>      
+                </div>
+              </form>
+              <table class="table table-bordered table-striped table-condensed table-responsive flip-content" border="0">
+                <thead>
+                  <tr>
+                    <th><a href="#" ng-click="sortType = 'eventDate'; sortReverse = !sortReverse">
+                      Date
+                      <span ng-show="sortType == 'eventDate' && !sortReverse" class="fa fa-caret-down"></span>
+                      <span ng-show="sortType == 'eventDate' && sortReverse" class="fa fa-caret-up"></span>
+                    </th>
+                    <th><a href="#" ng-click="sortType = 'subtotal'; sortReverse = !sortReverse">
+                      # of Messages
+                      <span ng-show="sortType == 'subtotal' && !sortReverse" class="fa fa-caret-down"></span>
+                      <span ng-show="sortType == 'subtotal' && sortReverse" class="fa fa-caret-up"></span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat = "attitude in attitudeDataSet | orderBy:sortType:sortReverse | filter:searchCriteria">
+                    <td>{{ attitude.q4 }}</td>
+                    <td>{{ attitude.timestamp }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -77,10 +77,8 @@
     <div class="row col-md-12" style="margin-top:40px;">
       <p>
         <button type="radio" id="getAttitudePartial" ng-click="getAttitudePartial(yourVehicleId, yourNItems)" class="btn btn-success ">
-          <i class="glyphicon glyphicon-play btn-success"></i> Browse
+          <i class="glyphicon glyphicon-play btn-success"></i> Refresh
         </button>&nbsp;&nbsp;
-        <span>Vehicle Id: <input type="text" id="yourVehicleId" ng-model="yourVehicleId"></span>&nbsp;&nbsp;
-        <span>Fetch latest # of Items: <input type="text" id="yourNItems" ng-model="yourNItems">
       </p>
     </div>
 
@@ -170,8 +168,6 @@
         <button type="radio" id="getPositionPartial" ng-click="getPositionPartial(yourVehicleId, yourNItems)" class="btn btn-success ">
           <i class="glyphicon glyphicon-play btn-success"></i> Browse
         </button>&nbsp;&nbsp;
-        <span>Vehicle Id: <input type="text" id="yourVehicleId" ng-model="yourVehicleId"></span>&nbsp;&nbsp;
-        <span>Fetch latest # of Items: <input type="text" id="yourNItems" ng-model="yourNItems">
       </p>
     </div>
 
@@ -271,10 +267,8 @@
     <div class="row col-md-12" style="margin-top:40px;">
       <p>
         <button type="radio" id="getVehiclePartial" ng-click="getVehiclePartial(yourVehicleId, yourNItems)" class="btn btn-success ">
-          <i class="glyphicon glyphicon-play btn-success"></i> Browse
+          <i class="glyphicon glyphicon-play btn-success"></i> Refresh
         </button>&nbsp;&nbsp;
-        <span>Vehicle Id: <input type="text" id="yourVehicleId" ng-model="yourVehicleId"></span>&nbsp;&nbsp;
-        <span>Fetch latest # of Items: <input type="text" id="yourNItems" ng-model="yourNItems">
       </p>
     </div>
 
@@ -332,10 +326,8 @@
     <div class="row col-md-12" style="margin-top:40px;">
       <p>
         <button type="radio" id="getOrbitPartial" ng-click="getOrbitPartial(yourVehicleId, yourNItems)" class="btn btn-success ">
-          <i class="glyphicon glyphicon-play btn-success"></i> Browse
+          <i class="glyphicon glyphicon-play btn-success"></i> Refresh
         </button>&nbsp;&nbsp;
-        <span>Vehicle Id: <input type="text" id="yourVehicleId" ng-model="yourVehicleId"></span>&nbsp;&nbsp;
-        <span>Fetch latest # of Items: <input type="text" id="yourNItems" ng-model="yourNItems">
       </p>
     </div>
 

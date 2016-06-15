@@ -78,6 +78,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
     var attitudeData = new Attitude(req.body);
+    attitudeData.timestamp = Math.floor(new Date() / 1000);
     attitudeData.save(function(err) {
       if (err) {
         res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
@@ -189,6 +190,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
     var positionData = new Position(req.body);
+    positionData.timestamp = Math.floor(new Date() / 1000);
     positionData.save(function(err) {
       if (err) {
         res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
@@ -306,6 +308,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
     var vehicleData = new Vehicle(req.body);
+    vehicleData.timestamp = Math.floor(new Date() / 1000);
     vehicleData.save(function(err) {
       if (err) {
         res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
@@ -420,6 +423,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
     var orbitData = new Orbit(req.body);
+    orbitData.timestamp = Math.floor(new Date() / 1000);
     orbitData.save(function(err) {
       if (err) { 
         res.status(500).send({"message": "Internal system error encountered", "type":"internal"});

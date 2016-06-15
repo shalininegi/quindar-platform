@@ -126,3 +126,4 @@ require('./app/scripts/module04.js')(app, bodyParser, fs, syslogger, logger, hel
 require('./app/scripts/module06.js')(app, socketPort, syslogger, logger, helper);
 require('./app/scripts/module07.js')(app, secureSocketServer, secureSocketPort, io, syslogger, logger, helper);
 require('./app/scripts/module08.js')(app, bodyParser, mongoose, fs, syslogger, logger, helper);
+require('./app/scripts/module09.js')(app, bodyParser, mongoose, fs, syslogger, logger, helper);
