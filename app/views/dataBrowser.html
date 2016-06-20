@@ -75,7 +75,7 @@
     </div>
 
     <div class="row col-md-12" style="margin-top:40px;">
-      <p>
+      <p ng-init="getAttitudePartial(yourVehicleId, 3)" >
         <button type="radio" id="getAttitudePartial" ng-click="getAttitudePartial(yourVehicleId, yourNItems)" class="btn btn-success ">
           <i class="glyphicon glyphicon-play btn-success"></i> Browse
         </button>&nbsp;&nbsp;
@@ -166,7 +166,7 @@
     </div>
 
     <div class="row col-md-12" style="margin-top:40px;">
-      <p>
+      <p ng-init="getPositionPartial(yourVehicleId, 3)">
         <button type="radio" id="getPositionPartial" ng-click="getPositionPartial(yourVehicleId, yourNItems)" class="btn btn-success ">
           <i class="glyphicon glyphicon-play btn-success"></i> Browse
         </button>&nbsp;&nbsp;
@@ -269,7 +269,7 @@
     </div>
 
     <div class="row col-md-12" style="margin-top:40px;">
-      <p>
+      <p ng-init="getVehiclePartial(yourVehicleId, 3)" >
         <button type="radio" id="getVehiclePartial" ng-click="getVehiclePartial(yourVehicleId, yourNItems)" class="btn btn-success ">
           <i class="glyphicon glyphicon-play btn-success"></i> Browse
         </button>&nbsp;&nbsp;
@@ -330,7 +330,7 @@
     </div>
 
     <div class="row col-md-12" style="margin-top:40px;">
-      <p>
+      <p ng-init="getOrbitPartial(yourVehicleId, 3)">
         <button type="radio" id="getOrbitPartial" ng-click="getOrbitPartial(yourVehicleId, yourNItems)" class="btn btn-success ">
           <i class="glyphicon glyphicon-play btn-success"></i> Browse
         </button>&nbsp;&nbsp;

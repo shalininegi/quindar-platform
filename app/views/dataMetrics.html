@@ -16,7 +16,60 @@
 
     <br />
 
+    <div class="row col-md-12 ">
+      <table class="table-responsive" border="0">
+        <thead>
+          <tr>
+            <th><input type="image" src="/images/gauge.png" 
+              width="120" height="120" 
+              ng-init="getMetricsTotalAll('attitude')"
+              style="display: inline-block; height:auto; max-width: 100%;">
+            </th>
+            <th>&nbsp &nbsp &nbsp&nbsp &nbsp&nbsp</th>
+            <th><p><center><h3>{{ }} 4</h3></center></p>
+              <p>messages sent/received</p>
+            </th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+
+    <div class="row col-md-12" style="margin-top: 40px;">
+      <form>
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Search..." ng-model="searchCriteria">
+                  </div>      
+                </div>
+              </form>
+              <table class="table table-bordered table-striped table-condensed table-responsive flip-content" border="0">
+                <thead>
+                  <tr>
+                    <th><a href="#" ng-click="sortType = 'eventDate'; sortReverse = !sortReverse">
+                      Date
+                      <span ng-show="sortType == 'eventDate' && !sortReverse" class="fa fa-caret-down"></span>
+                      <span ng-show="sortType == 'eventDate' && sortReverse" class="fa fa-caret-up"></span>
+                    </th>
+                    <th><a href="#" ng-click="sortType = 'subtotal'; sortReverse = !sortReverse">
+                      # of Messages
+                      <span ng-show="sortType == 'subtotal' && !sortReverse" class="fa fa-caret-down"></span>
+                      <span ng-show="sortType == 'subtotal' && sortReverse" class="fa fa-caret-up"></span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat = "attitude in attitudeDataSet | orderBy:sortType:sortReverse | filter:searchCriteria">
+                    <td>{{ attitude.q4 }}</td>
+                    <td>{{ attitude.timestamp }}</td>
+                  </tr>
+                </tbody>
+              </table>
+    </div>
+    <!--
     <div class="row col-md-12 col-md-offset-1"">
+    
       <table class="table table-responsive" border="0">
         <tbody>
           <tr>
@@ -72,6 +125,7 @@
           </tr>
         </tbody>
       </table>
+    
     </div>
 
     <div class="row col-md-12" style="margin-top:40px;">
@@ -81,7 +135,7 @@
         </button>&nbsp;&nbsp;
       </p>
     </div>
-
+    -->
   </div>
   <!-- tab-pane active -->
 
@@ -93,7 +147,9 @@
 
     <br />
    
+   <!--
     <div class="row col-md-12 ">
+  
       <form>
         <div class="form-group">
           <div class="input-group">
@@ -161,6 +217,7 @@
           </tr>
         </tbody>
       </table>
+     
     </div>
 
     <div class="row col-md-12" style="margin-top:40px;">
@@ -170,6 +227,7 @@
         </button>&nbsp;&nbsp;
       </p>
     </div>
+  -->
 
   </div>
   <!-- tab-pane active -->
@@ -182,7 +240,9 @@
 
     <br />
    
+    <!--
     <div class="row col-md-12 ">
+    
       <form>
         <div class="form-group">
           <div class="input-group">
@@ -262,6 +322,7 @@
           </tr>
         </tbody>
       </table>
+    
     </div>
 
     <div class="row col-md-12" style="margin-top:40px;">
@@ -271,6 +332,7 @@
         </button>&nbsp;&nbsp;
       </p>
     </div>
+    -->
 
   </div>
   <!-- tab-pane active --> 
@@ -283,6 +345,7 @@
 
     <br />
    
+    <!--
     <div class="row col-md-12 ">
       <form>
         <div class="form-group">
@@ -330,8 +393,8 @@
         </button>&nbsp;&nbsp;
       </p>
     </div>
-
-  </di
+  -->
+  </div>
   <!-- tab-pane active -->
 
  </div>
