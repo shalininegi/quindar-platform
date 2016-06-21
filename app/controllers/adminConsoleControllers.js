@@ -4,7 +4,7 @@
 // Updated: Jun 10, 2016
 // License: MIT license
 
-var app = angular.module("app", ['ui.bootstrap', 'ui.router']);
+var app = angular.module("app", ['ui.bootstrap', 'ui.router', 'nvd3']);
 
 // ui.router definitions
  app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
@@ -66,7 +66,119 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.totalNumberMessagesVehicle = 0;
   $scope.totalNumberMessagesOrbit = 0;
 
+  // nvd3 for charts
+  $scope.optionX = { 
+    chart: {
+        type: 'lineChart',
+        height: 450,
+        margin : {
+            top: 20,
+            right: 20,
+            bottom: 60,
+            left: 105 // 55
+        },
+        x: function(d){ return d.x; },
+        y: function(d){ return d.y; },
+        showValues: true,
+        valueFormat: function(d){
+            return d3.format(',.4f')(d);
+        },
+        transitionDuration: 500,
+        xAxis: {
+            axisLabel: '# Past Days'
+        },
+        yAxis: {
+            axisLabel: '# Messages',
+            axisLabelDistance: 10
+        }
+    }
+  };
 
+  $scope.getAttitudeMetricsTrend = function() {
+    adminFactory.getMetricsTrendTotalAll('attitude') 
+    .success(function(data, status) {
+      var tmpValues = [];
+      $scope.attitudeDataSetX = data.trend;
+      for (var i = 0; i < $scope.attitudeDataSetX.length; i++) {
+         tmpValues.push({ x: i, y: $scope.attitudeDataSetX[i].subtotal });
+      };
+      $scope.dataAttitudeTrend = [ { key: "Attitude Telemetry", values:  tmpValues }];
+      console.log("getAttitudeMetricsTrend() status=" + status + "   $scope.data=" + JSON.stringify($scope.data));
+    })
+    .error(function(err) {
+      console.error('Sorry, Quindar platform cannot serve getAttitudeMetricsTrend() immediately. Please retry later.');
+    });
+  };
+
+  $scope.getPositionMetricsTrend = function() {
+    adminFactory.getMetricsTrendTotalAll('position') 
+    .success(function(data, status) {
+      var tmpValues = [];
+      $scope.positionDataSetX = data.trend;
+      for (var i = 0; i < $scope.positionDataSetX.length; i++) {
+         tmpValues.push({ x: i, y: $scope.positionDataSetX[i].subtotal });
+      };
+      $scope.dataPositionTrend = [ { key: "Position Telemetry", values:  tmpValues }];
+      console.log("getPositionMetricsTrend() status=" + status + "   $scope.data=" + JSON.stringify($scope.data));
+    })
+    .error(function(err) {
+      console.error('Sorry, Quindar platform cannot serve getPositionMetricsTrend() immediately. Please retry later.');
+    });
+  };
+
+  $scope.getVehicleMetricsTrend = function() {
+    adminFactory.getMetricsTrendTotalAll('vehicle') 
+    .success(function(data, status) {
+      var tmpValues = [];
+      $scope.vehicleDataSetX = data.trend;
+      for (var i = 0; i < $scope.vehicleDataSetX.length; i++) {
+         tmpValues.push({ x: i, y: $scope.vehicleDataSetX[i].subtotal });
+      };
+      $scope.dataVehicleTrend = [ { key: "Vehicle Telemetry", values:  tmpValues }];
+      console.log("getVehicleMetricsTrend() status=" + status + "   $scope.data=" + JSON.stringify($scope.data));
+    })
+    .error(function(err) {
+      console.error('Sorry, Quindar platform cannot serve getVehicleMetricsTrend() immediately. Please retry later.');
+    });
+  };
+
+  $scope.getOrbitMetricsTrend = function() {
+    adminFactory.getMetricsTrendTotalAll('orbit') 
+    .success(function(data, status) {
+      var tmpValues = [];
+      $scope.orbitDataSetX = data.trend;
+      for (var i = 0; i < $scope.orbitDataSetX.length; i++) {
+         tmpValues.push({ x: i, y: $scope.orbitDataSetX[i].subtotal });
+      };
+      $scope.dataOrbitTrend = [ { key: "Orbit Telemetry", values:  tmpValues }];
+      console.log("getOrbitMetricsTrend() status=" + status + "   $scope.data=" + JSON.stringify($scope.data));
+    })
+    .error(function(err) {
+      console.error('Sorry, Quindar platform cannot serve getOrbitMetricsTrend() immediately. Please retry later.');
+    });
+  };
+
+  $scope.getAttitudeMetricsTrend();
+  $scope.getPositionMetricsTrend();
+  $scope.getVehicleMetricsTrend();
+  $scope.getOrbitMetricsTrend();
+
+/**
+  $scope.data = [{
+    key: "Vehicle: Audacy1",
+    values: [
+        { x : 1 , y : -29.765957771107 },
+        { x : 2 , y : 0 },
+        { x : 3 , y : 32.807804682612 },
+        { x : 4 , y : 196.45946739256 },
+        { x : 5 , y : 0.19434030906893 },
+        { x : 6 , y : -98.079782601442 },
+        { x : 7 , y : -13.925743130903 },
+        { x : 8 , y : -5.1387322875705 }
+    ]
+  }
+  ];
+**/
   $scope.generateIt = function(payloadType) {
     var payload = {};
     var timestamp = new Date();
