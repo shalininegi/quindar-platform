@@ -1237,7 +1237,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       {$group : {
         _id : { eventDate : "$timestamp" },
         subtotal: { $sum: 1}
-      }},,
+      }},
       {$sort: { "timestamp": -1}},
       {$limit: limitResultset },
       {$sort: { "timestamp": -1}}
