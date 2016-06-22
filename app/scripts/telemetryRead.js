@@ -28,7 +28,7 @@ module.exports = function(app, mongoose, syslogger, logger) {
   
   // common database handlers
   db.on('connected', function (err) {
-    console.log('MongoDB connected');
+    console.log('MongoDB connected - telemetryRead.js (read-only REST API)');
   });
 
   db.on('error', function (err) {

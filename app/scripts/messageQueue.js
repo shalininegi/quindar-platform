@@ -19,6 +19,7 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   var serverURL = systemSettings.serverURL;
   var serverEndpoint = systemSettings.serverEndpoint;
 
+  console.log("/messageQueue.js RabbitMQ API loaded.");
   /**
   * @api {post} /services/v1/simulation/messaging/attitude/:topic/:numberOfItems  attitude/topic/numberOfItems
   * @apiVersion 0.1.0

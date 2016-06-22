@@ -14,7 +14,7 @@ module.exports = function(app, secureSocketServer, secureSocketPort, io, syslogg
 
   var randomstring = require('randomstring');
 
-
+  console.log("/webSocketSSL.js webSocket server SSL loaded.");
   io.on('connection', function(socket) {
     console.log("socket.io Server connected.")
 

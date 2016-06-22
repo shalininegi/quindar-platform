@@ -347,7 +347,7 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
   };
 
   // generate simulated position data point @ nItems
-  admFactory.generatePositionSimulated = function() {
+  admFactory.generatePositionSimulated = function(nTimes) {
     var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/simulation/position/' + nTimes;
     return $http.post(serviceEndpoint)
     .success(function(response) {
@@ -359,7 +359,7 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
   };
 
   // generate simulated vehicle data point @ nItems
-  admFactory.generateVehicleSimulated = function() {
+  admFactory.generateVehicleSimulated = function(nTimes) {
     var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/simulation/vehicle/' + nTimes;
     return $http.post(serviceEndpoint)
     .success(function(response) {
@@ -371,7 +371,7 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
   };
 
   // generate simulated orbit data point @ nItems
-  admFactory.generateOrbitSimulated = function() {
+  admFactory.generateOrbitSimulated = function(nTimes) {
     var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/simulation/orbit/' + nTimes;
     return $http.post(serviceEndpoint)
     .success(function(response) {

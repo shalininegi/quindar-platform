@@ -16,8 +16,11 @@
 
     <br />
 
-    <div class="row col-md-12 " style="margin-top: 30px;">
+    <div class="row col-md-12 " style="margin-top: 30px;" ng-init="getAttitudeMetricsTrend()">
       <nvd3 options='optionX' data='dataAttitudeTrend'></nvd3>
+      <button type="radio" id="refreshAttitudeMetricsTrend" ng-click="getAttitudeMetricsTrend()" class="btn btn-success ">
+          <i class="glyphicon glyphicon-refresh btn-success"></i> Refresh
+      </button>
     </div>
   </div>
   <!-- tab-pane active -->
@@ -30,8 +33,11 @@
 
     <br />
 
-    <div class="row col-md-12 " style="margin-top: 30px;">
+    <div class="row col-md-12 " style="margin-top: 30px;" ng-init="getPositionMetricsTrend()">
       <nvd3 options='optionX' data='dataPositionTrend'></nvd3>
+      <button type="radio" id="refreshPositionMetricsTrend" ng-click="getPositionMetricsTrend()" class="btn btn-success ">
+          <i class="glyphicon glyphicon-refresh btn-success"></i> Refresh
+      </button>
     </div>
   </div>
   <!-- tab-pane active -->
@@ -43,8 +49,11 @@
     <p class="marginTop"></p>
 
     <br />
-    <div class="row col-md-12 " style="margin-top: 30px;">
+    <div class="row col-md-12 " style="margin-top: 30px;" ng-init="getVehicleMetricsTrend()">
       <nvd3 options='optionX' data='dataVehicleTrend'></nvd3>
+      <button type="radio" id="refreshVehicleMetricsTrend" ng-click="getVehicleMetricsTrend()" class="btn btn-success ">
+          <i class="glyphicon glyphicon-refresh btn-success"></i> Refresh
+      </button>
     </div>
   </div>
   <!-- tab-pane active --> 
@@ -56,8 +65,11 @@
     <p class="marginTop"></p>
 
     <br />
-    <div class="row col-md-12 " style="margin-top: 30px;">
+    <div class="row col-md-12 " style="margin-top: 30px;" ng-init="getOrbitMetricsTrend()">
       <nvd3 options='optionX' data='dataOrbitTrend'></nvd3>
+      <button type="radio" id="refreshOrbitMetricsTrend" ng-click="getOrbitMetricsTrend()" class="btn btn-success ">
+          <i class="glyphicon glyphicon-refresh btn-success"></i> Refresh
+      </button>
     </div>
   </div>
   <!-- tab-pane active -->

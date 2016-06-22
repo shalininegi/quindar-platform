@@ -72,7 +72,7 @@
     <br />
    
     <div class="row col-md-12 col-md-offset-1">
-      <table class="table table-responsive" border="0">
+      <table class="table-responsive" border="0">
         <thead>
           <tr>
             <th><input type="image" src="images/Dash_Icons-03.png" 
@@ -102,21 +102,81 @@
 
     <br />
     <div class="row col-md-12" style="margin-top:40px;">
-      <p>Generated Data: <input type="text" id="generatedDataMQ" ng-model="generatedDataMQ" style="min-width: 80%;">
+      <p>Message Queue topic (for routing): <input type="text" id="topicMQ" ng-model="topicMQ" style="min-width: 30%;" >
       </p>
-      <p>Message Queue topic (for routing): <input type="text" id="topicMQ" ng-model="topicMQ" style="min-width: 30%;">
+      <p>How many records to generate: <input type="text" id="nItemsGenerated" ng-model="nItemsGenerated"
+        style="min-width:30%;">
       </p>
-      <p>Timestamp: <input type="text" id="statusMQ" ng-model="statusMQ" style="min-width: 40%;">
+
+      <p style="margin-top: 30px;"></p>
+      <hr />
+      <p>Generated Data: <input type="text" id="generatedDataMQ" ng-model="generatedDataMQ" style="min-width: 80%;" readonly >
+      </p>
+      <p>Timestamp: <input type="text" id="statusMQ" ng-model="statusMQ" style="min-width: 40%;" readonly>
       </p>
       <p>
         <button type="radio" id="clearItMQ" ng-click="clearIt('messagequeue')" class="btn btn-warning ">
           <i class="glyphicon glyphicon-trash btn-warning"></i> Clear
         </button>
-        <button type="radio" id="writeToMQ" ng-click="writeToMQ()" class="btn btn-success ">
-          <i class="glyphicon glyphicon-trash btn-success"></i> WriteToMQ
-        </button>
-        <button type="radio" id="getAttitudePartial" ng-click="getAttitudePartial('IBEX', 3)" class="btn btn-success ">
-          <i class="glyphicon glyphicon-trash btn-success"></i> getAttitudePartial
+      </p>
+    </div>
+
+  </div>
+  <!-- tab-pane active -->
+
+   <div class="tab-pane" id="database">
+    <br />
+    <p>This tool will generate one random telemetry data point, and write to our platform.audacy.space database server (MongoDB). Please click the icon below to push data changes to MongoDB.
+    </p>
+    <p>Benefits - MongoDB is a multi-node database cluster, which is distributed in 3 different geographical region for fast database read and for resilience and high availability. Another advantage is the use of schema-less design that allows easy data structure changes without rebuilding the application or backend database.  This will also ease descriptive (e.g. metrics) and predictive (e.g. trend prediction, anomaly prediction) data analytics.</p>
+    <p class="marginTop"></p>
+
+    <br />
+   
+    <div class="row col-md-12 col-md-offset-1">
+      <table class="table-responsive" border="0">
+        <thead>
+          <tr>
+            <th><input type="image" src="images/Dash_Icons-03.png" 
+              width="160" height="160" 
+              ng-click="dbIt('attitude')" style="display: inline-block; height:auto; max-width: 100%;"></th>
+            <th><input type="image" src="images/Dash_Icons-02.png" 
+              width="160" height="160" 
+              ng-click="dbIt('position')" style="display: inline-block; height:auto; max-width: 100%;"></th>
+            <th><input type="image" src="images/Dash_Icons-01.png" 
+              width="160" height="160"
+              ng-click="dbIt('vehicle')" style="display: inline-block; height:auto; max-width: 100%;"></th>
+            <th><input type="image" src="images/Dash_Icons-04.png" 
+              width="160" height="160" 
+              ng-click="dbIt('orbit')" style="display: inline-block; height:auto; max-width: 100%;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><center>Attitude Change</center></td>
+            <td><center>Position Change</center></td>
+            <td><center>Vehicle Change</center></td>
+            <td><center>Orbit Trajectory Change</center></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <br />
+    <div class="row col-md-12" style="margin-top:40px;">
+      <p>How many records to generate: <input type="text" id="nItemsGenerated" ng-model="nItemsGenerated"
+        style="min-width:30%;">
+      </p>
+
+      <p style="margin-top: 30px;"></p>
+      <hr />
+      <p>Generated Data: <input type="text" id="generatedDataDatabase" ng-model="generatedDataDatabase" style="min-width: 80%;" readonly >
+      </p>
+      <p>Timestamp: <input type="text" id="statusDatabase" ng-model="statusDatabase" style="min-width: 40%;" readonly>
+      </p>
+      <p>
+        <button type="radio" id="clearItDatabase" ng-click="clearIt('database')" class="btn btn-warning ">
+          <i class="glyphicon glyphicon-trash btn-warning"></i> Clear
         </button>
       </p>
     </div>

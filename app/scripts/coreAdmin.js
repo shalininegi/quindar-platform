@@ -22,7 +22,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
   // common database handlers
   db.on('connected', function (err) {
-    console.log('MongoDB connected');
+    console.log('MongoDB connected - coreAdmin.js (Write, DB admin and Trending REST APIs)');
   });
 
   db.on('error', function (err) {
@@ -472,11 +472,12 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     var nTimes = parseInt(req.params.nTimes);  
     var orbitData = {};
     var dataList = [];
+    var nDataPoints = 200;
     for (var i=0; i < nTimes; i++) {
-      orbitData = new Orbit(helper.getOrbit(Math.random() * 0.2, Math.random() * 0.3, nTimes));
+      orbitData = new Orbit(helper.getOrbit(Math.random() * 0.2, Math.random() * 0.3, nDataPoints));
       dataList.push(orbitData);
     };
-
+    
     var counter = 0;
     async.eachLimit(dataList, 5, function(item, callback) {
       orbitData = new Orbit(item);

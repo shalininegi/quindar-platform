@@ -7,6 +7,8 @@
 module.exports = function(app) {
   var mongoose = require('mongoose');
 
+  console.log("/verifyMe.js - verifyMe is loaded.");
+  
 	/**
 	* @api {get} /verifyMe system heartbeat
 	* @apiVersion 0.1.0

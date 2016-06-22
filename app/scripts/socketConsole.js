@@ -7,7 +7,7 @@
 var socket = io('ws://platform.audacy.space:7904');
 
 socket.on('connection', function() {
-  //console.log("...connected");
+  console.log("/socketConsole.js - webSocket server console loaded.");
   //alert("connected");
 });
 

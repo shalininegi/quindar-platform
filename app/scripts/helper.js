@@ -8,6 +8,7 @@
 var systemSettings = require('../../config/systemSettings.js');
 var randomstring = require('randomstring');
 
+console.log("/helper.js - helper classes loaded.");
 /**
  * @api {javascript} getAttitudeData randomize attitude
  * @apiVersion 0.1.0
@@ -96,16 +97,22 @@ exports.getVehiclesData = function(high, low) {
  *
  **/
 exports.getOrbit = function(initX, initY, nTimes) {
+  var testData = {};
   var nData = [];
   var x = initX, y = initY; 
   var topic = "audacy.orbit";
+  var vehicleId = exports.getVehicleId();
+  var timestamp = Math.floor(new Date() / 1000);
 
   for (var i=0; i < nTimes; i++) {
     x = x + 7 * Math.random() * 0.3 ;
     y = 45 * Math.sin(2 * x / 180 * Math.PI);
     nData.push([x, y]);
   }
-  return nData;
+
+  testData = { "vehicleId": vehicleId, "trajectory": nData,
+    "timestamp": timestamp };
+  return testData;
 }
 
 /**

@@ -38,6 +38,15 @@ var app = angular.module("app", ['ui.bootstrap', 'ui.router', 'nvd3']);
       },
       controller: 'adminConsoleController'
   })  
+  .state("dataCleanup", {
+      url: "/dataCleanup",
+      views: {
+        "dataCleanup": {
+           templateUrl: "app/views/dataCleanup.html"
+         }
+      },
+      controller: 'adminConsoleController'
+  })  
 }]);
 
 
@@ -45,12 +54,16 @@ var app = angular.module("app", ['ui.bootstrap', 'ui.router', 'nvd3']);
 app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', '$http',
   function($scope, $timeout, adminFactory, $http) {
 
+  // common $scope variables and data
   $scope.statusStreaming = "";
   $scope.statusMQ = "";
   $scope.statusDatabase = "";
   $scope.generatedDataStreaming = "";
   $scope.generatedDataMQ = "";
   $scope.generatedDataDatabase = "";
+  $scope.topicMQ = "audacy.telemetry.attitude";
+  $scope.nItemsGenerated = 1;
+
   $scope.attitudeDataSet = [];
   $scope.positionDataSet = [];
   $scope.vehicleDataSet = [];
@@ -66,7 +79,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.totalNumberMessagesVehicle = 0;
   $scope.totalNumberMessagesOrbit = 0;
 
-  // nvd3 for charts
+  // this section uses angular-nvd3 d3 directive to report # messages for each data type
   $scope.optionX = { 
     chart: {
         type: 'lineChart',
@@ -158,27 +171,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
     });
   };
 
-  $scope.getAttitudeMetricsTrend();
-  $scope.getPositionMetricsTrend();
-  $scope.getVehicleMetricsTrend();
-  $scope.getOrbitMetricsTrend();
-
-/**
-  $scope.data = [{
-    key: "Vehicle: Audacy1",
-    values: [
-        { x : 1 , y : -29.765957771107 },
-        { x : 2 , y : 0 },
-        { x : 3 , y : 32.807804682612 },
-        { x : 4 , y : 196.45946739256 },
-        { x : 5 , y : 0.19434030906893 },
-        { x : 6 , y : -98.079782601442 },
-        { x : 7 , y : -13.925743130903 },
-        { x : 8 , y : -5.1387322875705 }
-    ]
-  }
-  ];
-**/
+  // generate telemetry data as simulation, and send to webSocket server
   $scope.generateIt = function(payloadType) {
     var payload = {};
     var timestamp = new Date();
@@ -210,6 +203,79 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
     }
   };
 
+  // generate telemetry data as simulation, and send to RabbitMQ
+  $scope.queueIt = function(payloadType) {
+    var payload = {};
+    var timestamp = new Date();
+
+    if (payloadType === "attitude") {
+      //payload = $scope.generateAttitude();
+      //$scope.generatedDataMQ = JSON.stringify(payload);
+      
+      $scope.generateSimulatedTelemetryMQ("attitude", $scope.topicMQ, $scope.nItemsGenerated);
+      $scope.generatedDataMQ = JSON.stringify($scope.attitudeDataSet);
+      $scope.statusMQ = "Sent @" + timestamp;
+    } else if (payloadType === "position") {
+      //payload = $scope.generatePosition();
+      //$scope.generatedDataMQ = JSON.stringify(payload);
+      
+      $scope.generateSimulatedTelemetryMQ("position", $scope.topicMQ, $scope.nItemsGenerated);
+      $scope.generatedDataMQ = JSON.stringify($scope.positionDataSet);
+      $scope.statusMQ = "Sent @" + timestamp;
+    } else if (payloadType === "vehicle") {
+      //payload = $scope.generateVehicle();
+      //$scope.generatedDataMQ = JSON.stringify(payload);
+      
+      $scope.generateSimulatedTelemetryMQ("vehicle", $scope.topicMQ, $scope.nItemsGenerated);
+      $scope.generatedDataMQ = JSON.stringify($scope.vehicleDataSet);
+      $scope.statusMQ = "Sent @" + timestamp;
+    } else if (payloadType === "orbit") {
+      //payload = $scope.generateOrbit();
+      //$scope.generatedDataMQ = JSON.stringify(payload);
+
+      $scope.generateSimulatedTelemetryMQ("orbit", $scope.topicMQ, $scope.nItemsGenerated);
+      $scope.generatedDataMQ = JSON.stringify($scope.orbitDataSet);
+      $scope.statusMQ = "Sent @" + timestamp;
+    }
+  };
+
+   // generate telemetry data as simulation, and upsert into database
+  $scope.dbIt = function(payloadType) {
+    var payload = {};
+    var timestamp = new Date();
+
+    if (payloadType === "attitude") {
+      //payload = $scope.generateAttitude();
+      //$scope.generatedDataDatabase = JSON.stringify(payload);
+      
+      $scope.generateSimulatedTelemetry("attitude", $scope.nItemsGenerated);
+      $scope.generatedDataDatabase = JSON.stringify($scope.attitudeDataSet);
+      $scope.statusDatabase = "Sent @" + timestamp;
+    } else if (payloadType === "position") {
+      //payload = $scope.generatePosition();
+      //$scope.generatedDataDatabase = JSON.stringify(payload);
+      
+      $scope.generateSimulatedTelemetry("position", $scope.nItemsGenerated);
+      $scope.generatedDataDatabase = JSON.stringify($scope.positionDataSet);
+      $scope.statusDatabase = "Sent @" + timestamp;
+    } else if (payloadType === "vehicle") {
+      //payload = $scope.generateVehicle();
+      //$scope.generatedDataDatabase = JSON.stringify(payload);
+      
+      $scope.generateSimulatedTelemetry("vehicle", $scope.nItemsGenerated);
+      $scope.generatedDataDatabase = JSON.stringify($scope.vehicleDataSet);
+      $scope.statusDatabase = "Sent @" + timestamp;
+    } else if (payloadType === "orbit") {
+      //payload = $scope.generateOrbit();
+      //$scope.generatedDataDatabase = JSON.stringify(payload);
+
+      $scope.generateSimulatedTelemetry("orbit", $scope.nItemsGenerated);
+      $scope.generatedDataDatabase = JSON.stringify($scope.orbitDataSet);
+      $scope.statusDatabase = "Sent @" + timestamp;
+    }
+  };
+
+  // clear screen and variables
   $scope.clearIt = function(deliveryMode) {
     if (deliveryMode === 'streaming') {
       $scope.generatedDataStreaming = "";

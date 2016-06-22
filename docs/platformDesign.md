@@ -1,7 +1,33 @@
 # Quindar Platform Design Overview
-Updated: Jun 8, 2016 
+Updated: Jun 21, 2016 
 
 ## Overview
+Quindar platform consists of the following infrastructural components:
+* Web server (server.js) - NodeJS express server engine serving as HTTP and HTTPS server.
+* WebSocket server 
+* RabbitMQ server
+* MongoDB replica set (noSQL database cluster)
+
+We have built the following functional modules:
+* Admin console 
+  - Data Generator - generate test data for (1) WebSocket data streaming (real time streaming spacecraft telemetry and geo-position data); (2) writing telemetry data to message queue, (3) writing directly to MongoDB database.
+  - Data Browser - browsing database contents without using JavaScript or native MongoDB commands
+  - Metrics - simple D3.js chart to report on data traffic and trending
+
+* Helper class - data simulator to generate telemetry data for (1) attitude, (2) position, (3) spacecraft vehicle, and (4) orbit trajectory.
+
+* Modular server design - a simple server configuration file to enable or disable any of the above infrastructure components.
+
+* Built-in hook for Passport (single sign-on and security token server to support JSON Web Token and/or OAuth).
+
+You can use Quindar platform independently without using the Quindar application, say, 
+* As a data streaming server
+* As backend database for your mission operations application
+
+You can also use Quindar platform as the backend for your open source mission operations application using Quindar application (aka Quindar-angular) with GMAT mission operations planning software.
+
+
+# Architecture Design Principles
 
 ## Modularity - Micro-services
 Quindar platform consists of several backend technologies, including REST Web services, messaging (initially RabbitMQ), real-time data streaming and data services (initially MongoDB). The core server is built using NodeJS. From deployment perspective, these technologies should be deployed in different server instances for horizontal scaling. However, with modular component design, we can also deploy them in all-in-one container for demo or testing purpose.
@@ -63,7 +89,12 @@ If customers have their own data sources from their satellites, they can integra
   
 
 ## Scalability Considerations
+* You can use Docker v1.12 (https://blog.docker.com/2016/06/docker-1-12-built-in-orchestration/)  to build your Quindar micro-services with the new Docker orchestration. It can scale horizontally by adding more containers given a service level objective, e.g.
 
+```
+%docker service scale frontend=100
+``` 
 
 ## Availability Considerations
+* You can use Consul to collect heart beats from each Quindar docker container. Consul can help manage availabilty by adding new instances if the existing docker container loses its heart beat.
 

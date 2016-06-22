@@ -26,7 +26,7 @@ var jwt    	 			= require('jsonwebtoken');
 var fs		 			= require('fs');
 var https    			= require('https');
 var http     			= require('http');
-var helper   			= require('./app/scripts/module05.js');
+var helper   			= require('./app/scripts/helper.js');
 var systemSettings = require('./config/systemSettings.js');
 var server = '';
 var secureServer = '';
@@ -119,11 +119,9 @@ if (systemSettings.serverStartupOptions.socketHttps) {
 	console.log('socket.io webSocket server with SSL port ' + secureSocketPort + ' is disabled.');
 };
 
-require('./app/scripts/module01.js')(app);
-require('./app/scripts/module02.js')(app, mongoose, syslogger, logger);
-require('./app/scripts/module03.js')(app, bodyParser, mongoose, fs, syslogger, logger, helper);
-require('./app/scripts/module04.js')(app, bodyParser, fs, syslogger, logger, helper);
-require('./app/scripts/module06.js')(app, socketPort, syslogger, logger, helper);
-require('./app/scripts/module07.js')(app, secureSocketServer, secureSocketPort, io, syslogger, logger, helper);
-require('./app/scripts/module08.js')(app, bodyParser, mongoose, fs, syslogger, logger, helper);
-require('./app/scripts/module09.js')(app, bodyParser, mongoose, fs, syslogger, logger, helper);
+require('./app/scripts/verifyMe.js')(app);
+require('./app/scripts/telemetryRead.js')(app, mongoose, syslogger, logger);
+require('./app/scripts/coreAdmin.js')(app, bodyParser, mongoose, fs, syslogger, logger, helper);
+require('./app/scripts/messageQueue.js')(app, bodyParser, fs, syslogger, logger, helper);
+require('./app/scripts/webSocket.js')(app, socketPort, syslogger, logger, helper);
+require('./app/scripts/webSocketSSL.js')(app, secureSocketServer, secureSocketPort, io, syslogger, logger, helper);
