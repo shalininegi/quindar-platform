@@ -1,4 +1,6 @@
 # Quindar Platform
+Updated: Jun 21, 2016
+
 The Quindar-platform project is the backend module that generates test data for mission operations application (Quindar widgets) to consume. It adopts an API-centric architecture with the integration with WebSockets (for real time data streaming), RabbitMQ messaging (for reliable and resilient transaction handling) and distributed data management.
 
 # Overview

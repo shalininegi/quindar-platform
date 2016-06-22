@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <meta charset="utf-8" />
+  <title>WebSocket Test</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.min.js"></script>
+
+  <script type="text/javascript">
+
+  var socket = io('ws://platform.audacy.space:7904');
+  //var socket = io('ws://localhost:3002');
+
+  $(window).on('onload', function() {  // beforeunload
+    socket.close();
+   });
+
+  $(window).on('beforeunload', function() {  // beforeunload
+    socket.close();
+   });
+
+  //console.log('client: socketfoo.html: ...testWebSocket');
+
+  //socket.emit('connection', 'hi audacy');
+
+  socket.on('connection', function(data) {
+      console.log("socket.on(connection)..connected data=" + JSON.stringify(data.data));
+      //alert("connected");
+  });
+
+  socket.on('attitude', function(data) {
+    console.log("socket.on(attitude)...attitude data=" + JSON.stringify(data));
+    alert('socket.on(attitude) - i hear you, you got an attitude! =' + data);
+  })
+
+  function attitudeMe() {
+    alert('socket.emit(attitude)');
+    socket.emit('attitude', '{"type": "attitude", "subtype": "audacy1", "data": "poor attitude..."}');
+  }
+  </script>
+<body>
+  <h2>WebSocket Verification Test</h2>
+  <hr />
+  <button onclick="attitudeMe()">Attitude</button>
+  
+</body>
+</html>

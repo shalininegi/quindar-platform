@@ -1,0 +1,78 @@
+<div id="dataMetricsDashboard" class="container contentContainer col-md-8 col-xs-12 col-md-offset-2"
+  style="margin-top: 20px;" ng-controller="adminConsoleController">
+  <ul class="nav nav-tabs" id="dataList3">
+   <li class="active"><a data-target="#countAttitude" data-toggle="tab">Attitude </a></li>
+   <li ><a data-target="#countPosition" data-toggle="tab">Position </a></li>
+   <li ><a data-target="#countVehicle" data-toggle="tab">Vehicle </a></li>
+   <li ><a data-target="#countOrbit" data-toggle="tab">Orbit </a></li>
+ </ul>
+
+ <div class="tab-content">
+  <div class="tab-pane active" id="countAttitude">
+    <br />
+    <p>The dashboard will report on metrics and trend for usage analytics. There are other metrics REST APIs available.
+    </p>
+    <p class="marginTop"></p>
+
+    <br />
+
+    <div class="row col-md-12 " style="margin-top: 30px;" ng-init="getAttitudeMetricsTrend()">
+      <nvd3 options='optionX' data='dataAttitudeTrend'></nvd3>
+      <button type="radio" id="refreshAttitudeMetricsTrend" ng-click="getAttitudeMetricsTrend()" class="btn btn-success ">
+          <i class="glyphicon glyphicon-refresh btn-success"></i> Refresh
+      </button>
+    </div>
+  </div>
+  <!-- tab-pane active -->
+
+  <div class="tab-pane" id="countPosition">
+    <br />
+    <p>The data browser will browse position collection for verification. It will fetch the latest n records by vehicle id.
+    </p>
+    <p class="marginTop"></p>
+
+    <br />
+
+    <div class="row col-md-12 " style="margin-top: 30px;" ng-init="getPositionMetricsTrend()">
+      <nvd3 options='optionX' data='dataPositionTrend'></nvd3>
+      <button type="radio" id="refreshPositionMetricsTrend" ng-click="getPositionMetricsTrend()" class="btn btn-success ">
+          <i class="glyphicon glyphicon-refresh btn-success"></i> Refresh
+      </button>
+    </div>
+  </div>
+  <!-- tab-pane active -->
+
+  <div class="tab-pane" id="countVehicle">
+    <br />
+    <p>The data browser will browse vehicle collection for verification. It will fetch the latest n records by vehicle id.
+    </p>
+    <p class="marginTop"></p>
+
+    <br />
+    <div class="row col-md-12 " style="margin-top: 30px;" ng-init="getVehicleMetricsTrend()">
+      <nvd3 options='optionX' data='dataVehicleTrend'></nvd3>
+      <button type="radio" id="refreshVehicleMetricsTrend" ng-click="getVehicleMetricsTrend()" class="btn btn-success ">
+          <i class="glyphicon glyphicon-refresh btn-success"></i> Refresh
+      </button>
+    </div>
+  </div>
+  <!-- tab-pane active --> 
+
+  <div class="tab-pane" id="countOrbit">
+    <br />
+    <p>The data browser will browse orbit collection for verification. It will fetch the latest n records by vehicle id.
+    </p>
+    <p class="marginTop"></p>
+
+    <br />
+    <div class="row col-md-12 " style="margin-top: 30px;" ng-init="getOrbitMetricsTrend()">
+      <nvd3 options='optionX' data='dataOrbitTrend'></nvd3>
+      <button type="radio" id="refreshOrbitMetricsTrend" ng-click="getOrbitMetricsTrend()" class="btn btn-success ">
+          <i class="glyphicon glyphicon-refresh btn-success"></i> Refresh
+      </button>
+    </div>
+  </div>
+  <!-- tab-pane active -->
+
+ </div>
+ <!-- tab-content -->

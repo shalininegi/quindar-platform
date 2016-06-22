@@ -1,0 +1,60 @@
+<div id="dataCleanupPanel" class="container contentContainer col-md-8 col-xs-12 col-md-offset-2"
+  style="margin-top: 20px;" ng-controller="adminConsoleController">
+  <ul class="nav nav-tabs" id="dataList1">
+   <li class="active"><a data-target="#dataCleanup" data-toggle="tab">Database Admin </a></li>
+ </ul>
+
+ <div class="tab-content">
+  <div class="tab-pane active" id="dataCleanup">
+    <br />
+   <p>This tool will drop (and reset) database collection for database cleanup for continuous testing.
+   </p>
+   <p class="marginTop"></p>
+
+   <br />
+   
+    <div class="row col-md-12 col-md-offset-1">
+      <table class="table-responsive" border="0">
+        <thead>
+          <tr>
+            <th><input type="image" src="images/Dash_Icons-03.png" 
+              width="160" height="160" 
+              ng-click="dbCleanUp('attitude')" style="display: inline-block; height:auto; max-width: 100%;"></th>
+            <th><input type="image" src="images/Dash_Icons-02.png" 
+              width="160" height="160" 
+              ng-click="dbCleanUp('position')" style="display: inline-block; height:auto; max-width: 100%;"></th>
+            <th><input type="image" src="images/Dash_Icons-01.png" 
+              width="160" height="160"
+              ng-click="dbCleanUp('vehicle')" style="display: inline-block; height:auto; max-width: 100%;"></th>
+            <th><input type="image" src="images/Dash_Icons-04.png" 
+              width="160" height="160" 
+              ng-click="dbCleanUp('orbit')" style="display: inline-block; height:auto; max-width: 100%;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><center>Drop Attitude Collection</center></td>
+            <td><center>Drop Position Collection</center></td>
+            <td><center>Drop Vehicle Collection</center></td>
+            <td><center>Drop Orbit Collection</center></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <br />
+    <div class="row col-md-12" style="margin-top:40px;">
+      <p>Status: <input type="text" id="statusDbCleanUp" ng-model="statusDbCleanUp" style="min-width: 40%;">
+      </p>
+      <p>
+        <button type="radio" id="clearItDBCleanup" ng-click="clearIt('dbCleanup')" class="btn btn-warning ">
+          <i class="glyphicon glyphicon-trash btn-warning"></i> Clear
+        </button>
+      </p>
+    </div>
+
+  </div>
+  <!-- tab-pane active -->
+
+ </div>
+ <!-- tab-content -->
