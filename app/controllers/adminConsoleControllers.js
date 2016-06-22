@@ -58,6 +58,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.statusStreaming = "";
   $scope.statusMQ = "";
   $scope.statusDatabase = "";
+  $scope.statusDbCleanUp = "";
   $scope.generatedDataStreaming = "";
   $scope.generatedDataMQ = "";
   $scope.generatedDataDatabase = "";
@@ -275,6 +276,30 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
     }
   };
 
+  // generate telemetry data as simulation, and upsert into database
+  $scope.dbCleanUp = function(payloadType) {
+    var payload = {};
+    var timestamp = new Date();
+
+    if (payloadType === "attitude") {
+      $scope.cleanupDBCollection("attitude");
+      $scope.statusDbCleanUp = "Done @" + timestamp;
+    } else if (payloadType === "position") {
+      $scope.cleanupDBCollection("position");
+      $scope.generatedDataDatabase = JSON.stringify($scope.positionDataSet);
+      $scope.statusDbCleanUp = "Done @" + timestamp;
+    } else if (payloadType === "vehicle") {
+      $scope.cleanupDBCollection("vehicle");
+      $scope.generatedDataDatabase = JSON.stringify($scope.vehicleDataSet);
+      $scope.statusDbCleanUp = "Done @" + timestamp;
+    } else if (payloadType === "orbit") {
+      $scope.cleanupDBCollection("orbit");
+      $scope.generatedDataDatabase = JSON.stringify($scope.orbitDataSet);
+      $scope.statusDbCleanUp = "Done @" + timestamp;
+    }
+  };
+
+
   // clear screen and variables
   $scope.clearIt = function(deliveryMode) {
     if (deliveryMode === 'streaming') {
@@ -286,7 +311,9 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
     } else if (deliveryMode === 'database') {
       $scope.generatedDataDatabase = "";
       $scope.statusDatabase = "";
-    };
+    } else if (deliveryMode === 'dbCleanup') {
+      $scope.statusDbCleanUp = "";
+    }
   };
 
   $scope.getVehicleId = function() {
@@ -308,10 +335,6 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.generateOrbit = function() {
       return adminFactory.generateOrbit();
   }; 
-
-  $scope.writeToMQ = function() {
-    return adminFactory.writeToMQ();
-  };
 
   // ------ Category: Database ----------
   // ------ read 
