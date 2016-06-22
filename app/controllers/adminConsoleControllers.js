@@ -109,6 +109,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   };
 
   $scope.getAttitudeMetricsTrend = function() {
+    $scope.attitudeDataSet = [];
     adminFactory.getMetricsTrendTotalN('attitude', 20) 
     .success(function(data, status) {
       var tmpValues = [];
@@ -125,6 +126,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   };
 
   $scope.getPositionMetricsTrend = function() {
+    $scope.positionDataSet = [];
     adminFactory.getMetricsTrendTotalN('position', 20) 
     .success(function(data, status) {
       var tmpValues = [];
@@ -141,6 +143,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   };
 
   $scope.getVehicleMetricsTrend = function() {
+    $scope.vehicleDataSet = [];
     adminFactory.getMetricsTrendTotalN('vehicle', 20) 
     .success(function(data, status) {
       var tmpValues = [];
@@ -157,6 +160,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   };
 
   $scope.getOrbitMetricsTrend = function() {
+    $scope.orbitDataSet = [];
     adminFactory.getMetricsTrendTotalN('orbit', 20) 
     .success(function(data, status) {
       var tmpValues = [];
