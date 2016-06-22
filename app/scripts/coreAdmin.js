@@ -532,8 +532,8 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
           return res.send(500, {error: err});
       };
 
-      res.status(200).send("collection dropped");
-      return res.send(200).send({"message": "collection dropped", "type":"client"});
+      //res.status(200).send("collection dropped");
+      return res.status(200).send({"message": "collection dropped", "type":"client"});
     });
   });
 
@@ -569,8 +569,8 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
           console.log("Position.collection.drop() error=" + err);
           return res.send(500, {error: err});
       }; 
-      res.status(200).send({"status": 200, "message": "collection dropped"});
-      return res.send(200).send({"message": "collection dropped", "type":"client"});  
+      //res.status(200).send({"status": 200, "message": "collection dropped"});
+      return res.status(200).send({"message": "collection dropped", "type":"client"});  
     });
   });
 
@@ -606,8 +606,8 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
           console.log("Vehicle.collection.drop() error=" + err);
           return res.send(500, {error: err});
       }; 
-      res.status(200).send({"status": 200, "message": "collection dropped"});
-      return res.send(200).send({"message": "collection dropped", "type":"client"}); 
+      //res.status(200).send({"status": 200, "message": "collection dropped"});
+      return res.status(200).send({"message": "collection dropped", "type":"client"}); 
     });
   });
 
@@ -643,8 +643,8 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
           console.log("Orbit.collection.drop() error=" + err);
           return res.send(500, {error: err});
       }; 
-      res.status(200).send({"status": 200, "message": "collection dropped"});
-      return res.send(200).send({"message": "collection dropped", "type":"client"});
+      //res.status(200).send({"status": 200, "message": "collection dropped"});
+      return res.status(200).send({"message": "collection dropped", "type":"client"});
     });
   });
 
@@ -1199,6 +1199,64 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     ) 
   });
 
+   // --- Data Aggregation framework example
+  /**
+  * @api {get} /services/v1/admin/metrics/trend/attitude/nLimit attitude usage trend nLimit
+  * @apiVersion 0.1.0
+  * @apiName getMetricsAttitudeTrendAll
+  * @apiDescription get attitude collection metrics trend in ascending order
+  * @apiGroup Analytics
+  *
+  *
+  * @apiSuccess {boolean} success
+  *
+  * @apiSuccessExample Success-Response:
+  *     HTTP/1.1 200 OK
+  *     {"status":200,"message":"Quindar attitude trending metrics updated successfully."}
+  *
+  * @apiError (Error 500) {json} internal system error     no metrics collected
+  *
+  * @apiErrorExample {json} Error-Response:
+  *     HTTP/1.1 500 Internal system error encoutered
+  * 
+  *     {"message":"Internal system error encountered","type":"internal"}
+  **/
+  app.get('/services/v1/admin/metrics/trend/attitude/:nLimit', function(req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+
+    var limitResultset = parseInt(req.params.nLimit);
+    if (limitResultset > 9999) {
+      limitResultset = 9999;
+    } else if (limitResultset < 1) {
+      limitResultset = 1;
+    }
+
+    Attitude.aggregate([
+      {$group : {
+        _id : { eventDate : "$timestamp" },
+        subtotal: { $sum: 1}
+      }},,
+      {$sort: { "timestamp": -1}},
+      {$limit: limitResultset },
+      {$sort: { "timestamp": -1}}
+      ],
+      function(err,data) {
+        if (err) {
+          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
+          console.log("Quindar attitude metrics trending error=" + err);
+          return res.status(500).send({error: err});
+        } else {
+          console.log("Quindar attitude metrics trending updated. count=" + JSON.stringify(data));
+          return res.status(200).send({"message": "Quindar attitude metrics trending updated successfully.",  
+            "collection": "attitude",
+            "trend": data});
+        }
+      }
+    ) 
+  });
+
   /**
   * @api {get} /services/v1/admin/metrics/trend/attitude/:vehicleId attitude usage trend
   * @apiVersion 0.1.0
@@ -1250,6 +1308,65 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   });
 
   /**
+  * @api {get} /services/v1/admin/metrics/trend/attitude/:vehicleId/:nLimit attitude usage trend nLimit
+  * @apiVersion 0.1.0
+  * @apiName getMetricsAttitudeTrendByVehicleId
+  * @apiDescription get attitude collection metrics trend by vehicleId  in ascending order
+  * @apiGroup Analytics
+  *
+  *
+  * @apiSuccess {boolean} success
+  *
+  * @apiSuccessExample Success-Response:
+  *     HTTP/1.1 200 OK
+  *     {"status":200,"message":"Quindar attitude trending metrics by vehicleId updated successfully."}
+  *
+  * @apiError (Error 500) {json} internal system error     no metrics collected
+  *
+  * @apiErrorExample {json} Error-Response:
+  *     HTTP/1.1 500 Internal system error encoutered
+  * 
+  *     {"message":"Internal system error encountered","type":"internal"}
+  **/
+  app.get('/services/v1/admin/metrics/trend/attitude/:vehicleId/:nLimit', function(req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+
+    var limitResultset = parseInt(req.params.nLimit);
+    if (limitResultset > 9999) {
+      limitResultset = 9999;
+    } else if (limitResultset < 1) {
+      limitResultset = 1;
+    }
+
+    var vehicleId = req.params.vehicleId;
+    Attitude.aggregate([
+      {$match: { "vehicleId": vehicleId}},
+      {$group : {
+        _id : { eventDate : "$timestamp" },
+        subtotal: { $sum: 1}
+      }},
+      {$sort: { "timestamp": -1}},
+      {$limit: limitResultset },
+      {$sort: { "timestamp": -1}}
+      ],
+      function(err,data) {
+        if (err) {
+          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
+          console.log("Quindar attitude metrics trending error=" + err);
+          return res.status(500).send({error: err});
+        } else {
+          console.log("Quindar attitude metrics trending updated. count=" + JSON.stringify(data));
+          return res.status(200).send({"message": "Quindar attitude metrics trending updated successfully.",  
+            "collection": "attitude",
+            "trend": data});
+        }
+      }
+    )
+  });
+
+  /**
   * @api {get} /services/v1/admin/metrics/trend/position/all position usage trend
   * @apiVersion 0.1.0
   * @apiName getMetricsPositionTrendAll
@@ -1281,6 +1398,63 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
         subtotal: { $sum: 1}
       }},
       {$sort: { "timestamp": 1}}
+      ],
+      function(err,data) {
+        if (err) {
+          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
+          console.log("Quindar position metrics trending error=" + err);
+          return res.status(500).send({error: err});
+        } else {
+          console.log("Quindar position metrics trending updated. count=" + JSON.stringify(data));
+          return res.status(200).send({"message": "Quindar position metrics trending updated successfully.",  
+            "collection": "position",
+            "trend": data});
+        }
+      }
+    )
+  });
+
+  /**
+  * @api {get} /services/v1/admin/metrics/trend/position/:nLimit position usage trend nLimit
+  * @apiVersion 0.1.0
+  * @apiName getMetricsPositionTrendAll
+  * @apiDescription get position collection metrics trend in ascending order
+  * @apiGroup Analytics
+  *
+  *
+  * @apiSuccess {boolean} success
+  *
+  * @apiSuccessExample Success-Response:
+  *     HTTP/1.1 200 OK
+  *     {"status":200,"message":"Quindar attitude trending metrics updated successfully."}
+  *
+  * @apiError (Error 500) {json} internal system error     no metrics collected
+  *
+  * @apiErrorExample {json} Error-Response:
+  *     HTTP/1.1 500 Internal system error encoutered
+  * 
+  *     {"message":"Internal system error encountered","type":"internal"}
+  **/
+  app.get('/services/v1/admin/metrics/trend/position/:nLimit', function(req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+
+    var limitResultset = parseInt(req.params.nLimit);
+    if (limitResultset > 9999) {
+      limitResultset = 9999;
+    } else if (limitResultset < 1) {
+      limitResultset = 1;
+    }
+
+    Position.aggregate([
+      {$group : {
+        _id : { eventDate : "$timestamp" },
+        subtotal: { $sum: 1}
+      }},
+      {$sort: { "timestamp": -1}},
+      {$limit: limitResultset },
+      {$sort: { "timestamp": -1}}
       ],
       function(err,data) {
         if (err) {
@@ -1347,6 +1521,65 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     )
   });
 
+    /**
+  * @api {get} /services/v1/admin/metrics/trend/position/:vehicleId/:nLimit position usage trend by vehicleId nLimit
+  * @apiVersion 0.1.0
+  * @apiName getMetricsPositionTrendByVehicleId
+  * @apiDescription get position collection metrics trend by vehicleId  in ascending order
+  * @apiGroup Analytics
+  *
+  *
+  * @apiSuccess {boolean} success
+  *
+  * @apiSuccessExample Success-Response:
+  *     HTTP/1.1 200 OK
+  *     {"status":200,"message":"Quindar position trending metrics by vehicleId updated successfully."}
+  *
+  * @apiError (Error 500) {json} internal system error     no metrics collected
+  *
+  * @apiErrorExample {json} Error-Response:
+  *     HTTP/1.1 500 Internal system error encoutered
+  * 
+  *     {"message":"Internal system error encountered","type":"internal"}
+  **/
+  app.get('/services/v1/admin/metrics/trend/position/:vehicleId/:nLimit', function(req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+
+    var limitResultset = parseInt(req.params.nLimit);
+    if (limitResultset > 9999) {
+      limitResultset = 9999;
+    } else if (limitResultset < 1) {
+      limitResultset = 1;
+    }
+
+    var vehicleId = req.params.vehicleId;
+    Position.aggregate([
+      {$match: { "vehicleId": vehicleId}},
+      {$group : {
+        _id : { eventDate : "$timestamp" },
+        subtotal: { $sum: 1}
+      }},
+      {$sort: { "timestamp": -1}},
+      {$limit: limitResultset },
+      {$sort: { "timestamp": -1}}
+      ],
+      function(err,data) {
+        if (err) {
+          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
+          console.log("Quindar position metrics trending error=" + err);
+          return res.status(500).send({error: err});
+        } else {
+          console.log("Quindar position metrics trending updated. count=" + JSON.stringify(data));
+          return res.status(200).send({"message": "Quindar position metrics trending updated successfully.",  
+            "collection": "position",
+            "trend": data});
+        }
+      }
+    )
+  });
+
   /**
   * @api {get} /services/v1/admin/metrics/trend/vehicle/all vehicle usage trend
   * @apiVersion 0.1.0
@@ -1379,6 +1612,63 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
         subtotal: { $sum: 1}
       }},
       {$sort: { "timestamp": 1}}
+      ],
+      function(err,data) {
+        if (err) {
+          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
+          console.log("Quindar vehicle metrics trending error=" + err);
+          return res.status(500).send({error: err});
+        } else {
+          console.log("Quindar vehicle metrics trending updated. count=" + JSON.stringify(data));
+          return res.status(200).send({"message": "Quindar vehicle metrics trending updated successfully.",  
+            "collection": "vehicle",
+            "trend": data});
+        }
+      }
+    ) 
+  });
+
+   /**
+  * @api {get} /services/v1/admin/metrics/trend/vehicle/:nLimit vehicle usage trend nLimit
+  * @apiVersion 0.1.0
+  * @apiName getMetricsVehicleTrendAll
+  * @apiDescription get vehicle collection metrics trend in ascending order
+  * @apiGroup Analytics
+  *
+  *
+  * @apiSuccess {boolean} success
+  *
+  * @apiSuccessExample Success-Response:
+  *     HTTP/1.1 200 OK
+  *     {"status":200,"message":"Quindar vehicle trending metrics updated successfully."}
+  *
+  * @apiError (Error 500) {json} internal system error     no metrics collected
+  *
+  * @apiErrorExample {json} Error-Response:
+  *     HTTP/1.1 500 Internal system error encoutered
+  * 
+  *     {"message":"Internal system error encountered","type":"internal"}
+  **/
+  app.get('/services/v1/admin/metrics/trend/vehicle/:nLimit', function(req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+
+    var limitResultset = parseInt(req.params.nLimit);
+    if (limitResultset > 9999) {
+      limitResultset = 9999;
+    } else if (limitResultset < 1) {
+      limitResultset = 1;
+    }
+
+    Vehicle.aggregate([
+      {$group : {
+        _id : { eventDate : "$timestamp" },
+        subtotal: { $sum: 1}
+      }},
+      {$sort: { "timestamp": -1}},
+      {$limit: limitResultset },
+      {$sort: { "timestamp": -1}}
       ],
       function(err,data) {
         if (err) {
@@ -1445,6 +1735,67 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     )
   });
 
+
+  /**
+  * @api {get} /services/v1/admin/metrics/trend/vehicle/:vehicleId/:nLimit vehicle usage trend by vehicleId nLimit
+  * @apiVersion 0.1.0
+  * @apiName getMetricsVehicleTrendByVehicleId
+  * @apiDescription get vehicle collection metrics trend by vehicleId  in ascending order
+  * @apiGroup Analytics
+  *
+  *
+  * @apiSuccess {boolean} success
+  *
+  * @apiSuccessExample Success-Response:
+  *     HTTP/1.1 200 OK
+  *     {"status":200,"message":"Quindar vehicle trending metrics by vehicleId updated successfully."}
+  *
+  * @apiError (Error 500) {json} internal system error     no metrics collected
+  *
+  * @apiErrorExample {json} Error-Response:
+  *     HTTP/1.1 500 Internal system error encoutered
+  * 
+  *     {"message":"Internal system error encountered","type":"internal"}
+  **/
+  app.get('/services/v1/admin/metrics/trend/vehicle/:vehicleId/:nLimit', function(req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+
+    var limitResultset = parseInt(req.params.nLimit);
+    if (limitResultset > 9999) {
+      limitResultset = 9999;
+    } else if (limitResultset < 1) {
+      limitResultset = 1;
+    }
+
+    var vehicleId = req.params.vehicleId;
+    Vehicle.aggregate([
+      {$match: { "vehicleId": vehicleId}},
+      {$group : {
+        _id : { eventDate : "$timestamp" },
+        subtotal: { $sum: 1}
+      }},
+      {$sort: { "timestamp": -1}},
+      {$limit: limitResultset },
+      {$sort: { "timestamp": -1}}
+      ],
+      function(err,data) {
+        if (err) {
+          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
+          console.log("Quindar vehicle metrics trending error=" + err);
+          return res.status(500).send({error: err});
+        } else {
+          console.log("Quindar vehicle metrics trending updated. count=" + JSON.stringify(data));
+          return res.status(200).send({"message": "Quindar vehicle metrics trending updated successfully.",  
+            "collection": "vehicle",
+            "trend": data});
+        }
+      }
+    )
+  });
+
+
   /**
   * @api {get} /services/v1/admin/metrics/trend/orbit/all orbit usage trend
   * @apiVersion 0.1.0
@@ -1477,6 +1828,63 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
         subtotal: { $sum: 1}
       }},
       {$sort: { "timestamp": 1}}
+      ],
+      function(err,data) {
+        if (err) {
+          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
+          console.log("Quindar orbit metrics trending error=" + err);
+          return res.status(500).send({error: err});
+        } else {
+          console.log("Quindar orbit metrics trending updated. count=" + JSON.stringify(data));
+          return res.status(200).send({"message": "Quindar orbit metrics trending updated successfully.",  
+            "collection": "orbit",
+            "trend": data});
+        }
+      }
+    ) 
+  });
+
+   /**
+  * @api {get} /services/v1/admin/metrics/trend/orbit/:nLimit orbit usage trend nLimit
+  * @apiVersion 0.1.0
+  * @apiName getMetricsOrbitTrendAll
+  * @apiDescription get orbit collection metrics trend in ascending order
+  * @apiGroup Analytics
+  *
+  *
+  * @apiSuccess {boolean} success
+  *
+  * @apiSuccessExample Success-Response:
+  *     HTTP/1.1 200 OK
+  *     {"status":200,"message":"Quindar orbit trending metrics updated successfully."}
+  *
+  * @apiError (Error 500) {json} internal system error     no metrics collected
+  *
+  * @apiErrorExample {json} Error-Response:
+  *     HTTP/1.1 500 Internal system error encoutered
+  * 
+  *     {"message":"Internal system error encountered","type":"internal"}
+  **/
+  app.get('/services/v1/admin/metrics/trend/orbit/:nLimit', function(req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+
+    var limitResultset = parseInt(req.params.nLimit);
+    if (limitResultset > 9999) {
+      limitResultset = 9999;
+    } else if (limitResultset < 1) {
+      limitResultset = 1;
+    }
+
+    Orbit.aggregate([
+      {$group : {
+        _id : { eventDate : "$timestamp" },
+        subtotal: { $sum: 1}
+      }},
+      {$sort: { "timestamp": -1}},
+      {$limit: limitResultset },
+      {$sort: { "timestamp": -1}}
       ],
       function(err,data) {
         if (err) {
@@ -1527,6 +1935,65 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
         subtotal: { $sum: 1}
       }},
       {$sort: { "timestamp": 1}}
+      ],
+      function(err,data) {
+        if (err) {
+          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
+          console.log("Quindar orbit metrics trending error=" + err);
+          return res.status(500).send({error: err});
+        } else {
+          console.log("Quindar orbit metrics trending updated. count=" + JSON.stringify(data));
+          return res.status(200).send({"message": "Quindar orbit metrics trending updated successfully.",  
+            "collection": "orbit",
+            "trend": data});
+        }
+      }
+    )
+  });
+
+    /**
+  * @api {get} /services/v1/admin/metrics/trend/orbit/:vehicleId/:nLimit orbit usage trend by vehicleId nLimit
+  * @apiVersion 0.1.0
+  * @apiName getMetricsOrbitTrendByVehicleId
+  * @apiDescription get orbit collection metrics trend by vehicleId  in ascending order
+  * @apiGroup Analytics
+  *
+  *
+  * @apiSuccess {boolean} success
+  *
+  * @apiSuccessExample Success-Response:
+  *     HTTP/1.1 200 OK
+  *     {"status":200,"message":"Quindar orbit trending metrics by vehicleId updated successfully."}
+  *
+  * @apiError (Error 500) {json} internal system error     no metrics collected
+  *
+  * @apiErrorExample {json} Error-Response:
+  *     HTTP/1.1 500 Internal system error encoutered
+  * 
+  *     {"message":"Internal system error encountered","type":"internal"}
+  **/
+  app.get('/services/v1/admin/metrics/trend/orbit/:vehicleId/:nLimit', function(req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+
+    var limitResultset = parseInt(req.params.nLimit);
+    if (limitResultset > 9999) {
+      limitResultset = 9999;
+    } else if (limitResultset < 1) {
+      limitResultset = 1;
+    }
+
+    var vehicleId = req.params.vehicleId;
+    Orbit.aggregate([
+      {$match: { "vehicleId": vehicleId}},
+      {$group : {
+        _id : { eventDate : "$timestamp" },
+        subtotal: { $sum: 1}
+      }},
+      {$sort: { "timestamp": -1}},
+      {$limit: limitResultset },
+      {$sort: { "timestamp": -1}}
       ],
       function(err,data) {
         if (err) {

@@ -109,7 +109,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   };
 
   $scope.getAttitudeMetricsTrend = function() {
-    adminFactory.getMetricsTrendTotalAll('attitude') 
+    adminFactory.getMetricsTrendTotalN('attitude', 20) 
     .success(function(data, status) {
       var tmpValues = [];
       $scope.attitudeDataSetX = data.trend;
@@ -125,7 +125,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   };
 
   $scope.getPositionMetricsTrend = function() {
-    adminFactory.getMetricsTrendTotalAll('position') 
+    adminFactory.getMetricsTrendTotalN('position', 20) 
     .success(function(data, status) {
       var tmpValues = [];
       $scope.positionDataSetX = data.trend;
@@ -141,7 +141,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   };
 
   $scope.getVehicleMetricsTrend = function() {
-    adminFactory.getMetricsTrendTotalAll('vehicle') 
+    adminFactory.getMetricsTrendTotalN('vehicle', 20) 
     .success(function(data, status) {
       var tmpValues = [];
       $scope.vehicleDataSetX = data.trend;
@@ -157,7 +157,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   };
 
   $scope.getOrbitMetricsTrend = function() {
-    adminFactory.getMetricsTrendTotalAll('orbit') 
+    adminFactory.getMetricsTrendTotalN('orbit', 20) 
     .success(function(data, status) {
       var tmpValues = [];
       $scope.orbitDataSetX = data.trend;
@@ -736,6 +736,19 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
     });
   };
 
+  // get metrics trend by telemetry data types (e.g. attitude, position, vehicle) nLimit
+  // valid telemetryDataType value: attitude, position, vehicle, orbit
+  $scope.getMetricsTrendTotalN = function(telemetryDataType, nLimit) {
+    adminFactory.getMetricsTrendTotalN(telemetryDataType, nLimit)
+    .success(function(data, status) {
+      console.log("getMetricsTrendTotalN() status=" + status);
+    })
+    .error(function(err) {
+      console.error('Sorry, Quindar platform cannot serve getMetricsTrendTotalN() immediately. Please retry later.');
+    });
+  };
+
+
   // get metrics trend by telemetry data types (e.g. attitude, position, vehicle) by vehicleId
   // valid telemetryDataType value: attitude, position, vehicle, orbit
   $scope.getMetricsTrendTotalByVehicle = function(telemetryDataType, vehicleId) {
@@ -745,6 +758,18 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
     })
     .error(function(err) {
       console.error('Sorry, Quindar platform cannot serve getMetricsTrendTotalByVehicle() immediately. Please retry later.');
+    });
+  };
+
+  // get metrics trend by telemetry data types (e.g. attitude, position, vehicle) by vehicleId nLimit
+  // valid telemetryDataType value: attitude, position, vehicle, orbit
+  $scope.getMetricsTrendTotalByVehicleN = function(telemetryDataType, vehicleId, nLimit) {
+    adminFactory.getMetricsTrendTotalByVehicleN(telemetryDataType, vehicleId)
+    .success(function(data, status) {
+      console.log("getMetricsTrendTotalByVehicleN() status=" + status);
+    })
+    .error(function(err) {
+      console.error('Sorry, Quindar platform cannot serve getMetricsTrendTotalByVehicleN() immediately. Please retry later.');
     });
   };
 

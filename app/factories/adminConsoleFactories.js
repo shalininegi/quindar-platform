@@ -589,6 +589,23 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
     });
   };
 
+  // get metrics trend by telemetry data types (e.g. attitude, position, vehicle) nLimit
+  // valid telemetryDataType value: attitude, position, vehicle, orbit
+  admFactory.getMetricsTrendTotalN = function(telemetryDataType, nLimit) {
+    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/admin/metrics/trend/' 
+      + telemetryDataType + '/' + nLimit;
+    return $http.get(serviceEndpoint)
+    .success(function(response) {
+      console.log("admFactory.getMetricsTrendTotalN() for " + telemetryDataType + 
+        " response.data=" + JSON.stringify(response));
+    })
+    .error(function(err) {
+       console.error('Sorry, Quindar platform cannot serve admFactory.getMetricsTrendTotalN() for ' +
+        telemetryDataType + ' immediately. Please retry later.');
+    });
+  };
+
+
   // get metrics trend by telemetry data types (e.g. attitude, position, vehicle) by vehicleId
   // valid telemetryDataType value: attitude, position, vehicle, orbit
   admFactory.getMetricsTrendTotalByVehicle = function(telemetryDataType, vehicleId) {
@@ -605,6 +622,24 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
         telemetryDataType + ' immediately. Please retry later.');
     });
   };
+
+  // get metrics trend by telemetry data types (e.g. attitude, position, vehicle) by vehicleId nLimit
+  // valid telemetryDataType value: attitude, position, vehicle, orbit
+  admFactory.getMetricsTrendTotalByVehicleN = function(telemetryDataType, vehicleId, nLimit) {
+    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/admin/metrics/trend/' 
+      + telemetryDataType + '/' + vehicleId + '/' + nLimit;
+    return $http.get(serviceEndpoint)
+    .success(function(response) {
+      console.log("admFactory.getMetricsTrendTotalByVehicleN() for " + telemetryDataType + 
+        "  vehicleId=" + vehicleId +
+        "  response.data=" + JSON.stringify(response));
+    })
+    .error(function(err) {
+       console.error('Sorry, Quindar platform cannot serve admFactory.getMetricsTrendTotalByVehicleN() for ' +
+        telemetryDataType + ' immediately. Please retry later.');
+    });
+  };
+
 
   return admFactory;
 }]);
