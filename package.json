@@ -2,7 +2,7 @@
   "name": "QuindarPlatform",
   "version": "0.1.0",
   "description": "Quindar platform consists of data services (REST API) and webSocket services for real time data streaming.",
-  "main": "express.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
