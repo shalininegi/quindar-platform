@@ -1,8 +1,8 @@
 module.exports = {
   'dbUrl': 'mongodb://data01.audacy.space:11001/telemetry',
   'dbOptions': {
-    'user': 'ray',
-    'pass': 'race2space',
+    'user': 'audacy',
+    'pass': 'audacy1234',
     'auth': {
       'authdb': 'admin'
     },
@@ -14,7 +14,7 @@ module.exports = {
       }
     }
   },
-  'secret': 'race2space',
+  'secret': 'audacy1234',
   'maxRecords': 9999,
   'vehicles': ["IBEX", "CST-100 Starliner", "Orion MPCV", "Dream Chaser CRS-2", "ISRO OV",
     "Skylon D1", "XCOR Lynx", "SIRIUS-1", "ISS (ZARYA)"],
@@ -25,7 +25,7 @@ module.exports = {
   'serverEndpoint': 'amqp://audacy:race2space@data04.audacy.space/develop',
   'mqConfig': {
     'user': 'audacy',
-    'pass': 'race2space',
+    'pass': 'audacy1234',
     'server': 'data04.audacy.space',
     'queue': 'develop'
   },

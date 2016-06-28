@@ -11,7 +11,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   var randomstring = require('randomstring');
   var async = require('async');
 
-  var systemSettings = require('../../config/systemSettings.js');
+  var systemSettings = require('../../config/.systemSettings.js');
   mongoose.connect(systemSettings.dbUrl, systemSettings.dbOptions); 
   var db = mongoose.connection;
 

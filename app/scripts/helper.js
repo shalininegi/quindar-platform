@@ -5,7 +5,7 @@
 // License: MIT license
 //
 
-var systemSettings = require('../../config/systemSettings.js');
+var systemSettings = require('../../config/.systemSettings.js');
 var randomstring = require('randomstring');
 
 console.log("/helper.js - helper classes loaded.");
