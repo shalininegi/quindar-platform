@@ -1,5 +1,5 @@
 # Quindar Platform
-Updated: Jun 21, 2016
+Updated: Jun 28, 2016
 
 The Quindar-platform project is the backend module that generates test data for mission operations application (Quindar widgets) to consume. It adopts an API-centric architecture with the integration with WebSockets (for real time data streaming), RabbitMQ messaging (for reliable and resilient transaction handling) and distributed data management.
 
@@ -15,6 +15,11 @@ This Quindar-platform project provides the platform services to support Quindar 
 * WebSockets server - data streaming of telemetry data
 * RabbitMQ gateway - guaranteed messaging for data generator 
 * REST API documentation generator and API console for testing
+
+# Security
+* Always use HTTPS. You can turn on/off different modules (e.g. http) by setting the flag to False in config/.systemSettings.js. It is perfectly acceptable to use http for early development and testing.
+* Credentials.  We have made a small change not to disclose system user credentials which are defined in .systemSettings.js.  Before you run the application, you need to run the build/deploy script buildme.sh, which will install NPM dependencies, and also create a copy of .systemSettings.js based on the template config/systemSettings.js.
+* Access token. We plan to use JSON Web Token for both REST API and webSockets.
 
 # For More Information
 * For license (terms of use), please refer to the file license.md.

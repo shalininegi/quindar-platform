@@ -20,9 +20,8 @@ module.exports = {
     "Skylon D1", "XCOR Lynx", "SIRIUS-1", "ISS (ZARYA)"],
   'exchange':'quindarExchange04',
   'exchangeType': 'topic',
-  'mqAccessConfig': '../../config/mqAccess.json',
   'serverURL': 'data04.audacy.space/develop',
-  'serverEndpoint': 'amqp://audacy:race2space@data04.audacy.space/develop',
+  'serverEndpoint': 'amqp://audacy:audacy1234@data04.audacy.space/develop',
   'mqConfig': {
     'user': 'audacy',
     'pass': 'audacy1234',
