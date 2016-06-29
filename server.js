@@ -35,7 +35,7 @@ var secureSocketServer = '';
 var io = '';
 
 
-// read SSL cert (self-signed cert for testing)
+// read SSL cert (self-signed cert for testing).
 var quindarKey = fs.readFileSync(__dirname + '/keys/quindar-key.pem');
 var quindarCert = fs.readFileSync(__dirname + '/keys/quindar-cert.pem');
 var sslOptions = {
