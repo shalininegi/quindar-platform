@@ -14,7 +14,8 @@ var vehicleSchema = new mongoose.Schema({
   alertHigh: Number,
   warnHigh: Number,
   alertLow: Number,
-  warnLow: Number
-}, { collection: 'vehicles'});
+  warnLow: Number,
+  createdAt: Date
+}, { collection: 'vehicle'});
 
 module.exports = mongoose.model('Vehicle', vehicleSchema);

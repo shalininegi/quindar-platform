@@ -8,7 +8,8 @@ var mongoose = require('mongoose');
 var orbitSchema = new mongoose.Schema({
   vehicleId: String,
   timestamp: Number,
-  trajectory: []
+  trajectory: [],
+  createdAt: Date
 }, { collection: 'orbit'});
 
 module.exports = mongoose.model('Orbit', orbitSchema);

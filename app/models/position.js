@@ -13,7 +13,8 @@ var positionSchema = new mongoose.Schema({
   z: Number,
   vx: Number,
   vy: Number,
-  vz: Number
+  vz: Number,
+  createdAt: Date
 }, { collection: 'position'});
 
 module.exports = mongoose.model('Position', positionSchema);

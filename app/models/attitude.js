@@ -10,7 +10,8 @@ var attitudeSchema = new mongoose.Schema({
   q1: Number,
   q2: Number,
   q3: Number,
-  q4: Number
+  q4: Number,
+  createdAt: Date
 }, { collection: 'attitude'});
 
 module.exports = mongoose.model('Attitude', attitudeSchema);

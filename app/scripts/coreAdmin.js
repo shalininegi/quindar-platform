@@ -79,6 +79,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
     var attitudeData = new Attitude(req.body);
     attitudeData.timestamp = Math.floor(new Date() / 1000);
+    attitudeData.createdAt = new Date();
     attitudeData.save(function(err) {
       if (err) {
         res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
@@ -86,7 +87,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
         return res.send(500, {error: err});
       };   
       res.status(200);
-      res.json( {"status": 200, "message": "insert attitude data points", "data": req.body} );
+      res.json( {"status": 200, "message": "insert attitude data points", "data": attitudeData} );
     });
   })
 
@@ -129,12 +130,14 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     var dataList = [];
     for (var i=0; i < nTimes; i++) {
       attitudeData = new Attitude(helper.getAttitudeData(0.999999, -0.000001));
+      attitudeData.timestamp = Math.floor(new Date() / 1000);
+      attitudeData.createdAt = new Date();
       dataList.push(attitudeData);
     };
 
     var counter = 0;
     async.eachLimit(dataList, 5, function(item, callback) {
-      attitudeData = new Attitude(item);
+      attitudeData = new Attitude(item); 
       attitudeData.save(function(err, item) {
         if (err) {
           res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
@@ -191,6 +194,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
     var positionData = new Position(req.body);
     positionData.timestamp = Math.floor(new Date() / 1000);
+    positionData.createdAt = new Date();
     positionData.save(function(err) {
       if (err) {
         res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
@@ -251,6 +255,8 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     var counter = 0;
     async.eachLimit(dataList, 5, function(item, callback) {
       positionData = new Position(item);
+      positionData.timestamp = Math.floor(new Date() / 1000);
+      positionData.createdAt = new Date();
       positionData.save(function(err, item) {
         if (err) {
           res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
@@ -309,6 +315,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
     var vehicleData = new Vehicle(req.body);
     vehicleData.timestamp = Math.floor(new Date() / 1000);
+    vehicleData.createdAt = new Date();
     vehicleData.save(function(err) {
       if (err) {
         res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
@@ -374,6 +381,8 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     var counter = 0;
     async.eachLimit(dataList, 5, function(item, callback) {
       vehicleData = new Position(item);
+      vehicleData.timestamp = Math.floor(new Date() / 1000);
+      vehicleData.createdAt = new Date();
       vehicleData.save(function(err, item) {
         if (err) {
           res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
@@ -424,6 +433,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
     var orbitData = new Orbit(req.body);
     orbitData.timestamp = Math.floor(new Date() / 1000);
+    orbitData.createdAt = new Date();
     orbitData.save(function(err) {
       if (err) { 
         res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
@@ -481,6 +491,8 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     var counter = 0;
     async.eachLimit(dataList, 5, function(item, callback) {
       orbitData = new Orbit(item);
+      orbitData.timestamp = Math.floor(new Date() / 1000);
+      orbitData.createdAt = new Date();
       orbitData.save(function(err, item) {
         if (err) {
           res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
