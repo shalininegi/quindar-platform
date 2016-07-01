@@ -2,7 +2,7 @@
 // Previous: upsertapi2.js
 // Purpose: Data API to write telemetry data into MongoDB
 // Author:  Ray Lai
-// Updated: May 26, 2016
+// Updated: Jul 1, 2016
 // License: MIT license
 //
 module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, helper) {
@@ -80,6 +80,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     var attitudeData = new Attitude(req.body);
     attitudeData.timestamp = Math.floor(new Date() / 1000);
     attitudeData.createdAt = new Date();
+
     attitudeData.save(function(err) {
       if (err) {
         res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
@@ -87,7 +88,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
         return res.send(500, {error: err});
       };   
       res.status(200);
-      res.json( {"status": 200, "message": "insert attitude data points", "data": attitudeData} );
+      res.json( {"status": 200, "message": "insert attitude data points", "data": req.body} );
     });
   })
 
@@ -137,7 +138,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
     var counter = 0;
     async.eachLimit(dataList, 5, function(item, callback) {
-      attitudeData = new Attitude(item); 
+      attitudeData = new Attitude(item);
       attitudeData.save(function(err, item) {
         if (err) {
           res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
@@ -249,6 +250,8 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     var dataList = [];
     for (var i=0; i < nTimes; i++) {
       positionData = new Position(helper.getPositionData(400000.0, -400000.0, 20.0, -20.0));
+      positionData.timestamp = Math.floor(new Date() / 1000);
+      positionData.createdAt = new Date();
       dataList.push(positionData);
     };
 
@@ -485,6 +488,8 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     var nDataPoints = 200;
     for (var i=0; i < nTimes; i++) {
       orbitData = new Orbit(helper.getOrbit(Math.random() * 0.2, Math.random() * 0.3, nDataPoints));
+      orbitData.timestamp = Math.floor(new Date() / 1000);
+      orbitData.createdAt = new Date();
       dataList.push(orbitData);
     };
     
