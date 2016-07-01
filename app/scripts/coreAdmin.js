@@ -88,7 +88,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
         return res.send(500, {error: err});
       };   
       res.status(200);
-      res.json( {"status": 200, "message": "insert attitude data points", "data": req.body} );
+      res.json( {"status": 200, "message": "insert attitude data points", "data": attitudeData} );
     });
   })
 
@@ -205,7 +205,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
       // if no error
       res.status(200);
-      res.json( {"status": 200, "message": "retrieve all position data points", "data": req.body} );
+      res.json( {"status": 200, "message": "retrieve all position data points", "data": positionData} );
     });
   })
 
@@ -328,7 +328,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
       // if no error
       res.status(200);
-      res.json( {"status": 200, "message": "retrieve all attitude data points", "data": req.body} );
+      res.json( {"status": 200, "message": "retrieve all attitude data points", "data": vehicleData} );
     });
   })
 
@@ -446,7 +446,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
       // if no error
       res.status(200);
-      res.json( {"status": 200, "message": "retrieve all position data points", "data": req.body} );
+      res.json( {"status": 200, "message": "retrieve all position data points", "data": orbitData} );
     });
   })
 
