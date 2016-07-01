@@ -120,7 +120,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
   **/
-  app.post('/services/v1/simulation/attitude/:nTimes', function(req, res) {
+  app.post('/services/v1/simulation/attitude/:nTimes', function(req, res) { 
     res.setHeader('Content-Type', 'application/json');
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");

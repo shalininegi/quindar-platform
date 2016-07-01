@@ -9,7 +9,7 @@ var orbitSchema = new mongoose.Schema({
   vehicleId: String,
   timestamp: Number,
   trajectory: [],
-  createdAt: Date
+  createdAt: Date 
 }, { collection: 'orbit'});
 
 module.exports = mongoose.model('Orbit', orbitSchema);
