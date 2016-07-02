@@ -83,12 +83,11 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
     attitudeData.save(function(err) {
       if (err) {
-        res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
         console.log("attitude.save() error=" + err);
-        return res.send(500, {error: err});
+        return res.status(500).send({"message": "Internal system error encountered", "type":"internal",
+          "error": err});
       };   
-      res.status(200);
-      res.json( {"status": 200, "message": "insert attitude data points", "data": attitudeData} );
+      return res.status(200).send( {"status": 200, "message": "insert attitude data points", "data": attitudeData} );
     });
   })
 
@@ -126,7 +125,16 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
-    var nTimes = parseInt(req.params.nTimes);  
+    var nTimes = parseInt(req.params.nTimes); 
+    if (isNaN(nTimes) || (nTimes < 0)) {
+      return res.status(300).send({"status": 300, "message": "User-related error encountered", "type":"user",
+            "error": "Please enter a valid number (nTimes)"});
+    };
+    var nTimesMax = 99999;
+    if (nTimes > nTimesMax) {
+      nTimes = nTimesMax;
+    }
+
     var attitudeData = {};
     var dataList = [];
     for (var i=0; i < nTimes; i++) {
@@ -141,16 +149,15 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       attitudeData = new Attitude(item);
       attitudeData.save(function(err, item) {
         if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
           console.log("attitude.nTimes.save() error=" + err);
-          return res.send(500, {error: err});
+          return res.status(500).send({"status": 500, "message": "Internal system error encountered", "type":"internal",
+            "error": err});
         };   
 
         // if no error
         counter++;
         if (counter  === dataList.length) {
-          res.status(200);
-          res.json( {"status": 200, "message": "create all attitude data points", "data": JSON.stringify(dataList)} );    
+          res.status(200).send( {"status": 200, "message": "create all attitude data points", "data": JSON.stringify(dataList)} );    
         };
         callback(err);
       });  
@@ -198,14 +205,14 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     positionData.createdAt = new Date();
     positionData.save(function(err) {
       if (err) {
-        res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
         console.log("position.save() error=" + err);
-        return res.send(500, {error: err});
+        return res.status(500).send({"status": 500, "message": "Internal system error encountered", 
+          "type":"internal", "error": err});
       };
 
       // if no error
       res.status(200);
-      res.json( {"status": 200, "message": "retrieve all position data points", "data": positionData} );
+      return res.status(200).send( {"status": 200, "message": "insert all position data points", "data": positionData} );
     });
   })
 
@@ -245,7 +252,16 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
-    var nTimes = parseInt(req.params.nTimes);  
+    var nTimes = parseInt(req.params.nTimes); 
+    if (isNaN(nTimes) || (nTimes < 0)) {
+      return res.status(300).send({"status": 300, "message": "User-related error encountered", "type":"user",
+            "error": "Please enter a valid number (nTimes)"});
+    };
+    var nTimesMax = 99999;
+    if (nTimes > nTimesMax) {
+      nTimes = nTimesMax;
+    }
+
     var positionData = {};
     var dataList = [];
     for (var i=0; i < nTimes; i++) {
@@ -262,16 +278,15 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       positionData.createdAt = new Date();
       positionData.save(function(err, item) {
         if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
           console.log("position.nTimes.save() error=" + err);
-          return res.send(500, {error: err});
+          res.status(500).send({"status":500, "message": "Internal system error encountered", 
+            "type":"internal", "error": err});
         };   
 
         // if no error
         counter++;
         if (counter  === dataList.length) {
-          res.status(200);
-          res.json( {"status": 200, "message": "create all position data points", "data": JSON.stringify(dataList)} );
+          res.status(200).send( {"status": 200, "message": "create all position data points", "data": JSON.stringify(dataList)} );
         };
         callback(err);
       });  
@@ -321,14 +336,13 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     vehicleData.createdAt = new Date();
     vehicleData.save(function(err) {
       if (err) {
-        res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
         console.log("vehicle.save() error=" + err);
-        return res.send(500, {error: err});
+        return res.status(500).send({"message": "Internal system error encountered", "type":"internal",
+          "error": err});
       };
 
       // if no error
-      res.status(200);
-      res.json( {"status": 200, "message": "retrieve all attitude data points", "data": vehicleData} );
+      return res.status.send( {"status": 200, "message": "retrieve all attitude data points", "data": vehicleData} );
     });
   })
 
@@ -374,6 +388,16 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
     var nTimes = parseInt(req.params.nTimes);  
+    
+    if (isNaN(nTimes) || (nTimes < 0)) {
+      return res.status(300).send({"status": 300, "message": "User-related error encountered", "type":"user",
+            "error": "Please enter a valid number (nTimes)"});
+    };
+    var nTimesMax = 99999;
+    if (nTimes > nTimesMax) {
+      nTimes = nTimesMax;
+    }
+
     var vehicleData = {};
     var dataList = [];
     for (var i=0; i < nTimes; i++) {
@@ -390,16 +414,15 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       vehicleData.createdAt = new Date();
       vehicleData.save(function(err, item) {
         if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
           console.log("vehicle.nTimes.save() error=" + err);
-          return res.send(500, {error: err});
+          res.status(500).send({"message": "Internal system error encountered", "type":"internal",
+            "error": err});
         };   
 
         // if no error
         counter++;
         if (counter  === dataList.length) {
-          res.status(200);
-          res.json( {"status": 200, "message": "create all position data points", "data": JSON.stringify(dataList)} );
+          res.status(200).send( {"status": 200, "message": "create all position data points", "data": JSON.stringify(dataList)} );
         };
         callback(err);
       });  
@@ -485,6 +508,15 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
     var nTimes = parseInt(req.params.nTimes);  
+    if (isNaN(nTimes) || (nTimes < 0)) {
+      return res.status(300).send({"status": 300, "message": "User-related error encountered", "type":"user",
+            "error": "Please enter a valid number (nTimes)"});
+    };
+    var nTimesMax = 99999;
+    if (nTimes > nTimesMax) {
+      nTimes = nTimesMax;
+    }
+
     var orbitData = {};
     var dataList = [];
     var nDataPoints = 200;
