@@ -1,13 +1,17 @@
 // Program: adminConsoleDirectives.js
 // Purpose: AngularJS router for quindar dashboard
 // Author:  Ray Lai
-// Updated: Jun 13, 2016
+// Updated: Jul 1, 2016
 // License: MIT license
 
 // AngularJS module definition
 // Remark: 6/13/2016  Promise $q is added here, but not used yet
 'use strict';
 app.factory('adminFactory', ['$http', '$q', function($http, $q) {
+  // you can change the endpoint and port for all factories globally below
+  var admFactoryEndpoint = "http://platform.audacy.space";
+  var admFactoryPort = "7902";
+
   var admFactory = {};
 
   // ------ Category:  random data generation ----------
@@ -117,7 +121,8 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
   // ------ Category: Database ----------
   // retrieve all attitude data
   admFactory.getAttitudeAll = function() {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/attitude';
+    var serviceEndpoint = admFactoryEndpoint + 
+      ':' + admFactoryPort + '/services/v1/attitude';
     return $http.get(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.getAttitudeAll() response.data=" + JSON.stringify(response));
@@ -129,8 +134,9 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
 
   // retrieve attitude data by vehicleId, limited by nItems rows
   admFactory.getAttitudePartial = function(vehicleId, nItems) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/attitude/' + vehicleId
-      + '/' + nItems;
+    var serviceEndpoint = admFactoryEndpoint +
+      ':' + admFactoryPort + '/services/v1/attitude/' +
+      vehicleId + '/' + nItems; 
     return $http.get(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.getAttitudePartial() response.data=" + JSON.stringify(response));
@@ -142,8 +148,9 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
 
   // retrieve attitude data by vehicleId within a time period fromTS to toTS
   admFactory.getAttitudeFromTo = function(vehicleId, fromTS, toTS) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/attitude/' + vehicleId
-      + '/' + fromTS + '/' + toTS;
+    var serviceEndpoint = admFactoryEndpoint + 
+      ':' + admFactoryPort + '/services/v1/attitude/' + vehicleId +
+      '/' + fromTS + '/' + toTS;
     return $http.get(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.getAttitudePartial() response.data=" + JSON.stringify(response));
@@ -155,7 +162,8 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
 
   // retrieve all position data
   admFactory.getPositionAll = function() {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/position';
+    var serviceEndpoint = admFactoryEndpoint + 
+      ':' + admFactoryPort + '/services/v1/position'; 
     return $http.get(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.getPositionAll() response.data=" + JSON.stringify(response));
@@ -167,8 +175,9 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
 
   // retrieve position data by vehicleId, limited by nItems rows
   admFactory.getPositionPartial = function(vehicleId, nItems) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/position/' + vehicleId
-      + '/' + nItems;
+    var serviceEndpoint = admFactoryEndpoint + 
+      ':' + admFactoryPort + '/services/v1/position/' + vehicleId +
+      '/' + nItems;
     return $http.get(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.getPositionPartial() response.data=" + JSON.stringify(response));
@@ -180,8 +189,9 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
 
   // retrieve position data by vehicleId within a time period fromTS to toTS
   admFactory.getPositionFromTo = function(vehicleId, fromTS, toTS) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/position/' + vehicleId
-      + '/' + fromTS + '/' + toTS;
+    var serviceEndpoint = admFactoryEndpoint +
+      ':' + admFactoryPort + '/services/v1/position/' + vehicleId +
+      '/' + fromTS + '/' + toTS;
     return $http.get(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.getPositionFromTo() response.data=" + JSON.stringify(response));
@@ -193,7 +203,8 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
 
   // retrieve all vehicle data
   admFactory.getVehicleAll = function() {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/vehicle';
+    var serviceEndpoint = admFactoryEndpoint + 
+      ':' + admFactoryPort + '/services/v1/vehicle';
     return $http.get(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.getVehicleAll() response.data=" + JSON.stringify(response));
@@ -205,8 +216,9 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
 
   // retrieve vehicle data by vehicleId, limited by nItems rows
   admFactory.getVehiclePartial = function(vehicleId, nItems) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/vehicle/' + vehicleId
-      + '/' + nItems;
+    var serviceEndpoint = admFactoryEndpoint + 
+      ':' + admFactoryPort + '/services/v1/vehicle/' + vehicleId +
+      '/' + nItems;
     return $http.get(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.getVehiclePartial() response.data=" + JSON.stringify(response));
@@ -218,8 +230,9 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
 
   // retrieve vehicle data by vehicleId within a time period fromTS to toTS
   admFactory.getVehicleFromTo = function(vehicleId, fromTS, toTS) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/vehicle/' + vehicleId
-      + '/' + fromTS + '/' + toTS;
+    var serviceEndpoint = admFactoryEndpoint + 
+      ':' + admFactoryPort + '/services/v1/vehicle/' + vehicleId +
+      '/' + fromTS + '/' + toTS;
     return $http.get(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.getVehicleFromTo() response.data=" + JSON.stringify(response));
@@ -231,7 +244,8 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
 
   // retrieve all orbit trajectory data
   admFactory.getOrbitAll = function() {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/orbit';
+    var serviceEndpoint = admFactoryEndpoint + 
+      ':' + admFactoryPort + '/services/v1/orbit';
     return $http.get(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.getOrbitAll () response.data=" + JSON.stringify(response));
@@ -243,8 +257,9 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
 
   // retrieve orbit trajectory data by vehicleId, limited by nItems rows
   admFactory.getOrbitPartial = function(vehicleId, nItems) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/orbit/' + vehicleId
-      + '/' + nItems;
+    var serviceEndpoint = admFactoryEndpoint + 
+      ':' + admFactoryPort + '/services/v1/orbit/' + vehicleId +
+      '/' + nItems;
     return $http.get(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.getOrbitPartial() response.data=" + JSON.stringify(response));
@@ -256,8 +271,9 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
 
   // retrieve orbit trajectory data by vehicleId within a time period fromTS to toTS
   admFactory.getOrbitFromTo = function(vehicleId, fromTS, toTS) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/orbit/' + vehicleId
-      + '/' + fromTS + '/' + toTS;
+    var serviceEndpoint = admFactoryEndpoint + 
+      ':' + admFactoryPort + '/services/v1/orbit/' + vehicleId + 
+      '/' + fromTS + '/' + toTS;
     return $http.get(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.getOrbitFromTo() response.data=" + JSON.stringify(response));
@@ -269,7 +285,8 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
 
   // upsert attitude data point
   admFactory.postAttitude = function(vehicleId, q1, q2, q3, q4) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/attitude';
+    var serviceEndpoint = admFactoryEndpoint + 
+      ':' + admFactoryPort + '/services/v1/attitude';
     return $http.post(serviceEndpoint,
       { "vehicleId": vehicleId,
         "q1": q1, "q2": q2, "q3": q3, "q4": q4
@@ -285,7 +302,8 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
 
   // upsert position data point
   admFactory.postPosition = function(vehicleId, x, y, z, vx, vy, vz) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/position';
+    var serviceEndpoint = admFactoryEndpoint +
+      ':' + admFactoryPort + '/services/v1/position';
     return $http.post(serviceEndpoint,
       { "vehicleId": vehicleId,
         "x": x, "y": y, "z": z, "vx": vx, "vy": vy, "vz": vz
@@ -302,7 +320,8 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
   // upsert vehicle data point
   admFactory.postVehicle = function(vehicleId, deviceId, value, uom, alertHigh, warnHigh, 
     alertLow, warnLow, calibrationFactor) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/vehicle';
+    var serviceEndpoint = admFactoryEndpoint + 
+      ':' + admFactoryPort + '/services/v1/vehicle';
     return $http.post(serviceEndpoint,
       { "vehicleId": vehicleId,
         "deviceId": deviceId, "value": value, "uom": uom,
@@ -320,7 +339,8 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
 
  // upsert orbit data point
   admFactory.postOrbit = function(vehicleId, trajectory) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/orbit';
+    var serviceEndpoint = admFactoryEndpoint +
+      ':' + admFactoryPort + '/services/v1/orbit';
     return $http.post(serviceEndpoint,
       { "vehicleId": vehicleId,
         "trajectory": trajectory
@@ -336,7 +356,8 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
 
   // generate simulated attitude data point @ nItems
   admFactory.generateAttitudeSimulated = function(nTimes) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/simulation/attitude/' + nTimes;
+    var serviceEndpoint = admFactoryEndpoint +
+      ':' + admFactoryPort + '/services/v1/simulation/attitude/' + nTimes;
     return $http.post(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.generateAttitudeSimulated() response.data=" + JSON.stringify(response));
@@ -348,7 +369,8 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
 
   // generate simulated position data point @ nItems
   admFactory.generatePositionSimulated = function(nTimes) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/simulation/position/' + nTimes;
+    var serviceEndpoint = admFactoryEndpoint +
+      ':' + admFactoryPort + '/services/v1/simulation/position/' + nTimes;
     return $http.post(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.generatePositionSimulated() response.data=" + JSON.stringify(response));
@@ -360,7 +382,8 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
 
   // generate simulated vehicle data point @ nItems
   admFactory.generateVehicleSimulated = function(nTimes) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/simulation/vehicle/' + nTimes;
+    var serviceEndpoint = admFactoryEndpoint +
+      ':' + admFactoryPort + '/services/v1/simulation/vehicle/' + nTimes;
     return $http.post(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.generateVehicleSimulated() response.data=" + JSON.stringify(response));
@@ -372,7 +395,8 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
 
   // generate simulated orbit data point @ nItems
   admFactory.generateOrbitSimulated = function(nTimes) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/simulation/orbit/' + nTimes;
+    var serviceEndpoint = admFactoryEndpoint +
+      ':' + admFactoryPort + '/services/v1/simulation/orbit/' + nTimes;
     return $http.post(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.generateOrbitSimulated() response.data=" + JSON.stringify(response));
@@ -386,8 +410,9 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
   // generate test data to MQ
   // generate simulated attitude data point @ nItems for RabbitMQ
   admFactory.generateAttitudeSimulatedMQ = function(topic, nTimes) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/simulation/messaging/attitude/'
-       + topic + '/' + nTimes;
+    var serviceEndpoint = admFactoryEndpoint +
+      ':' + admFactoryPort + '/services/v1/simulation/messaging/attitude/' + 
+      topic + '/' + nTimes;
     return $http.post(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.generateAttitudeSimulatedMQ() response.data=" + JSON.stringify(response));
@@ -399,8 +424,9 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
 
   // generate simulated position data point @ nItems for RabbitMQ
   admFactory.generatePositionSimulatedMQ = function(topic, nTimes) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/simulation/messaging/position/'
-       + topic + '/' + nTimes;
+    var serviceEndpoint = admFactoryEndpoint +
+      ':' + admFactoryPort + '/services/v1/simulation/messaging/position/' +
+      topic + '/' + nTimes;
     return $http.post(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.generatePositionSimulated() response.data=" + JSON.stringify(response));
@@ -412,8 +438,9 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
 
   // generate simulated vehicle data point @ nItems for RabbitMQ
   admFactory.generateVehicleSimulatedMQ = function(topic, nTimes) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/simulation/messaging/vehicle/'
-       + topic + '/' + nTimes;
+    var serviceEndpoint = admFactoryEndpoint +
+      ':' + admFactoryPort + '/services/v1/simulation/messaging/vehicle/' +
+      topic + '/' + nTimes;
     return $http.post(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.generateVehicleSimulatedMQ() response.data=" + JSON.stringify(response));
@@ -425,8 +452,9 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
 
   // generate simulated orbit data point @ nItems for RabbitMQ
   admFactory.generateOrbitSimulatedMQ = function(topic, nTimes) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/simulation/messaging/orbit/'
-       + topic + '/' + nTimes;
+    var serviceEndpoint = admFactoryEndpoint +
+      ':' + admFactoryPort + '/services/v1/simulation/messaging/orbit/' +
+      topic + '/' + nTimes;
     return $http.post(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.generateOrbitSimulatedMQ() response.data=" + JSON.stringify(response));
@@ -439,8 +467,9 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
   // write to MQ
   // post attitude data point using RabbitMQ
   admFactory.postAttitudeMQ = function(topic, vehicleId, q1, q2, q3, q4) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/messaging/attitude/'
-       + topic;
+    var serviceEndpoint = admFactoryEndpoint +
+      ':' + admFactoryPort + '/services/v1/simulation/messaging/attitude/' +
+      topic;
     return $http.post(serviceEndpoint,
       { "vehicleId": vehicleId,
         "q1": q1, "q2": q2, "q3": q3, "q4": q4
@@ -456,8 +485,9 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
 
  // upsert position data point using RabbitMQ
   admFactory.postPositionMQ = function(topic, vehicleId, x, y, z, vx, vy, vz) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/messaging/position/' +
-      + topic;
+    var serviceEndpoint = admFactoryEndpoint +
+      ':' + admFactoryPort + '/services/v1/simulation/messaging/position/' +
+      topic;
     return $http.post(serviceEndpoint,
       { "vehicleId": vehicleId,
         "x": x, "y": y, "z": z, "vx": vx, "vy": vy, "vz": vz
@@ -474,8 +504,9 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
   // upsert vehicle data point using RabbitMQ
   admFactory.postVehicleMQ = function(topic, vehicleId, deviceId, value, uom, alertHigh, warnHigh, 
     alertLow, warnLow, calibrationFactor) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/messaging/vehicle/' +
-      + topic;
+    var serviceEndpoint = admFactoryEndpoint +
+      ':' + admFactoryPort + '/services/v1/simulation/messaging/vehicle/' +
+      topic;
     return $http.post(serviceEndpoint,
       { "vehicleId": vehicleId,
         "deviceId": deviceId, "value": value, "uom": uom,
@@ -493,8 +524,9 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
 
   // upsert orbit data point using RabbitMQ
   admFactory.postOrbitMQ = function(topic, vehicleId, trajectory) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/messaging/orbit/' + 
-      + topic;
+    var serviceEndpoint = admFactoryEndpoint +
+      ':' + admFactoryPort + '/services/v1/simulation/messaging/orbit/' +
+      topic;
     return $http.post(serviceEndpoint,
       { "vehicleId": vehicleId,
         "trajectory": trajectory
@@ -512,8 +544,9 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
   // clean up database collections
   // collectionName values allowed:  attitude, position, vehicle, orbit
   admFactory.cleanupDBCollection = function(collectionName) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/admin/cleanup/' + 
-      + collectionName;
+    var serviceEndpoint = admFactoryEndpoint +
+      ':' + admFactoryPort + '/services/v1/admin/cleanup/' +
+      collectionName;
     return $http.get(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.cleanupDBCollection() response.data=" + JSON.stringify(response));
@@ -527,8 +560,9 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
   // get metrics total by telemetry data types (e.g. attitude, position, vehicle)
   // valid telemetryDataType value: attitude, position, vehicle, orbit
   admFactory.getMetricsTotalAll = function(telemetryDataType) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/admin/metrics/' 
-      + telemetryDataType + '/total/all/';
+    var serviceEndpoint = admFactoryEndpoint +
+      ':' + admFactoryPort + '/services/v1/admin/metrics/' +
+      telemetryDataType + '/total/all/';
     return $http.get(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.getMetricsTotalAll() for " + telemetryDataType + 
@@ -543,8 +577,9 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
   // get metrics total by telemetry data types (e.g. attitude, position, vehicle) by vehicleId
   // valid telemetryDataType value: attitude, position, vehicle, orbit
   admFactory.getMetricsAttitudeTotalByVehicle = function(telemetryDataType, vehicleId) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/admin/metrics/' 
-      + telemetryDataType + '/total/' + vehicleId;
+    var serviceEndpoint = admFactoryEndpoint +
+      ':' + admFactoryPort + '/services/v1/admin/metrics/' +
+      telemetryDataType + '/total/' + vehicleId;
     return $http.get(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.getMetricsAttitudeTotalByVehicle() for " + telemetryDataType + 
@@ -560,8 +595,9 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
   // valid telemetryDataType value: attitude, position, vehicle, orbit
   admFactory.getMetricsAttitudeTotalByVehicleTimestamp = function(telemetryDataType, vehicleId,
       fromTS, toTS) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/admin/metrics/' 
-      + telemetryDataType + '/total/' + vehicleId + '/' + fromTS + '/' + toTS;
+    var serviceEndpoint = admFactoryEndpoint +
+      ':' + admFactoryPort + '/services/v1/admin/metrics/' +
+      telemetryDataType + '/total/' + vehicleId + '/' + fromTS + '/' + toTS;
     return $http.get(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.getMetricsAttitudeTotalByVehicleTimestamp() for " + telemetryDataType + 
@@ -576,8 +612,9 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
   // get metrics trend by telemetry data types (e.g. attitude, position, vehicle)
   // valid telemetryDataType value: attitude, position, vehicle, orbit
   admFactory.getMetricsTrendTotalAll = function(telemetryDataType) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/admin/metrics/trend/' 
-      + telemetryDataType + '/all/';
+    var serviceEndpoint = admFactoryEndpoint +
+      ':' + admFactoryPort + '/services/v1/admin/metrics/trend/' +
+      telemetryDataType + '/all/';
     return $http.get(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.getMetricsTrendTotalAll() for " + telemetryDataType + 
@@ -592,8 +629,9 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
   // get metrics trend by telemetry data types (e.g. attitude, position, vehicle) nLimit
   // valid telemetryDataType value: attitude, position, vehicle, orbit
   admFactory.getMetricsTrendTotalN = function(telemetryDataType, nLimit) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/admin/metrics/trend/' 
-      + telemetryDataType + '/' + nLimit;
+    var serviceEndpoint = admFactoryEndpoint +
+      ':' + admFactoryPort + '/services/v1/admin/metrics/trend/' +
+      telemetryDataType + '/' + nLimit;
     return $http.get(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.getMetricsTrendTotalN() for " + telemetryDataType + 
@@ -609,8 +647,9 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
   // get metrics trend by telemetry data types (e.g. attitude, position, vehicle) by vehicleId
   // valid telemetryDataType value: attitude, position, vehicle, orbit
   admFactory.getMetricsTrendTotalByVehicle = function(telemetryDataType, vehicleId) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/admin/metrics/trend/' 
-      + telemetryDataType + '/' + vehicleId;
+    var serviceEndpoint = admFactoryEndpoint +
+      ':' + admFactoryPort + '/services/v1/admin/metrics/trend/' +
+      telemetryDataType + '/' + vehicleId;
     return $http.get(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.getMetricsTrendTotalByVehicle() for " + telemetryDataType + 
@@ -626,8 +665,9 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
   // get metrics trend by telemetry data types (e.g. attitude, position, vehicle) by vehicleId nLimit
   // valid telemetryDataType value: attitude, position, vehicle, orbit
   admFactory.getMetricsTrendTotalByVehicleN = function(telemetryDataType, vehicleId, nLimit) {
-    var serviceEndpoint = 'http://platform.audacy.space:7902/services/v1/admin/metrics/trend/' 
-      + telemetryDataType + '/' + vehicleId + '/' + nLimit;
+    var serviceEndpoint = admFactoryEndpoint +
+      ':' + admFactoryPort + '/services/v1/admin/metrics/trend/' +
+      telemetryDataType + '/' + vehicleId + '/' + nLimit;
     return $http.get(serviceEndpoint)
     .success(function(response) {
       console.log("admFactory.getMetricsTrendTotalByVehicleN() for " + telemetryDataType + 
