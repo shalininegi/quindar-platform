@@ -83,7 +83,6 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
     attitudeData.save(function(err) {
       if (err) {
-        console.log("attitude.save() error=" + err);
         return res.status(500).send({"message": "Internal system error encountered", "type":"internal",
           "error": err});
       };   
@@ -149,8 +148,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       attitudeData = new Attitude(item);
       attitudeData.save(function(err, item) {
         if (err) {
-          console.log("attitude.nTimes.save() error=" + err);
-          return res.status(500).send({"status": 500, "message": "Internal system error encountered", "type":"internal",
+          res.status(500).send({"status": 500, "message": "Internal system error encountered", "type":"internal",
             "error": err});
         };   
 
@@ -205,13 +203,11 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     positionData.createdAt = new Date();
     positionData.save(function(err) {
       if (err) {
-        console.log("position.save() error=" + err);
         return res.status(500).send({"status": 500, "message": "Internal system error encountered", 
           "type":"internal", "error": err});
       };
 
       // if no error
-      res.status(200);
       return res.status(200).send( {"status": 200, "message": "insert all position data points", "data": positionData} );
     });
   })
@@ -278,7 +274,6 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       positionData.createdAt = new Date();
       positionData.save(function(err, item) {
         if (err) {
-          console.log("position.nTimes.save() error=" + err);
           res.status(500).send({"status":500, "message": "Internal system error encountered", 
             "type":"internal", "error": err});
         };   
@@ -336,13 +331,12 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     vehicleData.createdAt = new Date();
     vehicleData.save(function(err) {
       if (err) {
-        console.log("vehicle.save() error=" + err);
-        return res.status(500).send({"message": "Internal system error encountered", "type":"internal",
+        return res.status(500).send({"status": 500, "message": "Internal system error encountered", "type":"internal",
           "error": err});
       };
 
       // if no error
-      return res.status.send( {"status": 200, "message": "retrieve all attitude data points", "data": vehicleData} );
+      return res.status(200).send( {"status": 200, "message": "retrieve all attitude data points", "data": vehicleData} );
     });
   })
 
@@ -414,7 +408,6 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       vehicleData.createdAt = new Date();
       vehicleData.save(function(err, item) {
         if (err) {
-          console.log("vehicle.nTimes.save() error=" + err);
           res.status(500).send({"message": "Internal system error encountered", "type":"internal",
             "error": err});
         };   
@@ -464,14 +457,12 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     orbitData.createdAt = new Date();
     orbitData.save(function(err) {
       if (err) { 
-        res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-        console.log("orbit.save() error=" + err);
-        return res.send(500, {error: err});
+        return res.status(500).send({"status": 500, "message": "Internal system error encountered", 
+          "type":"internal", "error": err});
       }
 
       // if no error
-      res.status(200);
-      res.json( {"status": 200, "message": "retrieve all position data points", "data": orbitData} );
+      return res.status(200).send( {"status": 200, "message": "retrieve all position data points", "data": orbitData} );
     });
   })
 
@@ -534,16 +525,14 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       orbitData.createdAt = new Date();
       orbitData.save(function(err, item) {
         if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("orbit.nTimes.save() error=" + err);
-          return res.send(500, {error: err});
+          res.status(500).send({"status": 500, "message": "Internal system error encountered", "type":"internal",
+            "error": err});
         };   
 
         // if no error
         counter++;
         if (counter  === dataList.length) {
-          res.status(200);
-          res.json( {"status": 200, "message": "create all orbit data points", "data": JSON.stringify(dataList)} );
+          res.status(200).send( {"status": 200, "message": "create all orbit data points", "data": JSON.stringify(dataList)} );
         };
         callback(err);
       });  
@@ -578,13 +567,11 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
     Attitude.collection.remove(function(err) {
       if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("Attitude.collection.drop() error=" + err);
-          return res.send(500, {error: err});
+          return res.status(500).send({"status":500, "message": "Cannot drop attitude collection due to system errors.", 
+            "type":"internal", "error": err});
       };
 
-      //res.status(200).send("collection dropped");
-      return res.status(200).send({"message": "collection dropped", "type":"client"});
+      return res.status(200).send({"status":200, "message": "attitude collection dropped", "type":"client"});
     });
   });
 
@@ -616,12 +603,11 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
     Position.collection.remove(function(err) {
       if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("Position.collection.drop() error=" + err);
-          return res.send(500, {error: err});
-      }; 
-      //res.status(200).send({"status": 200, "message": "collection dropped"});
-      return res.status(200).send({"message": "collection dropped", "type":"client"});  
+          return res.status(500).send({"status":500, "message": "Cannot drop position collection due to system errors.", 
+            "type":"internal", "error": err});
+      };
+
+      return res.status(200).send({"status":200, "message": "position collection dropped", "type":"client"});
     });
   });
 
@@ -653,12 +639,11 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
     Vehicle.collection.remove(function(err) {
       if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("Vehicle.collection.drop() error=" + err);
-          return res.send(500, {error: err});
-      }; 
-      //res.status(200).send({"status": 200, "message": "collection dropped"});
-      return res.status(200).send({"message": "collection dropped", "type":"client"}); 
+          return res.status(500).send({"status":500, "message": "Cannot drop vehicle collection due to system errors.", 
+            "type":"internal", "error": err});
+      };
+
+      return res.status(200).send({"status":200, "message": "vehicle collection dropped", "type":"client"});
     });
   });
 
@@ -690,12 +675,11 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
     Orbit.collection.remove(function(err) {
       if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("Orbit.collection.drop() error=" + err);
-          return res.send(500, {error: err});
-      }; 
-      //res.status(200).send({"status": 200, "message": "collection dropped"});
-      return res.status(200).send({"message": "collection dropped", "type":"client"});
+          return res.status(500).send({"status":500, "message": "Cannot drop orbit collection due to system errors.", 
+            "type":"internal", "error": err});
+      };
+
+      return res.status(200).send({"status":200, "message": "orbit collection dropped", "type":"client"});
     });
   });
 
