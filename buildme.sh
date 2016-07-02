@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "Building NodeJS dependencies for Quindar platform"
 echo "...installing npm modules from package.json"
-npm install
+npm install -g
 
 echo "...creating a sample config/.systemSettings.js"
 cp config/systemSettings.js config/.systemSettings.js
