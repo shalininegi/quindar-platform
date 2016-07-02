@@ -9,8 +9,9 @@
 'use strict';
 app.factory('adminFactory', ['$http', '$q', function($http, $q) {
   // you can change the endpoint and port for all factories globally below
-  var admFactoryEndpoint = "http://platform.audacy.space";
-  var admFactoryPort = "7902";
+  //var admFactoryEndpoint = "http://platform.audacy.space";
+  var admFactoryEndpoint = "http://localhost";
+  var admFactoryPort = "3000";
 
   var admFactory = {};
 
@@ -386,6 +387,7 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
       ':' + admFactoryPort + '/services/v1/simulation/vehicle/' + nTimes;
     return $http.post(serviceEndpoint)
     .success(function(response) {
+      console.log('..........vehicle');
       console.log("admFactory.generateVehicleSimulated() response.data=" + JSON.stringify(response));
     })
     .error(function(err) {

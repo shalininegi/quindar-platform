@@ -150,7 +150,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
         counter++;
         if (counter  === dataList.length) {
           res.status(200);
-          res.json( {"status": 200, "message": "retrieve all attitude data points", "data": JSON.stringify(dataList)} );    
+          res.json( {"status": 200, "message": "create all attitude data points", "data": JSON.stringify(dataList)} );    
         };
         callback(err);
       });  
@@ -271,7 +271,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
         counter++;
         if (counter  === dataList.length) {
           res.status(200);
-          res.json( {"status": 200, "message": "retrieve all position data points", "data": JSON.stringify(dataList)} );
+          res.json( {"status": 200, "message": "create all position data points", "data": JSON.stringify(dataList)} );
         };
         callback(err);
       });  
@@ -378,12 +378,14 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     var dataList = [];
     for (var i=0; i < nTimes; i++) {
       vehicleData = new Vehicle(helper.getVehiclesData(500.9999, -500.9999));
+      vehicleData.timestamp = Math.floor(new Date() / 1000);
+      vehicleData.createdAt = new Date();
       dataList.push(vehicleData);
     };
 
     var counter = 0;
     async.eachLimit(dataList, 5, function(item, callback) {
-      vehicleData = new Position(item);
+      vehicleData = new Vehicle(item);
       vehicleData.timestamp = Math.floor(new Date() / 1000);
       vehicleData.createdAt = new Date();
       vehicleData.save(function(err, item) {
@@ -397,7 +399,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
         counter++;
         if (counter  === dataList.length) {
           res.status(200);
-          res.json( {"status": 200, "message": "retrieve all position data points", "data": JSON.stringify(dataList)} );
+          res.json( {"status": 200, "message": "create all position data points", "data": JSON.stringify(dataList)} );
         };
         callback(err);
       });  
@@ -509,7 +511,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
         counter++;
         if (counter  === dataList.length) {
           res.status(200);
-          res.json( {"status": 200, "message": "retrieve all orbit data points", "data": JSON.stringify(dataList)} );
+          res.json( {"status": 200, "message": "create all orbit data points", "data": JSON.stringify(dataList)} );
         };
         callback(err);
       });  

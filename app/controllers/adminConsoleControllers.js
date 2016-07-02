@@ -266,7 +266,6 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
     } else if (payloadType === "vehicle") {
       //payload = $scope.generateVehicle();
       //$scope.generatedDataDatabase = JSON.stringify(payload);
-      
       $scope.generateSimulatedTelemetry("vehicle", $scope.nItemsGenerated);
       $scope.generatedDataDatabase = JSON.stringify($scope.vehicleDataSet);
       $scope.statusDatabase = "Sent @" + timestamp;
