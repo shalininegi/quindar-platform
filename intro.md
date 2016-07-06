@@ -48,13 +48,11 @@ need for grunt get installed. Copy the followng into the “devDependencies” s
 ```javascript
 “devDependencies”:{
     "grunt": "1.0.1",
-    "grunt-contrib-clean": "1.0.0",
     "grunt-contrib-concat": "1.0.1",
     "grunt-contrib-copy": "1.0.0",
     "grunt-contrib-cssmin": "1.0.1",
     "grunt-contrib-uglify": "1.0.1",
     "grunt-contrib-watch": "1.0.0",
-    "grunt-dev-update": "2.0.0",
     "grunt-processhtml": "0.4.0",
     "load-grunt-tasks": "3.5.0",
     "napa": "2.3.0",
@@ -105,11 +103,6 @@ module.exports = function(grunt) {   //all Gruntfiles have this heading, otherwi
         //dest writes a new file with concatenated javascript files according to the path
        dest: 'app/concat.js' 
         },
-        //same process with second batch of .js files
-        js2: { 
-            src: ['app/example.js'],
-            dest: 'app/concat2.js'
-        },
        //now css
         css: { 
         //note that ** means all directories within a given directory and * means all files
@@ -133,18 +126,16 @@ module.exports = function(grunt) {   //all Gruntfiles have this heading, otherwi
 	         },
 	   },
 
-	  //uglify minifies concat.js for faster loading
+	  //uglify minifies .js for faster loading
 	  uglify: { 
              my_target: {
 		  files: {
-			//minified file 'quindar-scripts.min.js’ from ‘concat.js' placed into 'app' directory
-			  'app/quindar-scripts.min.js': ['app/concat.js'],
-			//minified file 'quindar-scripts2.min.js' from ‘concat2.js’
-        'app/quindar-scripts2.min.js': ['app/concat2.js'] 
-			   }                          
+			//minified file 'newFile.min.js’ from source ‘example.js' placed into 'app' directory
+			  'app/newFile.min.js': ['app/example.js'],
+			  }                          
 		   }
 	   },
-	  //css min minifies concat.css for faster loading
+	  //css min minifies .css for faster loading
 	  cssmin: { 
   		options: {
     		shorthandCompacting: false,
@@ -152,8 +143,8 @@ module.exports = function(grunt) {   //all Gruntfiles have this heading, otherwi
   			},
   		  target: {
     			files: {
-				//minified file 'quindar-styles.min.js' from ‘concat.css’
-      				'app/quindar-styles.min.css': ['app/concat.css']
+				//minified file 'newFile.min.js' from source ‘example.css’
+      				'app/newFile.min.css': ['app/example.css']
     			     }                                             
   		  	}
 		 },
@@ -173,73 +164,21 @@ module.exports = function(grunt) {   //all Gruntfiles have this heading, otherwi
 	// have the files copy automatically after install
        copy: {
           main: {
+    // napa stores files into the node_modules folder. If you download third party code via napa,
+    // it will be more convenient for development to move those files to the app folder.
     // each chunk below defines the path to the file (cwd) and the files to copy over (src)
     // as well as their destination (dest). In our case dest is always “app/” as our root
     // directory
             files: [{
                 expand: true,
-                cwd: 'node_modules/bootstrapcdn',
+                cwd: 'node_modules/example',
                 src: '*.css',
                 dest: 'app/',
             },
             {
                 expand: true,
-                cwd: 'node_modules/angular-min',
-                src: '*.js',
-                dest: 'app/',
-            },
-            {
-                expand: true,
-                cwd: 'node_modules/router-min',
-                src: '*.js',
-                dest: 'app/',
-            },
-            {
-                expand: true,
-                cwd: 'node_modules/pace-min',
-                src: '*.js',
-                dest: 'app/',
-            },
-            {
-                expand: true,
-                cwd: 'node_modules/jquery-min',
-                src: '*.js',
-                dest: 'app/',
-            },
-            {
-                expand: true,
-                cwd: 'node_modules/bootstrap-min',
-                src: '*.js',
-                dest: 'app/',
-            },
-            {
-                expand: true,
-                cwd: 'node_modules/blockUI-min',
-                src: '*.js',
-                dest: 'app/',
-            },
-            {
-                expand: true,
-                cwd: 'node_modules/tpls-min',
-                src: '*.js',
-                dest: 'app/',
-            },
-            {
-                expand: true,
-                cwd: 'node_modules/socket',
-                src: '*.js',
-                dest: 'app/',
-            },
-            {
-                expand: true,
-                cwd: 'node_modules/flot',
-                src: '*.js',
-                dest: 'app/',
-            },
-            {
-                expand: true,
-                cwd: 'node_modules/googlejsapi/',
-                src: ['jsapi'],
+                cwd: 'node_modules/example2',
+                src: '*.css',
                 dest: 'app/',
             }]
           }
@@ -250,12 +189,11 @@ module.exports = function(grunt) {   //all Gruntfiles have this heading, otherwi
 	//these lines add loads in information about the tasks called when running grunt. We did not
 	// write the tasks ourselves so we have to load them from a third party
   	grunt.loadNpmTasks('grunt-contrib-concat'); 
- 	  grunt.loadNpmTasks('grunt-contrib-watch');  
+ 	grunt.loadNpmTasks('grunt-contrib-watch');  
   	grunt.loadNpmTasks('grunt-contrib-uglify'); 
   	grunt.loadNpmTasks('grunt-contrib-cssmin');
    	grunt.loadNpmTasks('grunt-contrib-copy');
   	grunt.loadNpmTasks('grunt-processhtml');
-  	grunt.loadNpmTasks('grunt-dev-update');
 
 	//Each function is called a task, so we have to call the tasks we want. Pass in a name
 	// you want, and the tasks listed above you want to run when you call this task.
@@ -311,9 +249,7 @@ Becomes:
 ```htlml
 <script src="app/quindar-styles.min.css"></script>
 ```
-(Note: since there are two chunks of .js file calls, we have two different minified files quindar-scripts.min.js and 
-quindar-scripts2.min.js. It also should be noted the second chunk of .js file calls has a .css file call in the middle, 
-so one sets of "build-/build" should be placed on either side of the .css file call which can be left alone.Furthermore, the call to Roboto should not be concatenated and should be left alone.)
+(Note: sometimes .js or .css files are called in groups split up by other code. Each of these chunks should have its own set of "build" tags, otherwis processhtml will remove all code between the chunks when running. It shold also be noted that .js and .css cannot be processed in the same group and if one appears in the others' group of script calls, it effectively splits that group into two separate groups.)
 
 Everything is ready to go. Make sure you have built app by running ./buildme.sh, then try your first grunt call:
 ```
