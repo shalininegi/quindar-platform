@@ -1,4 +1,4 @@
-#Using grut and napa In Your WebApp
+#Using grunt and napa In Your WebApp
 
 This is a template for structuring grunt and napa integration to your apps, such as quindar-platform. For an example
 of the template in action, see teh grunt+napa branch in quindar-angular and read the "intro.md" file.
