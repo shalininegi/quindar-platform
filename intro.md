@@ -11,6 +11,8 @@ calls as external scripts.
 If you clone our apps, build them, and run them on a local server, they will work well, but there is plenty of room to 
 grow for developers. This is where grunt and napa come into play.
 
+It should be noted that this example assumes a quindar application wherein the index.html calls each file individually. This is the old format for creating quindar apps. The new format for creating quindar app will involve fewer calls to begin with as our files on our github will be aggregated together.
+
 ###Preliminary Configuration
 Create a new temporary folder on your desktop or wherever you prefer and clone any quindar app from github into it 
 (platform, angular, etc.).
