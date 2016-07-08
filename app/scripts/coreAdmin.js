@@ -10,7 +10,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   var randomstring = require('randomstring');
   var async = require('async');
 
-  var systemSettings = require('../../config/.systemSettings.js');
+  var systemSettings = require('../../config/systemSettings.js');
   var nTimesMax = systemSettings.maxRecords;
   
   mongoose.connect(systemSettings.dbUrl, systemSettings.dbOptions); 

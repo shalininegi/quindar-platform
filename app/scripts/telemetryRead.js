@@ -16,7 +16,7 @@
 // - error handling - need to customize error page, e.g. if (err) res.render('error', ...)
 //
 module.exports = function(app, mongoose, syslogger, logger) {
-  var systemSettings = require('../../config/.systemSettings.js');
+  var systemSettings = require('../../config/systemSettings.js');
   mongoose.connect(systemSettings.dbUrl, systemSettings.dbOptions); 
   var db = mongoose.connection;
 

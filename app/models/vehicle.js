@@ -6,6 +6,7 @@
 
 var mongoose = require('mongoose');
 var vehicleSchema = new mongoose.Schema({
+  vehicleId: String,
   deviceId: String,
   timestamp: Number,
   value: Number,
@@ -14,7 +15,8 @@ var vehicleSchema = new mongoose.Schema({
   alertHigh: Number,
   warnHigh: Number,
   alertLow: Number,
-  warnLow: Number
-}, { collection: 'vehicles'});
+  warnLow: Number,
+  createdAt: Date
+}, { collection: 'vehicle'});
 
 module.exports = mongoose.model('Vehicle', vehicleSchema);
