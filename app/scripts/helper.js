@@ -84,6 +84,7 @@ exports.getVehiclesData = function(high, low) {
 
   testData = { "vehicleId": vehicleId, "value": value, "uom": uom, "alertHigh": alertHigh, "alertLow": alertLow,
     "warnHigh": warnHigh, "warnLow": warnLow, "calibrationFactor": calibrationFactor, 
+    "deviceId": deviceId,
     "timestamp": timestamp };
   return testData;
 }
