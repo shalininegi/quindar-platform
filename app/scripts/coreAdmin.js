@@ -1,8 +1,7 @@
-// Program: module03.js 
-// Previous: upsertapi2.js
+// Program: coreAdmin.js 
 // Purpose: Data API to write telemetry data into MongoDB
 // Author:  Ray Lai
-// Updated: May 26, 2016
+// Updated: Jul 6, 2016
 // License: MIT license
 //
 module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, helper) {
@@ -12,6 +11,8 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   var async = require('async');
 
   var systemSettings = require('../../config/.systemSettings.js');
+  var nTimesMax = systemSettings.maxRecords;
+  
   mongoose.connect(systemSettings.dbUrl, systemSettings.dbOptions); 
   var db = mongoose.connection;
 
@@ -59,9 +60,14 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   * @apiSuccess {array} data array of attitude quaternion q1/q2/q3/q4 data points
   *
+  * @apiExample {curl} Example usage:
+  * curl -X POST -H "Content-type: application/json" -d '{"vehicleId":"IBEX",
+  *        "timestamp":1457726400,"q1":0.651781,"q2":-0.29526,"q3":-0.268266,"q4":0.645009}' 
+  *        http://localhost:3000/services/v1/attitude
+  *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
-  *     {"status":200,"message":"upsert attitude data points",
+  *     {"status":200,"message":"insert attitude data points",
   *        "data":[{"_id":"56f312e98caf28f687482b5f","vehicleId":"IBEX",
   *        "timestamp":1457726400,"q1":0.651781,"q2":-0.29526,"q3":-0.268266,"q4":0.645009}]}
   *
@@ -79,14 +85,15 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
     var attitudeData = new Attitude(req.body);
     attitudeData.timestamp = Math.floor(new Date() / 1000);
+    attitudeData.createdAt = new Date();
+
     attitudeData.save(function(err) {
       if (err) {
-        res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-        console.log("attitude.save() error=" + err);
-        return res.send(500, {error: err});
+        return res.status(500).send({"status": 500, "message": "Cannot insert attitude data points due to internal system error", 
+          "type":"internal",
+          "error": err});
       };   
-      res.status(200);
-      res.json( {"status": 200, "message": "insert attitude data points", "data": req.body} );
+      return res.status(200).send( {"status": 200, "message": "insert attitude data points", "data": attitudeData} );
     });
   })
 
@@ -119,16 +126,28 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
   **/
-  app.post('/services/v1/simulation/attitude/:nTimes', function(req, res) {
+  app.post('/services/v1/simulation/attitude/:nTimes', function(req, res) { 
     res.setHeader('Content-Type', 'application/json');
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
-    var nTimes = parseInt(req.params.nTimes);  
+    var nTimes = parseInt(req.params.nTimes); 
+    if (isNaN(nTimes) || (nTimes < 0)) {
+      return res.status(300).send({"status": 300, "message": "User-related error encountered", "type":"user",
+            "nTimes": nTimes,
+            "error": "Please enter a valid number (nTimes)"});
+    };
+    
+    if (nTimes > nTimesMax) {
+      nTimes = nTimesMax;
+    }
+
     var attitudeData = {};
     var dataList = [];
     for (var i=0; i < nTimes; i++) {
       attitudeData = new Attitude(helper.getAttitudeData(0.999999, -0.000001));
+      attitudeData.timestamp = Math.floor(new Date() / 1000);
+      attitudeData.createdAt = new Date();
       dataList.push(attitudeData);
     };
 
@@ -137,16 +156,17 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       attitudeData = new Attitude(item);
       attitudeData.save(function(err, item) {
         if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("attitude.nTimes.save() error=" + err);
-          return res.send(500, {error: err});
+          res.status(500).send({"status": 500, "message": "Cannot insert attitude data points due to internal system error", 
+            "type":"internal",
+            "nTimes": nTimes, "counter": counter,
+            "error": err});
         };   
 
         // if no error
         counter++;
         if (counter  === dataList.length) {
-          res.status(200);
-          res.json( {"status": 200, "message": "retrieve all attitude data points", "data": JSON.stringify(dataList)} );    
+          res.status(200).send( {"status": 200, "message": "insert all attitude data points", 
+            "nTimes": nTimes, "data": JSON.stringify(dataList)} );    
         };
         callback(err);
       });  
@@ -169,7 +189,11 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   * @apiParam {Number} vx velocity for x
   * @apiParam {Number} vy velocity for y
   * @apiParam {Number} vz velocity for z
-
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X POST -H "Content-type: application/json" -d '{"vehicleId":"IBEX","timestamp":1457640420,"x":236294.1956,
+  * "y":116196.8879,"z":-34379.67682,"vx":-0.675287,"vy":0.508343,"vz":0.434496}' 
+  *        http://localhost:3000/services/v1/position
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -191,16 +215,15 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
     var positionData = new Position(req.body);
     positionData.timestamp = Math.floor(new Date() / 1000);
+    positionData.createdAt = new Date();
     positionData.save(function(err) {
       if (err) {
-        res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-        console.log("position.save() error=" + err);
-        return res.send(500, {error: err});
+        return res.status(500).send({"status": 500, "message": "Cannot insert position data points due to internal system error", 
+          "type":"internal", "error": err});
       };
 
       // if no error
-      res.status(200);
-      res.json( {"status": 200, "message": "retrieve all position data points", "data": req.body} );
+      return res.status(200).send( {"status": 200, "message": "insert all position data points", "data": positionData} );
     });
   })
 
@@ -240,29 +263,42 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
-    var nTimes = parseInt(req.params.nTimes);  
+    var nTimes = parseInt(req.params.nTimes); 
+    if (isNaN(nTimes) || (nTimes < 0)) {
+      return res.status(300).send({"status": 300, "message": "User-related error encountered", "type":"user",
+            "nTimes": nTimes,
+            "error": "Please enter a valid number (nTimes)"});
+    };
+    
+    if (nTimes > nTimesMax) {
+      nTimes = nTimesMax;
+    }
+
     var positionData = {};
     var dataList = [];
     for (var i=0; i < nTimes; i++) {
       positionData = new Position(helper.getPositionData(400000.0, -400000.0, 20.0, -20.0));
+      positionData.timestamp = Math.floor(new Date() / 1000);
+      positionData.createdAt = new Date();
       dataList.push(positionData);
     };
 
     var counter = 0;
     async.eachLimit(dataList, 5, function(item, callback) {
       positionData = new Position(item);
+      positionData.timestamp = Math.floor(new Date() / 1000);
+      positionData.createdAt = new Date();
       positionData.save(function(err, item) {
         if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("position.nTimes.save() error=" + err);
-          return res.send(500, {error: err});
+          res.status(500).send({"status":500, "message": "Cannot insert position data points due to internal system error", 
+            "nTimes": nTimes, "counter": counter,
+            "type":"internal", "error": err});
         };   
 
         // if no error
         counter++;
         if (counter  === dataList.length) {
-          res.status(200);
-          res.json( {"status": 200, "message": "retrieve all position data points", "data": JSON.stringify(dataList)} );
+          res.status(200).send( {"status": 200, "message": "create all position data points", "data": JSON.stringify(dataList)} );
         };
         callback(err);
       });  
@@ -288,6 +324,12 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   * @apiSuccess {array} data array of vehicle data points from sensors in the satellite , e.g. temperature value, warnHigh, alertHigh
   *
+  * @apiExample {curl} Example usage:
+  * curl -X POST -H "Content-type: application/json" -d '{"vehicleId":"IBEX","timestamp":1457726400,
+  * "value":315,"calibrationFactor":"T = 3*x - 4*x^2 + 2","uom":"Kelvin","alertHigh":330,
+  * "warnHigh":321,"alertLow":280,"warnLow":274,"deviceId":"Battery01Temp"}' 
+  *        http://localhost:3000/services/v1/vehicle
+  *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
   *     {"status":200,"message":"retrieve all vehicle data points",
@@ -309,16 +351,15 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
     var vehicleData = new Vehicle(req.body);
     vehicleData.timestamp = Math.floor(new Date() / 1000);
+    vehicleData.createdAt = new Date();
     vehicleData.save(function(err) {
       if (err) {
-        res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-        console.log("vehicle.save() error=" + err);
-        return res.send(500, {error: err});
+        return res.status(500).send({"status": 500, "message": "Cannot insert vehicle data points due to internal system error", "type":"internal",
+          "error": err});
       };
 
       // if no error
-      res.status(200);
-      res.json( {"status": 200, "message": "retrieve all attitude data points", "data": req.body} );
+      return res.status(200).send( {"status": 200, "message": "insert vehicle data points", "data": vehicleData} );
     });
   })
 
@@ -364,28 +405,43 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
     var nTimes = parseInt(req.params.nTimes);  
+    
+    if (isNaN(nTimes) || (nTimes < 0)) {
+      return res.status(300).send({"status": 300, "message": "User-related error encountered", "type":"user",
+            "nTimes": nTimes,
+            "error": "Please enter a valid number (nTimes)"});
+    };
+    
+    if (nTimes > nTimesMax) {
+      nTimes = nTimesMax;
+    }
+
     var vehicleData = {};
     var dataList = [];
     for (var i=0; i < nTimes; i++) {
       vehicleData = new Vehicle(helper.getVehiclesData(500.9999, -500.9999));
+      vehicleData.timestamp = Math.floor(new Date() / 1000);
+      vehicleData.createdAt = new Date();
       dataList.push(vehicleData);
     };
 
     var counter = 0;
     async.eachLimit(dataList, 5, function(item, callback) {
-      vehicleData = new Position(item);
+      vehicleData = new Vehicle(item);
+      vehicleData.timestamp = Math.floor(new Date() / 1000);
+      vehicleData.createdAt = new Date();
       vehicleData.save(function(err, item) {
         if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("vehicle.nTimes.save() error=" + err);
-          return res.send(500, {error: err});
+          res.status(500).send({"message": "Cannot insert vehicle data points due to internal system error", 
+            "nTimes": nTimes, "counter": counter,
+            "type":"internal",
+            "error": err});
         };   
 
         // if no error
         counter++;
         if (counter  === dataList.length) {
-          res.status(200);
-          res.json( {"status": 200, "message": "retrieve all position data points", "data": JSON.stringify(dataList)} );
+          res.status(200).send( {"status": 200, "message": "create all vehicle data points", "data": JSON.stringify(dataList)} );
         };
         callback(err);
       });  
@@ -403,6 +459,11 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   * @apiParam {Array}  orbit trajectory array (array of longitutde, latitude)
   *
   * @apiSuccess {array} data array of vehicle data points from sensors in the satellite , e.g. temperature value, warnHigh, alertHigh
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X POST -H "Content-type: application/json" -d '{"data":[{"_id":"56f315e98caf28f687483228","vehicleId":"IBEX","timestamp":1457726400,
+  * "value": [ 10,20...]}' 
+  *        http://localhost:3000/services/v1/orbit
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -424,16 +485,15 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
     var orbitData = new Orbit(req.body);
     orbitData.timestamp = Math.floor(new Date() / 1000);
+    orbitData.createdAt = new Date();
     orbitData.save(function(err) {
       if (err) { 
-        res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-        console.log("orbit.save() error=" + err);
-        return res.send(500, {error: err});
+        return res.status(500).send({"status": 500, "message": "Cannot insert orbit data points due to internal system error", 
+          "type":"internal", "error": err});
       }
 
       // if no error
-      res.status(200);
-      res.json( {"status": 200, "message": "retrieve all position data points", "data": req.body} );
+      return res.status(200).send( {"status": 200, "message": "retrieve all orbit data points", "data": orbitData} );
     });
   })
 
@@ -470,29 +530,43 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
     var nTimes = parseInt(req.params.nTimes);  
+    if (isNaN(nTimes) || (nTimes < 0)) {
+      return res.status(300).send({"status": 300, "message": "User-related error encountered", "type":"user",
+            "nTimes": nTimes,
+            "error": "Please enter a valid number (nTimes)"});
+    };
+  
+    if (nTimes > nTimesMax) {
+      nTimes = nTimesMax;
+    }
+
     var orbitData = {};
     var dataList = [];
     var nDataPoints = 200;
     for (var i=0; i < nTimes; i++) {
       orbitData = new Orbit(helper.getOrbit(Math.random() * 0.2, Math.random() * 0.3, nDataPoints));
+      orbitData.timestamp = Math.floor(new Date() / 1000);
+      orbitData.createdAt = new Date();
       dataList.push(orbitData);
     };
     
     var counter = 0;
     async.eachLimit(dataList, 5, function(item, callback) {
       orbitData = new Orbit(item);
+      orbitData.timestamp = Math.floor(new Date() / 1000);
+      orbitData.createdAt = new Date();
       orbitData.save(function(err, item) {
         if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("orbit.nTimes.save() error=" + err);
-          return res.send(500, {error: err});
+          res.status(500).send({"status": 500, "message": "Cannot insert orbit data points due to internal system error", 
+            "type":"internal",
+            "nTimes": nTimes, "counter": counter,
+            "error": err});
         };   
 
         // if no error
         counter++;
         if (counter  === dataList.length) {
-          res.status(200);
-          res.json( {"status": 200, "message": "retrieve all orbit data points", "data": JSON.stringify(dataList)} );
+          res.status(200).send( {"status": 200, "message": "create all orbit data points", "data": JSON.stringify(dataList)} );
         };
         callback(err);
       });  
@@ -527,13 +601,11 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
     Attitude.collection.remove(function(err) {
       if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("Attitude.collection.drop() error=" + err);
-          return res.send(500, {error: err});
+          return res.status(500).send({"status":500, "message": "Cannot drop attitude collection due to system errors.", 
+            "type":"internal", "error": err});
       };
 
-      //res.status(200).send("collection dropped");
-      return res.status(200).send({"message": "collection dropped", "type":"client"});
+      return res.status(200).send({"status":200, "message": "attitude collection dropped", "type":"client"});
     });
   });
 
@@ -565,12 +637,11 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
     Position.collection.remove(function(err) {
       if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("Position.collection.drop() error=" + err);
-          return res.send(500, {error: err});
-      }; 
-      //res.status(200).send({"status": 200, "message": "collection dropped"});
-      return res.status(200).send({"message": "collection dropped", "type":"client"});  
+          return res.status(500).send({"status":500, "message": "Cannot drop position collection due to system errors.", 
+            "type":"internal", "error": err});
+      };
+
+      return res.status(200).send({"status":200, "message": "position collection dropped", "type":"client"});
     });
   });
 
@@ -602,12 +673,11 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
     Vehicle.collection.remove(function(err) {
       if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("Vehicle.collection.drop() error=" + err);
-          return res.send(500, {error: err});
-      }; 
-      //res.status(200).send({"status": 200, "message": "collection dropped"});
-      return res.status(200).send({"message": "collection dropped", "type":"client"}); 
+          return res.status(500).send({"status":500, "message": "Cannot drop vehicle collection due to system errors.", 
+            "type":"internal", "error": err});
+      };
+
+      return res.status(200).send({"status":200, "message": "vehicle collection dropped", "type":"client"});
     });
   });
 
@@ -639,12 +709,11 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
     Orbit.collection.remove(function(err) {
       if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("Orbit.collection.drop() error=" + err);
-          return res.send(500, {error: err});
-      }; 
-      //res.status(200).send({"status": 200, "message": "collection dropped"});
-      return res.status(200).send({"message": "collection dropped", "type":"client"});
+          return res.status(500).send({"status":500, "message": "Cannot drop orbit collection due to system errors.", 
+            "type":"internal", "error": err});
+      };
+
+      return res.status(200).send({"status":200, "message": "orbit collection dropped", "type":"client"});
     });
   });
 
@@ -679,15 +748,19 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     var vehicleId = req.params.vehicleId;
     Attitude.count(function(err, cnt) {
       if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
           console.log("Quindar attitude metrics update error=" + err);
-          res.status(500).send({error: err});
+          return res.status(500).send({"status": 500, "message": "Quindar attitude metrics update due to internal system error", 
+            "type":"internal", "error": err});
       };
       console.log("Quindar attitude metrics updated. count=" + cnt);
-      //res.status(200).send("Quindar metrics updated successfully.");
-      return res.status(200).send({"message": "Quindar attitude metrics updated successfully.", 
+      if (cnt > 0) {
+        return res.status(200).send({"status": 200, "message": "Quindar attitude metrics updated successfully.", 
         "collection": "attitude",
         "count": cnt });
+      } else {
+        return res.status(200).send({"status": 200, "message": "Cannot find attitude data. The database is empty.", 
+        "collection": "attitude" });
+      };
     });
   });
 
@@ -718,16 +791,22 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
     var vehicleId = req.params.vehicleId;
-    Attitude.count({ "vehicleId": vehicleId}  , function(err, cnt) {
+    Attitude.count({ "vehicleId": vehicleId}, function(err, cnt) {
       if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
           console.log("Quindar attitude metrics update error=" + err);
-          return res.status(500).send({error: err});
+          return res.status(500).send({"status": 500,
+            "message": "Quindar attitude metrics update due to internal system error", "type":"internal",
+            "error": err});
       };
       console.log("Quindar attitude metrics updated. count=" + cnt);
-      return res.status(200).send({"message": "Quindar attitude metrics updated successfully.", 
-        "collection": "attitude",
-        "vehicldId":  vehicleId, "count": cnt});
+      if (cnt > 0) {
+        return res.status(200).send({"status": 200, "message": "Quindar attitude metrics updated successfully.", 
+        "collection": "attitude", "vehicleId": vehicleId,
+        "count": cnt });
+      } else {
+        return res.status(300).send({"status": 300, "message": "Cannot find attitude data for vehicle id " + vehicleId, 
+        "collection": "attitude" });
+      };
     });
   });
 
@@ -761,17 +840,35 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     var fromTS = req.params.fromTS;
     var toTS = req.params.toTS;
 
+    if (isNaN(fromTS) || (fromTS < 0)) {
+      return res.status(300).send({"status": 300, "message": "User-related error encountered", "type":"user",
+            "error": "Please enter a valid number (fromTS)"});
+    };
+    if (isNaN(toTS) || (toTS < 0)) {
+      return res.status(300).send({"status": 300, "message": "User-related error encountered", "type":"user",
+            "error": "Please enter a valid number (toTS)"});
+    };
+
     Attitude.count({ "vehicleId": vehicleId,
        "timestamp": { $gte: fromTS, $lte: toTS}}, function(err, cnt) {
       if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
           console.log("Quindar attitude metrics update error=" + err);
-          return res.status(500).send({error: err});
+          return res.status(500).send({"status": 500, 
+            "message": "Quindar attitude metrics update due to internal system error", "type":"internal", 
+            "error": err});
       };
       console.log("Quindar attitude metrics updated. count=" + cnt);
-      return res.status(200).send({"message": "Quindar attitude metrics updated successfully.",  
+      if (cnt > 0) {
+        return res.status(200).send({"status": 200, "message": "Quindar attitude metrics updated successfully.", 
+        "collection": "attitude", "vehicleId": vehicleId,
+        "fromTS": fromTS, "toTS": toTS, 
+        "count": cnt });
+      } else {
+        return res.status(300).send({"status": 300, "message": "Cannot find attitude data for vehicle id " + vehicleId, 
         "collection": "attitude",
-        "vehicldId":  vehicleId, "fromTS": fromTS, "toTS": toTS, "count": cnt});
+        "fromTS": fromTS, "toTS": toTS, 
+        "count": cnt });
+      };
     });
   });
 
@@ -805,14 +902,20 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     var vehicleId = req.params.vehicleId;
     Position.count(function(err, cnt) {
       if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
           console.log("Quindar position metrics update error=" + err);
-          res.status(500).send({error: err});
+          return res.status(500).send({"status": 500, 
+            "message": "Quindar position metrics update due to internal system error", "type":"internal",
+            "error": err});
       };
       console.log("Quindar position metrics updated. count=" + cnt);
-      return res.status(200).send({"message": "Quindar position metrics updated successfully.", 
+      if (cnt > 0) {
+        return res.status(200).send({"status": 200, "message": "Quindar position metrics updated successfully.", 
         "collection": "position",
         "count": cnt });
+      } else {
+        return res.status(200).send({"status": 300, "message": "Cannot find position data. The database is empty.", 
+        "collection": "position" });
+      };
     });
   });
 
@@ -845,14 +948,20 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     var vehicleId = req.params.vehicleId;
     Position.count({ "vehicleId": vehicleId}  , function(err, cnt) {
       if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
           console.log("Quindar position metrics update error=" + err);
-          return res.status(500).send({error: err});
+          return res.status(500).send({"status": 500,
+            "message": "Quindar position metrics update due to internal system error", "type":"internal",
+            "error": err});
       };
       console.log("Quindar position metrics updated. count=" + cnt);
-      return res.status(200).send({"message": "Quindar position metrics updated successfully.", 
-        "collection": "position",
-        "vehicldId":  vehicleId, "count": cnt});
+      if (cnt > 0) {
+        return res.status(200).send({"status": 200, "message": "Quindar position metrics updated successfully.", 
+        "collection": "position", "vehicleId": vehicleId,
+        "count": cnt });
+      } else {
+        return res.status(300).send({"status": 300, "message": "Cannot find position data for vehicle id " + vehicleId, 
+        "collection": "position" });
+      };
     });
   });
 
@@ -886,17 +995,35 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     var fromTS = req.params.fromTS;
     var toTS = req.params.toTS;
 
+    if (isNaN(fromTS) || (fromTS < 0)) {
+      return res.status(300).send({"status": 300, "message": "User-related error encountered", "type":"user",
+            "error": "Please enter a valid number (fromTS)"});
+    };
+    if (isNaN(toTS) || (toTS < 0)) {
+      return res.status(300).send({"status": 300, "message": "User-related error encountered", "type":"user",
+            "error": "Please enter a valid number (toTS)"});
+    };
+
     Position.count({ "vehicleId": vehicleId,
        "timestamp": { $gte: fromTS, $lte: toTS}}, function(err, cnt) {
       if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
           console.log("Quindar position metrics update error=" + err);
-          return res.status(500).send({error: err});
+          return res.status(500).send({"status": 500,
+            "message": "Quindar position metrics update due to internal system error", "type":"internal",
+            "error": err});
       };
       console.log("Quindar position metrics updated. count=" + cnt);
-      return res.status(200).send({"message": "Quindar position metrics updated successfully.",  
+      if (cnt > 0) {
+        return res.status(200).send({"status": 200, "message": "Quindar position metrics updated successfully.", 
+        "collection": "position", "vehicleId": vehicleId,
+        "fromTS": fromTS, "toTS": toTS, 
+        "count": cnt });
+      } else {
+        return res.status(300).send({"status": 300, "message": "Cannot find position data for vehicle id " + vehicleId, 
         "collection": "position",
-        "vehicldId":  vehicleId, "fromTS": fromTS, "toTS": toTS, "count": cnt});
+        "fromTS": fromTS, "toTS": toTS, 
+        "count": cnt });
+      };
     });
   });
 
@@ -930,14 +1057,20 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     var vehicleId = req.params.vehicleId;
     Vehicle.count(function(err, cnt) {
       if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
           console.log("Quindar vehicle metrics update error=" + err);
-          res.status(500).send({error: err});
+          return res.status(500).send({"status": 500, 
+            "message": "Quindar vehicle metrics update error due to internal system error", "type":"internal",
+            "error": err});
       };
       console.log("Quindar vehicle metrics updated. count=" + cnt);
-      return res.status(200).send({"message": "Quindar vehicle metrics updated successfully.", 
+      if (cnt > 0) {
+        return res.status(200).send({"status": 200, "message": "Quindar vehicle metrics updated successfully.", 
         "collection": "vehicle",
         "count": cnt });
+      } else {
+        return res.status(200).send({"status": 300, "message": "Cannot find vehicle data. The database is empty.", 
+        "collection": "vehicle" });
+      };
     });
   });
 
@@ -970,14 +1103,20 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     var vehicleId = req.params.vehicleId;
     Vehicle.count({ "vehicleId": vehicleId}  , function(err, cnt) {
       if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
           console.log("Quindar vehicle metrics update error=" + err);
-          return res.status(500).send({error: err});
+          return res.status(500).send({"status": 500,
+            "message": "Quindar vehicle metrics update error due to internal system error", "type":"internal",
+            "error": err});
       };
       console.log("Quindar vehicle metrics updated. count=" + cnt);
-      return res.status(200).send({"message": "Quindar vehicle metrics updated successfully.", 
-        "collection": "vehicle",
-        "vehicldId":  vehicleId, "count": cnt});
+      if (cnt > 0) {
+        return res.status(200).send({"status": 200, "message": "Quindar vehicle metrics updated successfully.", 
+        "collection": "vehicle", "vehicleId": vehicleId,
+        "count": cnt });
+      } else {
+        return res.status(300).send({"status": 300, "message": "Cannot find vehicle data for vehicle id " + vehicleId, 
+        "collection": "vehicle" });
+      };
     });
   });
 
@@ -1011,17 +1150,35 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     var fromTS = req.params.fromTS;
     var toTS = req.params.toTS;
 
+    if (isNaN(fromTS) || (fromTS < 0)) {
+      return res.status(300).send({"status": 300, "message": "User-related error encountered", "type":"user",
+            "error": "Please enter a valid number (fromTS)"});
+    };
+    if (isNaN(toTS) || (toTS < 0)) {
+      return res.status(300).send({"status": 300, "message": "User-related error encountered", "type":"user",
+            "error": "Please enter a valid number (toTS)"});
+    };
+
     Vehicle.count({ "vehicleId": vehicleId,
        "timestamp": { $gte: fromTS, $lte: toTS}}, function(err, cnt) {
       if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
           console.log("Quindar vehicle metrics update error=" + err);
-          return res.status(500).send({error: err});
+          return res.status(500).send({"status": 500,
+            "message": "Quindar vehicle metrics update error due to internal system error", "type":"internal",
+            "error": err});
       };
       console.log("Quindar vehicle metrics updated. count=" + cnt);
-      return res.status(200).send({"message": "Quindar vehicle metrics updated successfully.",  
+      if (cnt > 0) {
+        return res.status(200).send({"status": 200, "message": "Quindar vehicle metrics updated successfully.", 
+        "collection": "vehicle", "vehicleId": vehicleId,
+        "fromTS": fromTS, "toTS": toTS, 
+        "count": cnt });
+      } else {
+        return res.status(300).send({"status": 300, "message": "Cannot find vehicle data for vehicle id " + vehicleId, 
         "collection": "vehicle",
-        "vehicldId":  vehicleId, "fromTS": fromTS, "toTS": toTS, "count": cnt});
+        "fromTS": fromTS, "toTS": toTS, 
+        "count": cnt });
+      };
     });
   });
 
@@ -1055,14 +1212,19 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     var vehicleId = req.params.vehicleId;
     Orbit.count(function(err, cnt) {
       if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("Quindar orbit metrics update error=" + err);
-          res.status(500).send({error: err});
+          return res.status(500).send({"status": 500, 
+            "message": "Quindar orbit metrics update error due to internal system error", "type":"internal",
+            "error": err});
       };
       console.log("Quindar orbit metrics updated. count=" + cnt);
-      return res.status(200).send({"message": "Quindar orbit metrics updated successfully.", 
+      if (cnt > 0) {
+        return res.status(200).send({"status": 200, "message": "Quindar orbit metrics updated successfully.", 
         "collection": "orbit",
         "count": cnt });
+      } else {
+        return res.status(200).send({"status": 300, "message": "Cannot find orbit data. The database is empty.", 
+        "collection": "orbit" });
+      };
     });
   });
 
@@ -1095,14 +1257,19 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     var vehicleId = req.params.vehicleId;
     Orbit.count({ "vehicleId": vehicleId}  , function(err, cnt) {
       if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("Quindar orbit metrics update error=" + err);
-          return res.status(500).send({error: err});
+          return res.status(500).send({"status": 500,
+            "message": "Quindar orbit metrics update error due to internal system error", "type":"internal",
+            "error": err});
       };
       console.log("Quindar orbit metrics updated. count=" + cnt);
-      return res.status(200).send({"message": "Quindar orbit metrics updated successfully.", 
-        "collection": "orbit",
-        "vehicldId":  vehicleId, "count": cnt});
+      if (cnt > 0) {
+        return res.status(200).send({"status": 200, "message": "Quindar orbit metrics updated successfully.", 
+        "collection": "orbit", "vehicleId": vehicleId,
+        "count": cnt });
+      } else {
+        return res.status(300).send({"status": 300, "message": "Cannot find orbit data for vehicle id " + vehicleId, 
+        "collection": "orbit" });
+      };
     });
   });
 
@@ -1136,17 +1303,31 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     var fromTS = req.params.fromTS;
     var toTS = req.params.toTS;
 
+    if (isNaN(fromTS) || (fromTS < 0)) {
+      return res.status(300).send({"status": 300, "message": "User-related error encountered", "type":"user",
+            "error": "Please enter a valid number (fromTS)"});
+    };
+    if (isNaN(toTS) || (toTS < 0)) {
+      return res.status(300).send({"status": 300, "message": "User-related error encountered", "type":"user",
+            "error": "Please enter a valid number (toTS)"});
+    };
+
     Orbit.count({ "vehicleId": vehicleId,
        "timestamp": { $gte: fromTS, $lte: toTS}}, function(err, cnt) {
       if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("Quindar orbit metrics update error=" + err);
-          return res.status(500).send({error: err});
+          return res.status(500).send({"status": 500,
+            "message": "Quindar orbit metrics update error due to internal system error", "type":"internal",
+            "error": err});
       };
       console.log("Quindar orbit metrics updated. count=" + cnt);
-      return res.status(200).send({"message": "Quindar orbit metrics updated successfully.",  
-        "collection": "orbit",
-        "vehicldId":  vehicleId, "fromTS": fromTS, "toTS": toTS, "count": cnt});
+      if (cnt > 0) {
+        return res.status(200).send({"status": 200, "message": "Quindar orbit metrics updated successfully.", 
+        "collection": "orbit", "vehicleId": vehicleId,
+        "count": cnt });
+      } else {
+        return res.status(300).send({"status": 300, "message": "Cannot find orbit data for vehicle id " + vehicleId, 
+        "collection": "orbit" });
+      };
     });
   });
 
@@ -1186,9 +1367,10 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       ],
       function(err,data) {
         if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
           console.log("Quindar attitude metrics trending error=" + err);
-          return res.status(500).send({error: err});
+          return res.status(500).send({"status": 500,
+            "message": "Cannot extract attitude metrics trending due to internal system error", "type":"internal",
+            "error": err});
         } else {
           console.log("Quindar attitude metrics trending updated. count=" + JSON.stringify(data));
           return res.status(200).send({"message": "Quindar attitude metrics trending updated successfully.",  
@@ -1244,9 +1426,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       ],
       function(err,data) {
         if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("Quindar attitude metrics trending error=" + err);
-          return res.status(500).send({error: err});
+          return res.status(500).send({"status": 500,
+            "message": "Cannot extract attitude metrics trending due to internal system error", "type":"internal",
+            "error": err});
         } else {
           console.log("Quindar attitude metrics trending updated. count=" + JSON.stringify(data));
           return res.status(200).send({"message": "Quindar attitude metrics trending updated successfully.",  
@@ -1258,7 +1440,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   });
 
   /**
-  * @api {get} /services/v1/admin/metrics/trend/attitude/:vehicleId attitude usage trend
+  * @api {get} /services/v1/admin/metrics/trend/attitude/by/:vehicleId attitude usage trend
   * @apiVersion 0.1.0
   * @apiName getMetricsAttitudeTrendByVehicleId
   * @apiDescription get attitude collection metrics trend by vehicleId  in ascending order
@@ -1278,7 +1460,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
   **/
-  app.get('/services/v1/admin/metrics/trend/attitude/:vehicleId', function(req, res) {
+  app.get('/services/v1/admin/metrics/trend/attitude/by/:vehicleId', function(req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -1294,9 +1476,10 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       ],
       function(err,data) {
         if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("Quindar attitude metrics trending error=" + err);
-          return res.status(500).send({error: err});
+          return res.status(500).send({"status": 500,
+            "message": "Cannot extract attitude metrics trending due to internal system error", "type":"internal",
+            "vehicleId": vehicleId,
+            "error": err});
         } else {
           console.log("Quindar attitude metrics trending updated. count=" + JSON.stringify(data));
           return res.status(200).send({"message": "Quindar attitude metrics trending updated successfully.",  
@@ -1472,7 +1655,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   });
 
   /**
-  * @api {get} /services/v1/admin/metrics/trend/position/:vehicleId positionusage trend by vehicleId
+  * @api {get} /services/v1/admin/metrics/trend/position/by/:vehicleId positionusage trend by vehicleId
   * @apiVersion 0.1.0
   * @apiName getMetricsPositionTrendByVehicleId
   * @apiDescription get position collection metrics trend by vehicleId  in ascending order
@@ -1492,7 +1675,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
   **/
-  app.get('/services/v1/admin/metrics/trend/position/:vehicleId', function(req, res) {
+  app.get('/services/v1/admin/metrics/trend/position/by/:vehicleId', function(req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -1686,7 +1869,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   });
 
   /**
-  * @api {get} /services/v1/admin/metrics/trend/vehicle/:vehicleId vehicle usage trend by vehicleId
+  * @api {get} /services/v1/admin/metrics/trend/vehicle/by/:vehicleId vehicle usage trend by vehicleId
   * @apiVersion 0.1.0
   * @apiName getMetricsVehicleTrendByVehicleId
   * @apiDescription get vehicle collection metrics trend by vehicleId  in ascending order
@@ -1706,7 +1889,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
   **/
-  app.get('/services/v1/admin/metrics/trend/vehicle/:vehicleId', function(req, res) {
+  app.get('/services/v1/admin/metrics/trend/vehicle/by/:vehicleId', function(req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -1902,7 +2085,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   });
 
   /**
-  * @api {get} /services/v1/admin/metrics/trend/orbit/:vehicleId orbit usage trend by vehicleId
+  * @api {get} /services/v1/admin/metrics/trend/orbit/by/:vehicleId orbit usage trend by vehicleId
   * @apiVersion 0.1.0
   * @apiName getMetricsOrbitTrendByVehicleId
   * @apiDescription get orbit collection metrics trend by vehicleId  in ascending order
@@ -1922,7 +2105,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   * 
   *     {"message":"Internal system error encountered","type":"internal"}
   **/
-  app.get('/services/v1/admin/metrics/trend/orbit/:vehicleId', function(req, res) {
+  app.get('/services/v1/admin/metrics/trend/orbit/by/:vehicleId', function(req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
