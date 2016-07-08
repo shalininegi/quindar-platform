@@ -10,9 +10,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   var randomstring = require('randomstring');
   var async = require('async');
 
-  var systemSettings = require('../../config/systemSettings.js');
+  var systemSettings = require('../../config/.systemSettings.js');
   var nTimesMax = systemSettings.maxRecords;
-  
+
   mongoose.connect(systemSettings.dbUrl, systemSettings.dbOptions); 
   var db = mongoose.connection;
 
@@ -748,7 +748,6 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     var vehicleId = req.params.vehicleId;
     Attitude.count(function(err, cnt) {
       if (err) {
-          console.log("Quindar attitude metrics update error=" + err);
           return res.status(500).send({"status": 500, "message": "Quindar attitude metrics update due to internal system error", 
             "type":"internal", "error": err});
       };
@@ -758,7 +757,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
         "collection": "attitude",
         "count": cnt });
       } else {
-        return res.status(200).send({"status": 200, "message": "Cannot find attitude data. The database is empty.", 
+        return res.status(300).send({"status": 300, "message": "Cannot find attitude data. The database is empty.", 
         "collection": "attitude" });
       };
     });
@@ -793,12 +792,11 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     var vehicleId = req.params.vehicleId;
     Attitude.count({ "vehicleId": vehicleId}, function(err, cnt) {
       if (err) {
-          console.log("Quindar attitude metrics update error=" + err);
           return res.status(500).send({"status": 500,
             "message": "Quindar attitude metrics update due to internal system error", "type":"internal",
             "error": err});
       };
-      console.log("Quindar attitude metrics updated. count=" + cnt);
+      
       if (cnt > 0) {
         return res.status(200).send({"status": 200, "message": "Quindar attitude metrics updated successfully.", 
         "collection": "attitude", "vehicleId": vehicleId,
@@ -852,12 +850,11 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     Attitude.count({ "vehicleId": vehicleId,
        "timestamp": { $gte: fromTS, $lte: toTS}}, function(err, cnt) {
       if (err) {
-          console.log("Quindar attitude metrics update error=" + err);
           return res.status(500).send({"status": 500, 
             "message": "Quindar attitude metrics update due to internal system error", "type":"internal", 
             "error": err});
       };
-      console.log("Quindar attitude metrics updated. count=" + cnt);
+    
       if (cnt > 0) {
         return res.status(200).send({"status": 200, "message": "Quindar attitude metrics updated successfully.", 
         "collection": "attitude", "vehicleId": vehicleId,
@@ -902,18 +899,17 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     var vehicleId = req.params.vehicleId;
     Position.count(function(err, cnt) {
       if (err) {
-          console.log("Quindar position metrics update error=" + err);
           return res.status(500).send({"status": 500, 
             "message": "Quindar position metrics update due to internal system error", "type":"internal",
             "error": err});
       };
-      console.log("Quindar position metrics updated. count=" + cnt);
+      
       if (cnt > 0) {
         return res.status(200).send({"status": 200, "message": "Quindar position metrics updated successfully.", 
         "collection": "position",
         "count": cnt });
       } else {
-        return res.status(200).send({"status": 300, "message": "Cannot find position data. The database is empty.", 
+        return res.status(300).send({"status": 300, "message": "Cannot find position data. The database is empty.", 
         "collection": "position" });
       };
     });
@@ -948,12 +944,11 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     var vehicleId = req.params.vehicleId;
     Position.count({ "vehicleId": vehicleId}  , function(err, cnt) {
       if (err) {
-          console.log("Quindar position metrics update error=" + err);
           return res.status(500).send({"status": 500,
             "message": "Quindar position metrics update due to internal system error", "type":"internal",
             "error": err});
       };
-      console.log("Quindar position metrics updated. count=" + cnt);
+      
       if (cnt > 0) {
         return res.status(200).send({"status": 200, "message": "Quindar position metrics updated successfully.", 
         "collection": "position", "vehicleId": vehicleId,
@@ -1007,7 +1002,6 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     Position.count({ "vehicleId": vehicleId,
        "timestamp": { $gte: fromTS, $lte: toTS}}, function(err, cnt) {
       if (err) {
-          console.log("Quindar position metrics update error=" + err);
           return res.status(500).send({"status": 500,
             "message": "Quindar position metrics update due to internal system error", "type":"internal",
             "error": err});
@@ -1057,18 +1051,17 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     var vehicleId = req.params.vehicleId;
     Vehicle.count(function(err, cnt) {
       if (err) {
-          console.log("Quindar vehicle metrics update error=" + err);
           return res.status(500).send({"status": 500, 
             "message": "Quindar vehicle metrics update error due to internal system error", "type":"internal",
             "error": err});
       };
-      console.log("Quindar vehicle metrics updated. count=" + cnt);
+      
       if (cnt > 0) {
         return res.status(200).send({"status": 200, "message": "Quindar vehicle metrics updated successfully.", 
         "collection": "vehicle",
         "count": cnt });
       } else {
-        return res.status(200).send({"status": 300, "message": "Cannot find vehicle data. The database is empty.", 
+        return res.status(300).send({"status": 300, "message": "Cannot find vehicle data. The database is empty.", 
         "collection": "vehicle" });
       };
     });
@@ -1103,12 +1096,11 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     var vehicleId = req.params.vehicleId;
     Vehicle.count({ "vehicleId": vehicleId}  , function(err, cnt) {
       if (err) {
-          console.log("Quindar vehicle metrics update error=" + err);
           return res.status(500).send({"status": 500,
             "message": "Quindar vehicle metrics update error due to internal system error", "type":"internal",
             "error": err});
       };
-      console.log("Quindar vehicle metrics updated. count=" + cnt);
+      
       if (cnt > 0) {
         return res.status(200).send({"status": 200, "message": "Quindar vehicle metrics updated successfully.", 
         "collection": "vehicle", "vehicleId": vehicleId,
@@ -1162,12 +1154,11 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     Vehicle.count({ "vehicleId": vehicleId,
        "timestamp": { $gte: fromTS, $lte: toTS}}, function(err, cnt) {
       if (err) {
-          console.log("Quindar vehicle metrics update error=" + err);
           return res.status(500).send({"status": 500,
             "message": "Quindar vehicle metrics update error due to internal system error", "type":"internal",
             "error": err});
       };
-      console.log("Quindar vehicle metrics updated. count=" + cnt);
+      
       if (cnt > 0) {
         return res.status(200).send({"status": 200, "message": "Quindar vehicle metrics updated successfully.", 
         "collection": "vehicle", "vehicleId": vehicleId,
@@ -1216,13 +1207,13 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
             "message": "Quindar orbit metrics update error due to internal system error", "type":"internal",
             "error": err});
       };
-      console.log("Quindar orbit metrics updated. count=" + cnt);
+      
       if (cnt > 0) {
         return res.status(200).send({"status": 200, "message": "Quindar orbit metrics updated successfully.", 
         "collection": "orbit",
         "count": cnt });
       } else {
-        return res.status(200).send({"status": 300, "message": "Cannot find orbit data. The database is empty.", 
+        return res.status(300).send({"status": 300, "message": "Cannot find orbit data. The database is empty.", 
         "collection": "orbit" });
       };
     });
@@ -1261,7 +1252,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
             "message": "Quindar orbit metrics update error due to internal system error", "type":"internal",
             "error": err});
       };
-      console.log("Quindar orbit metrics updated. count=" + cnt);
+      
       if (cnt > 0) {
         return res.status(200).send({"status": 200, "message": "Quindar orbit metrics updated successfully.", 
         "collection": "orbit", "vehicleId": vehicleId,
@@ -1319,7 +1310,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
             "message": "Quindar orbit metrics update error due to internal system error", "type":"internal",
             "error": err});
       };
-      console.log("Quindar orbit metrics updated. count=" + cnt);
+      
       if (cnt > 0) {
         return res.status(200).send({"status": 200, "message": "Quindar orbit metrics updated successfully.", 
         "collection": "orbit", "vehicleId": vehicleId,
@@ -1367,13 +1358,11 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       ],
       function(err,data) {
         if (err) {
-          console.log("Quindar attitude metrics trending error=" + err);
           return res.status(500).send({"status": 500,
             "message": "Cannot extract attitude metrics trending due to internal system error", "type":"internal",
             "error": err});
         } else {
-          console.log("Quindar attitude metrics trending updated. count=" + JSON.stringify(data));
-          return res.status(200).send({"message": "Quindar attitude metrics trending updated successfully.",  
+          return res.status(200).send({"status": 200, "message": "Quindar attitude metrics trending updated successfully.",  
             "collection": "attitude",
             "trend": data});
         }
@@ -1430,8 +1419,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
             "message": "Cannot extract attitude metrics trending due to internal system error", "type":"internal",
             "error": err});
         } else {
-          console.log("Quindar attitude metrics trending updated. count=" + JSON.stringify(data));
-          return res.status(200).send({"message": "Quindar attitude metrics trending updated successfully.",  
+          return res.status(200).send({"status": 200,"message": "Quindar attitude metrics trending updated successfully.",  
             "collection": "attitude",
             "trend": data});
         }
@@ -1481,8 +1469,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
             "vehicleId": vehicleId,
             "error": err});
         } else {
-          console.log("Quindar attitude metrics trending updated. count=" + JSON.stringify(data));
-          return res.status(200).send({"message": "Quindar attitude metrics trending updated successfully.",  
+          return res.status(200).send({"status": 200,"message": "Quindar attitude metrics trending updated successfully.",  
             "collection": "attitude",
             "trend": data});
         }
@@ -1536,12 +1523,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       ],
       function(err,data) {
         if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("Quindar attitude metrics trending error=" + err);
-          return res.status(500).send({error: err});
+          return res.status(500).send({"status": 500, "message": "Internal system error encountered", "type":"internal"});
         } else {
-          console.log("Quindar attitude metrics trending updated. count=" + JSON.stringify(data));
-          return res.status(200).send({"message": "Quindar attitude metrics trending updated successfully.",  
+          return res.status(200).send({"status": 200, "message": "Quindar attitude metrics trending updated successfully.",  
             "collection": "attitude",
             "trend": data});
         }
@@ -1584,12 +1568,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       ],
       function(err,data) {
         if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("Quindar position metrics trending error=" + err);
-          return res.status(500).send({error: err});
+          return res.status(500).send({"status": 500, "message": "Internal system error encountered", "type":"internal"});
         } else {
-          console.log("Quindar position metrics trending updated. count=" + JSON.stringify(data));
-          return res.status(200).send({"message": "Quindar position metrics trending updated successfully.",  
+          return res.status(200).send({"status": 200, "message": "Quindar position metrics trending updated successfully.",  
             "collection": "position",
             "trend": data});
         }
@@ -1641,12 +1622,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       ],
       function(err,data) {
         if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("Quindar position metrics trending error=" + err);
-          return res.status(500).send({error: err});
+          return res.status(500).send({"status": 500, "message": "Internal system error encountered", "type":"internal"});
         } else {
-          console.log("Quindar position metrics trending updated. count=" + JSON.stringify(data));
-          return res.status(200).send({"message": "Quindar position metrics trending updated successfully.",  
+          return res.status(200).send({"status": 200, "message": "Quindar position metrics trending updated successfully.",  
             "collection": "position",
             "trend": data});
         }
@@ -1691,12 +1669,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       ],
       function(err,data) {
         if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("Quindar position metrics trending error=" + err);
-          return res.status(500).send({error: err});
+          return res.status(500).send({"status": 500, "message": "Internal system error encountered", "type":"internal"});
         } else {
-          console.log("Quindar position metrics trending updated. count=" + JSON.stringify(data));
-          return res.status(200).send({"message": "Quindar position metrics trending updated successfully.",  
+          return res.status(200).send({"status": 200, "message": "Quindar position metrics trending updated successfully.",  
             "collection": "position",
             "trend": data});
         }
@@ -1750,12 +1725,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       ],
       function(err,data) {
         if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("Quindar position metrics trending error=" + err);
-          return res.status(500).send({error: err});
+          return res.status(500).send({"status": 500, "message": "Internal system error encountered", "type":"internal"});
         } else {
-          console.log("Quindar position metrics trending updated. count=" + JSON.stringify(data));
-          return res.status(200).send({"message": "Quindar position metrics trending updated successfully.",  
+          return res.status(200).send({"status": 200, "message": "Quindar position metrics trending updated successfully.",  
             "collection": "position",
             "trend": data});
         }
@@ -1798,12 +1770,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       ],
       function(err,data) {
         if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("Quindar vehicle metrics trending error=" + err);
-          return res.status(500).send({error: err});
+          return res.status(500).send({"status": 500, "message": "Internal system error encountered", "type":"internal"});
         } else {
-          console.log("Quindar vehicle metrics trending updated. count=" + JSON.stringify(data));
-          return res.status(200).send({"message": "Quindar vehicle metrics trending updated successfully.",  
+          return res.status(200).send({"status": 200, "message": "Quindar vehicle metrics trending updated successfully.",  
             "collection": "vehicle",
             "trend": data});
         }
@@ -1855,12 +1824,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       ],
       function(err,data) {
         if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("Quindar vehicle metrics trending error=" + err);
-          return res.status(500).send({error: err});
+          return res.status(500).send({"status": 500, "message": "Internal system error encountered", "type":"internal"});
         } else {
-          console.log("Quindar vehicle metrics trending updated. count=" + JSON.stringify(data));
-          return res.status(200).send({"message": "Quindar vehicle metrics trending updated successfully.",  
+          return res.status(200).send({"status": 200,  "message": "Quindar vehicle metrics trending updated successfully.",  
             "collection": "vehicle",
             "trend": data});
         }
@@ -1905,12 +1871,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       ],
       function(err,data) {
         if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("Quindar vehicle metrics trending error=" + err);
-          return res.status(500).send({error: err});
+          return res.status(500).send({"status": 500, "message": "Internal system error encountered", "type":"internal"});
         } else {
-          console.log("Quindar vehicle metrics trending updated. count=" + JSON.stringify(data));
-          return res.status(200).send({"message": "Quindar vehicle metrics trending updated successfully.",  
+          return res.status(200).send({"status": 200, "message": "Quindar vehicle metrics trending updated successfully.",  
             "collection": "vehicle",
             "trend": data});
         }
@@ -1965,12 +1928,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       ],
       function(err,data) {
         if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("Quindar vehicle metrics trending error=" + err);
-          return res.status(500).send({error: err});
+          return res.status(500).send({"status": 500, "message": "Internal system error encountered", "type":"internal"});
         } else {
-          console.log("Quindar vehicle metrics trending updated. count=" + JSON.stringify(data));
-          return res.status(200).send({"message": "Quindar vehicle metrics trending updated successfully.",  
+          return res.status(200).send({"status": 200, "message": "Quindar vehicle metrics trending updated successfully.",  
             "collection": "vehicle",
             "trend": data});
         }
@@ -2014,12 +1974,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       ],
       function(err,data) {
         if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("Quindar orbit metrics trending error=" + err);
-          return res.status(500).send({error: err});
+          return res.status(500).send({"status": 500, "message": "Internal system error encountered", "type":"internal"});
         } else {
-          console.log("Quindar orbit metrics trending updated. count=" + JSON.stringify(data));
-          return res.status(200).send({"message": "Quindar orbit metrics trending updated successfully.",  
+          return res.status(200).send({"status": 200, "message": "Quindar orbit metrics trending updated successfully.",  
             "collection": "orbit",
             "trend": data});
         }
@@ -2071,12 +2028,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       ],
       function(err,data) {
         if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("Quindar orbit metrics trending error=" + err);
-          return res.status(500).send({error: err});
+          return res.status(500).send({"status": 500, "message": "Internal system error encountered", "type":"internal"});
         } else {
-          console.log("Quindar orbit metrics trending updated. count=" + JSON.stringify(data));
-          return res.status(200).send({"message": "Quindar orbit metrics trending updated successfully.",  
+          return res.status(200).send({"status": 200, "message": "Quindar orbit metrics trending updated successfully.",  
             "collection": "orbit",
             "trend": data});
         }
@@ -2121,12 +2075,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       ],
       function(err,data) {
         if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("Quindar orbit metrics trending error=" + err);
-          return res.status(500).send({error: err});
+          return res.status(500).send({"status": 500, "message": "Internal system error encountered", "type":"internal"});
         } else {
-          console.log("Quindar orbit metrics trending updated. count=" + JSON.stringify(data));
-          return res.status(200).send({"message": "Quindar orbit metrics trending updated successfully.",  
+          return res.status(200).send({"status": 200, "message": "Quindar orbit metrics trending updated successfully.",  
             "collection": "orbit",
             "trend": data});
         }
@@ -2180,12 +2131,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       ],
       function(err,data) {
         if (err) {
-          res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-          console.log("Quindar orbit metrics trending error=" + err);
-          return res.status(500).send({error: err});
+          return res.status(500).send({"status": 500, "message": "Internal system error encountered", "type":"internal"});
         } else {
-          console.log("Quindar orbit metrics trending updated. count=" + JSON.stringify(data));
-          return res.status(200).send({"message": "Quindar orbit metrics trending updated successfully.",  
+          return res.status(200).send({"status": 200, "message": "Quindar orbit metrics trending updated successfully.",  
             "collection": "orbit",
             "trend": data});
         }
