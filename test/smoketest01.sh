@@ -194,3 +194,17 @@ isReadOK $SERVERENDPOINT/services/v1/admin/metrics/trend/attitude/by/CST-100%20S
 isReadOK $SERVERENDPOINT/services/v1/admin/metrics/trend/position/by/XCOR%20Lynx " position trending by vehicle  "
 isReadOK $SERVERENDPOINT/services/v1/admin/metrics/trend/vehicle/by/Orion%20MPCV " vehicle trending by vehicle "
 isReadOK $SERVERENDPOINT/services/v1/admin/metrics/trend/orbit/by/IBEX " orbit trending by vehicle "
+
+# test trending by vehicle with nLimit
+testCase "Test trending by vehicle with nLimit"
+isReadOK $SERVERENDPOINT/services/v1/admin/metrics/trend/attitude/CST-100%20Starliner/5 " attitude trending by vehicle "
+isReadOK $SERVERENDPOINT/services/v1/admin/metrics/trend/position/XCOR%20Lynx/5 " position trending by vehicle  "
+isReadOK $SERVERENDPOINT/services/v1/admin/metrics/trend/vehicle/Orion%20MPCV/5 " vehicle trending by vehicle "
+isReadOK $SERVERENDPOINT/services/v1/admin/metrics/trend/orbit/IBEX/5 " orbit trending by vehicle "
+
+# housekeeping: reset and clean up database
+testCase "Test 5 - zap database collections "
+isWriteOK $SERVERENDPOINT/services/v1/admin/cleanup/attitude " reset db "
+isWriteOK $SERVERENDPOINT/services/v1/admin/cleanup/position " reset db "
+isWriteOK $SERVERENDPOINT/services/v1/admin/cleanup/vehicle " reset db "
+isWriteOK $SERVERENDPOINT/services/v1/admin/cleanup/orbit " reset db "
