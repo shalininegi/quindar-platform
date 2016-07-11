@@ -2178,7 +2178,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       if (err) {
         return res.status(500).send({"status": 500, "message": "Cannot read attitude data points due to internal system error", "type":"internal"});
       } else {
-        return res.status(200)send( {"status": 200, "message": "retrieve all attitude data points", "data": data} );
+        return res.status(200).send( {"status": 200, "message": "retrieve all attitude data points", "data": data} );
       }
     }).limit(nTimesMax);
   });
