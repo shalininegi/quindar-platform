@@ -10,7 +10,7 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   var randomstring = require('randomstring');
   var FileStreamRotator = require('file-stream-rotator');
 
-  var systemSettings = require('../../config/.systemSettings.js');
+  var systemSettings = require('../../config/systemSettings.js');
 
   // RabbitMQ config settings
   var ex = systemSettings.exchange;
