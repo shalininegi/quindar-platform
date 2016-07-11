@@ -118,7 +118,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
          tmpValues.push({ x: i, y: $scope.attitudeDataSetX[i].subtotal });
       };
       $scope.dataAttitudeTrend = [ { key: "Attitude Telemetry", values:  tmpValues }];
-      console.log("getAttitudeMetricsTrend() status=" + status + "   $scope.data=" + JSON.stringify($scope.data));
+      //console.log("getAttitudeMetricsTrend() status=" + status + "   $scope.data=" + JSON.stringify($scope.data));
     })
     .error(function(err) {
       console.error('Sorry, Quindar platform cannot serve getAttitudeMetricsTrend() immediately. Please retry later.');
@@ -135,7 +135,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
          tmpValues.push({ x: i, y: $scope.positionDataSetX[i].subtotal });
       };
       $scope.dataPositionTrend = [ { key: "Position Telemetry", values:  tmpValues }];
-      console.log("getPositionMetricsTrend() status=" + status + "   $scope.data=" + JSON.stringify($scope.data));
+      //console.log("getPositionMetricsTrend() status=" + status + "   $scope.data=" + JSON.stringify($scope.data));
     })
     .error(function(err) {
       console.error('Sorry, Quindar platform cannot serve getPositionMetricsTrend() immediately. Please retry later.');
@@ -152,7 +152,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
          tmpValues.push({ x: i, y: $scope.vehicleDataSetX[i].subtotal });
       };
       $scope.dataVehicleTrend = [ { key: "Vehicle Telemetry", values:  tmpValues }];
-      console.log("getVehicleMetricsTrend() status=" + status + "   $scope.data=" + JSON.stringify($scope.data));
+      //console.log("getVehicleMetricsTrend() status=" + status + "   $scope.data=" + JSON.stringify($scope.data));
     })
     .error(function(err) {
       console.error('Sorry, Quindar platform cannot serve getVehicleMetricsTrend() immediately. Please retry later.');
@@ -169,7 +169,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
          tmpValues.push({ x: i, y: $scope.orbitDataSetX[i].subtotal });
       };
       $scope.dataOrbitTrend = [ { key: "Orbit Telemetry", values:  tmpValues }];
-      console.log("getOrbitMetricsTrend() status=" + status + "   $scope.data=" + JSON.stringify($scope.data));
+      //console.log("getOrbitMetricsTrend() status=" + status + "   $scope.data=" + JSON.stringify($scope.data));
     })
     .error(function(err) {
       console.error('Sorry, Quindar platform cannot serve getOrbitMetricsTrend() immediately. Please retry later.');
@@ -346,7 +346,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.getAttitudeAll = function() {
     adminFactory.getAttitudeAll()
     .success(function(data, status) {
-      console.log("getAttitudeAll() status=" + status);
+      //console.log("getAttitudeAll() status=" + status);
       $scope.attitudeDataSet = data.data;
     })
     .error(function(err) {
@@ -358,7 +358,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.getAttitudePartial = function(vehicleId, nItems) {
     adminFactory.getAttitudePartial(vehicleId, nItems)
     .success(function(data, status) {
-      console.log("getAttitudePartial() status=" + status);
+      //console.log("getAttitudePartial() status=" + status);
       $scope.attitudeDataSet = data.data;
     })
     .error(function(err) {
@@ -370,7 +370,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.getAttitudeFromTo = function(vehicleId, fromTS, toTS) {
     adminFactory.getAttitudeFromTo(vehicleId, fromTS, toTS)
     .success(function(data, status) {
-      console.log("getAttitudeFromTo() status=" + status);
+      //console.log("getAttitudeFromTo() status=" + status);
       $scope.attitudeDataSet = data.data;
     })
     .error(function(err) {
@@ -382,7 +382,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.getPositionAll = function() {   
     adminFactory.getPositionAll()
     .success(function(data, status) {
-      console.log("getPositionAll() status=" + status);
+      //console.log("getPositionAll() status=" + status);
       $scope.positionDataSet = data.data;
     })
     .error(function(err) {
@@ -394,7 +394,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.getPositionPartial = function(vehicleId, nItems) {
     adminFactory.getPositionPartial(vehicleId, nItems)
     .success(function(data, status) {
-      console.log("getPositionPartial() status=" + status);
+      //console.log("getPositionPartial() status=" + status);
       $scope.positionDataSet = data.data;
     })
     .error(function(err) {
@@ -406,7 +406,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.getPositionFromTo = function(vehicleId, fromTS, toTS) {
     adminFactory.getPositionFromTo(vehicleId, fromTS, toTS)
     .success(function(data, status) {
-      console.log("getPositionFromTo() status=" + status);
+      //console.log("getPositionFromTo() status=" + status);
       $scope.positionDataSet = data.data;
     })
     .error(function(err) {
@@ -418,7 +418,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.getVehicleAll = function() {
     adminFactory.getVehicleAll()
     .success(function(data, status) {
-      console.log("getVehicleAll() status=" + status);
+      //console.log("getVehicleAll() status=" + status);
       $scope.vehicleDataSet = data.data;
     })
     .error(function(err) {
@@ -430,7 +430,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.getVehiclePartial = function(vehicleId, nItems) {
     adminFactory.getVehiclePartial(vehicleId, nItems)
     .success(function(data, status) {
-      console.log("getVehiclePartial() status=" + status);
+      //console.log("getVehiclePartial() status=" + status);
       $scope.vehicleDataSet = data.data;
     })
     .error(function(err) {
@@ -442,7 +442,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.getVehicleFromTo = function(vehicleId, fromTS, toTS) {
     adminFactory.getVehicleFromTo(vehicleId, fromTS, toTS)
     .success(function(data, status) {
-      console.log("getVehicleFromTo() status=" + status);
+      //console.log("getVehicleFromTo() status=" + status);
       $scope.vehicleDataSet = data.data;
     })
     .error(function(err) {
@@ -454,7 +454,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.getOrbitAll = function() {
     adminFactory.getOrbitAll()
     .success(function(data, status) {
-      console.log("getOrbitAll() status=" + status);
+      //console.log("getOrbitAll() status=" + status);
       $scope.orbitDataSet = data.data;
     })
     .error(function(err) {
@@ -466,7 +466,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.getOrbitPartial = function(vehicleId, nItems) {
     adminFactory.getOrbitPartial(vehicleId, nItems)
     .success(function(data, status) {
-      console.log("getOrbitPartial() status=" + status);
+      //console.log("getOrbitPartial() status=" + status);
       $scope.orbitDataSet = data.data;
     })
     .error(function(err) {
@@ -478,7 +478,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.getOrbitFromTo = function(vehicleId, fromTS, toTS) {
     adminFactory.getOrbitFromTo(vehicleId, fromTS, toTS)
     .success(function(data, status) {
-      console.log("getOrbitFromTo() status=" + status);
+      //console.log("getOrbitFromTo() status=" + status);
       $scope.orbitDataSet = data.data;
     })
     .error(function(err) {
@@ -491,7 +491,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.postAttitude = function(vehicleId, q1, q2, q3, q4) {
     adminFactory.postAttitude(vehicleId, q1, q2, q3, q4)
     .success(function(data, status) {
-      console.log("postAttitude() status=" + status);
+      //console.log("postAttitude() status=" + status);
       $scope.attitudeDataSet = data.data;
     })
     .error(function(err) {
@@ -503,7 +503,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.postPosition = function(vehicleId, x, y, z, vx, vy, vz) {
     adminFactory.postPosition(vehicleId, x, y, z, vx, vy, vz)
     .success(function(data, status) {
-      console.log("postPosition() status=" + status);
+      //console.log("postPosition() status=" + status);
       $scope.positionDataSet = data.data;
     })
     .error(function(err) {
@@ -517,7 +517,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
     adminFactory.postVehicle(vehicleId, deviceId, value, uom, alertHigh, warnHigh, 
       alertLow, warnLow, calibrationFactor)
     .success(function(data, status) {
-      console.log("postVehicle() status=" + status);
+      //console.log("postVehicle() status=" + status);
       $scope.vehicleDataSet = data.data;
     })
     .error(function(err) {
@@ -529,7 +529,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.postOrbit = function(vehicleId, trajectory) {
     adminFactory.postOrbit(vehicleId, trajectory)
     .success(function(data, status) {
-      console.log("postOrbit() status=" + status);
+      //console.log("postOrbit() status=" + status);
       $scope.orbitDataSet = data.data;
     })
     .error(function(err) {
@@ -543,7 +543,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
     if (telemetryDataType === 'attitude') {
       adminFactory.generateAttitudeSimulated(nTimes)
       .success(function(data, status) {
-        console.log("generateAttitudeSimulated() status=" + status);
+        //console.log("generateAttitudeSimulated() status=" + status);
         $scope.attitudeDataSet = data.data;
       })
       .error(function(err) {
@@ -552,7 +552,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
     } else if (telemetryDataType === 'position') {
       adminFactory.generatePositionSimulated(nTimes)
       .success(function(data, status) {
-        console.log("generatePositionSimulated() status=" + status);
+        //console.log("generatePositionSimulated() status=" + status);
         $scope.positionDataSet = data.data;
       })
       .error(function(err) {
@@ -561,7 +561,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
     } else if (telemetryDataType === 'vehicle') {
       adminFactory.generateVehicleSimulated(nTimes)
       .success(function(data, status) {
-        console.log("generateVehicleSimulated() status=" + status);
+        //console.log("generateVehicleSimulated() status=" + status);
         $scope.vehicleDataSet = data.data;
       })
       .error(function(err) {
@@ -570,7 +570,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
     } else if (telemetryDataType === 'orbit') {
       adminFactory.generateOrbitSimulated(nTimes)
       .success(function(data, status) {
-        console.log("generateOrbitSimulated() status=" + status);
+        //console.log("generateOrbitSimulated() status=" + status);
         $scope.orbitDataSet = data.data;
       })
       .error(function(err) {
@@ -587,7 +587,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
     if (telemetryDataType === 'attitude') {
       adminFactory.generateAttitudeSimulatedMQ(topic, nTimes)
       .success(function(data, status) {
-        console.log("generateAttitudeSimulatedMQ() status=" + status);
+        //console.log("generateAttitudeSimulatedMQ() status=" + status);
         $scope.attitudeDataSet = data.data;
       })
       .error(function(err) {
@@ -596,7 +596,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
     } else if (telemetryDataType === 'position') {
       adminFactory.generatePositionSimulatedMQ(topic, nTimes)
       .success(function(data, status) {
-        console.log("generatePositionSimulatedMQ() status=" + status);
+        //console.log("generatePositionSimulatedMQ() status=" + status);
         $scope.positionDataSet = data.data;
       })
       .error(function(err) {
@@ -605,7 +605,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
     } else if (telemetryDataType === 'vehicle') {
       adminFactory.generateVehicleSimulatedMQ(topic, nTimes)
       .success(function(data, status) {
-        console.log("generateVehicleSimulatedMQ() status=" + status);
+        //console.log("generateVehicleSimulatedMQ() status=" + status);
         $scope.vehicleDataSet = data.data;
       })
       .error(function(err) {
@@ -614,7 +614,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
     } else if (telemetryDataType === 'orbit') {
       adminFactory.generateOrbitSimulatedMQ(topic, nTimes)
       .success(function(data, status) {
-        console.log("generateOrbitSimulatedMQ() status=" + status);
+        //console.log("generateOrbitSimulatedMQ() status=" + status);
         $scope.orbitDataSet = data.data;
       })
       .error(function(err) {
@@ -629,7 +629,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.postAttitudeMQ = function(topic, vehicleId, q1, q2, q3, q4) {
     adminFactory.postAttitudeMQ(topic, vehicleId, q1, q2, q3, q4)
     .success(function(data, status) {
-      console.log("postAttitudeMQ() status=" + status);
+      //console.log("postAttitudeMQ() status=" + status);
       $scope.attitudeDataSet = data.data;
     })
     .error(function(err) {
@@ -641,7 +641,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.postPositionMQ = function(topic, vehicleId, x, y, z, vx, vy, vz) {
     adminFactory.postPositionMQ(topic, vehicleId, x, y, z, vx, vy, vz)
     .success(function(data, status) {
-      console.log("postPositionMQ() status=" + status);
+      //console.log("postPositionMQ() status=" + status);
       $scope.positionDataSet = data.data;
     })
     .error(function(err) {
@@ -655,7 +655,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
     adminFactory.postVehicleMQ(topic, vehicleId, deviceId, value, uom, alertHigh, warnHigh, 
       alertLow, warnLow, calibrationFactor)
     .success(function(data, status) {
-      console.log("postVehicleMQ() status=" + status);
+      //console.log("postVehicleMQ() status=" + status);
       $scope.vehicleDataSet = data.data;
     })
     .error(function(err) {
@@ -667,7 +667,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.postOrbitMQ = function(topic, vehicleId, trajectory) {
     adminFactory.postOrbitMQ(topic, vehicleId, trajectory)
     .success(function(data, status) {
-      console.log("postOrbitMQ() status=" + status);
+      //console.log("postOrbitMQ() status=" + status);
       $scope.orbitDataSet = data.data;
     })
     .error(function(err) {
@@ -681,7 +681,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.cleanupDBCollection = function(collectionName) {
     adminFactory.cleanupDBCollection(collectionName)
     .success(function(data, status) {
-      console.log("cleanupDBCollection() is completed. status=" + status);
+      //console.log("cleanupDBCollection() is completed. status=" + status);
     })
     .error(function(err) {
       console.error('Sorry, Quindar platform cannot serve cleanupDBCollection() immediately. Please retry later.');
@@ -694,7 +694,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.getMetricsTotalAll = function(telemetryDataType) {
     adminFactory.getMetricsTotalAll(telemetryDataType)
     .success(function(data, status) {
-      console.log("getMetricsTotalAll() status=" + status);
+      //console.log("getMetricsTotalAll() status=" + status);
       $scope.totalNumberMessagesAttitude = data.data;
     })
     .error(function(err) {
@@ -707,7 +707,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.getMetricsAttitudeTotalByVehicle = function(telemetryDataType, vehicleId) {
     adminFactory.getMetricsAttitudeTotalByVehicle(telemetryDataType, vehicleId)
     .success(function(data, status) {
-      console.log("getMetricsAttitudeTotalByVehicle() status=" + status);
+      //console.log("getMetricsAttitudeTotalByVehicle() status=" + status);
     })
     .error(function(err) {
       console.error('Sorry, Quindar platform cannot serve getMetricsAttitudeTotalByVehicle() immediately. Please retry later.');
@@ -721,7 +721,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
     adminFactory.getMetricsAttitudeTotalByVehicleTimestamp(telemetryDataType, vehicleId,
       fromTS, toTS)
     .success(function(data, status) {
-      console.log("getMetricsAttitudeTotalByVehicleTimestamp() status=" + status);
+      //console.log("getMetricsAttitudeTotalByVehicleTimestamp() status=" + status);
     })
     .error(function(err) {
       console.error('Sorry, Quindar platform cannot serve getMetricsAttitudeTotalByVehicleTimestamp() immediately. Please retry later.');
@@ -733,7 +733,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.getMetricsTrendTotalAll = function(telemetryDataType) {
     adminFactory.getMetricsTrendTotalAll(telemetryDataType)
     .success(function(data, status) {
-      console.log("getMetricsTrendTotalAll() status=" + status);
+      //console.log("getMetricsTrendTotalAll() status=" + status);
     })
     .error(function(err) {
       console.error('Sorry, Quindar platform cannot serve getMetricsTrendTotalAll() immediately. Please retry later.');
@@ -745,7 +745,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.getMetricsTrendTotalN = function(telemetryDataType, nLimit) {
     adminFactory.getMetricsTrendTotalN(telemetryDataType, nLimit)
     .success(function(data, status) {
-      console.log("getMetricsTrendTotalN() status=" + status);
+      //console.log("getMetricsTrendTotalN() status=" + status);
     })
     .error(function(err) {
       console.error('Sorry, Quindar platform cannot serve getMetricsTrendTotalN() immediately. Please retry later.');
@@ -758,7 +758,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.getMetricsTrendTotalByVehicle = function(telemetryDataType, vehicleId) {
     adminFactory.getMetricsTrendTotalByVehicle(telemetryDataType, vehicleId)
     .success(function(data, status) {
-      console.log("getMetricsTrendTotalByVehicle() status=" + status);
+      //console.log("getMetricsTrendTotalByVehicle() status=" + status);
     })
     .error(function(err) {
       console.error('Sorry, Quindar platform cannot serve getMetricsTrendTotalByVehicle() immediately. Please retry later.');
@@ -770,7 +770,7 @@ app.controller('adminConsoleController', ['$scope', '$timeout', 'adminFactory', 
   $scope.getMetricsTrendTotalByVehicleN = function(telemetryDataType, vehicleId, nLimit) {
     adminFactory.getMetricsTrendTotalByVehicleN(telemetryDataType, vehicleId)
     .success(function(data, status) {
-      console.log("getMetricsTrendTotalByVehicleN() status=" + status);
+      //console.log("getMetricsTrendTotalByVehicleN() status=" + status);
     })
     .error(function(err) {
       console.error('Sorry, Quindar platform cannot serve getMetricsTrendTotalByVehicleN() immediately. Please retry later.');

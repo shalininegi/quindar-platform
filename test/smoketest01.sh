@@ -2,7 +2,7 @@
 # Program: smoketest01.sh
 # Purpose: automated test using curl
 # Author:  Ray Lai
-# Updated: Jul 6, 2016
+# Updated: Jul 11, 2016
 #
 SERVERENDPOINT='http://platform.audacy.space:7902'
 NOW=$(date +"%Y-%m-%d")
@@ -161,6 +161,20 @@ isReadOK $SERVERENDPOINT/services/v1/position/XCOR%20Lynx/1000 " read "
 isReadOK $SERVERENDPOINT/services/v1/vehicle/Orion%20MPCV/1000 " read "
 isReadOK $SERVERENDPOINT/services/v1/orbit/IBEX/1000 " read "
 
+# read by vehicle and time period
+#testCase "Read by vehicleId and time period from/to "
+#isReadOK $SERVERENDPOINT/services/v1/attitude/CST-100%20Starliner/1468276662/1468276662 " read "
+#isReadOK $SERVERENDPOINT/services/v1/position/XCOR%20Lynx/1468276669/1468276669 " read "
+#isReadOK $SERVERENDPOINT/services/v1/vehicle/Orion%20MPCV/1468276670/1468276669 " read "
+#isReadOK $SERVERENDPOINT/services/v1/orbit/IBEX/1468277766/1468277765 " read "
+
+# metrics by vehicle by time period
+#testCase "Metrics by vehicle by time period "
+#isReadOK $SERVERENDPOINT/services/v1/admin/metrics/attitude/total/CST-100%20Starliner/1468276662/1468276662 " attitude metrics by vehicle and time period "
+#isReadOK $SERVERENDPOINT/services/v1/admin/metrics/position/total/XCOR%20Lynx/1468276669/1468276669 " position metrics by vehicle and time period "
+#isReadOK $SERVERENDPOINT/services/v1/admin/metrics/vehicle/total/Orion%20MPCV/1468276670/1468276669  " vehicle metrics by vehicle and time period "
+#isReadOK $SERVERENDPOINT/services/v1/admin/metrics/orbit/total/IBEX/1468277766/1468277765 " orbit metrics by vehicle and time period "
+
 # test metrics
 testCase "Test 4 - test metrics showing total - all"
 isReadOK $SERVERENDPOINT/services/v1/admin/metrics/attitude/total/all " attitude metrics "
@@ -208,3 +222,12 @@ isWriteOK $SERVERENDPOINT/services/v1/admin/cleanup/attitude " reset db "
 isWriteOK $SERVERENDPOINT/services/v1/admin/cleanup/position " reset db "
 isWriteOK $SERVERENDPOINT/services/v1/admin/cleanup/vehicle " reset db "
 isWriteOK $SERVERENDPOINT/services/v1/admin/cleanup/orbit " reset db "
+
+# add 1 single record
+testCase "Test 6 - insert 1 record per collection 
+postAttitudeOK $SERVERENDPOINT/services/v1/attitude " insert 1 attitude data point "
+postPositionOK $SERVERENDPOINT/services/v1/position " insert 1 position data point  "
+postVehicleOK $SERVERENDPOINT/services/v1/vehicle " insert 1 vehicle data point  "
+postOrbitOK $SERVERENDPOINT/services/v1/orbit " insert 1 orbit data point  "
+
+# 

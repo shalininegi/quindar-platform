@@ -2301,12 +2301,12 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
             "vehicleId": vehicleId, "fromTS": fromTS, "toTS": toTS
           });
         } else {
-          return res.status(200).send( {"status": 200, "message": "retrieve all attitude data points", 
+          return res.status(200).send({"status": 200, "message": "retrieve all attitude data points", 
             "vehicleId": vehicleId, "fromTS": fromTS, "toTS": toTS,
             "data": data} );
         }
       }
-    ).limit(nTimesMax);;
+    );
   });
 
   /**
@@ -2471,7 +2471,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
             "data": data} );
         }
       }
-    ).limit(nTimesMax);
+    );
   });
 
  /**
@@ -2633,12 +2633,12 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
             "vehicleId": vehicleId, "fromTS": fromTS, "toTS": toTS
           });
         } else {
-          return res.status(200),sebd({"status": 200, "message": "retrieve all vehicle data points", 
+          return res.status(200),send({"status": 200, "message": "retrieve all vehicle data points", 
             "vehicleId": vehicleId, "fromTS": fromTS, "toTS": toTS,
             "data": data} );
         }
       }
-    ).limit(nTimesMax);
+    );
   });
 
 /**
@@ -2801,7 +2801,7 @@ app.get('/services/v1/orbit/:vId/:nLimit', function(req, res) {
             "data": data} );
         }
       }
-    ).limit(nTimesMax);
+    );
   });
 
 
