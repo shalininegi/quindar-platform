@@ -2141,6 +2141,8 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     )
   });
 
+// 7/11/2016 RayL:
+// ---- merged from telemetryRead.js
 
 /**
   * @api {get} /services/v1/attitude  attitude
@@ -2174,13 +2176,11 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
     Attitude.find({}, function(err, data) {
       if (err) {
-        res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-        console.log(err);
+        return res.status(500).send({"status": 500, "message": "Cannot read attitude data points due to internal system error", "type":"internal"});
       } else {
-        res.status(200);
-        res.json( {"status": 200, "message": "retrieve all attitude data points", "data": data} );
+        return res.status(200)send( {"status": 200, "message": "retrieve all attitude data points", "data": data} );
       }
-    }).limit(maxRecords);
+    }).limit(nTimesMax);
   });
 
   /**
@@ -2228,11 +2228,15 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       {$limit: limitResultset }, {$sort: { "timestamp": -1} } ], 
       function(err,data) {
         if (err) {
-          res.status(400).send({"message": "Invalid input parameter or option", "type":"client"});
-          console.log(err);
+          return res.status(400).send({"status": 400, "message": "Invalid input parameter or option", "type":"client",
+            "vehicleId": vehicleId,
+            "nLimit": limitResultset
+          });
         } else {
-            res.status(200);
-            res.json( {"status": 200, "message": "retrieve all attitude data points", "data": data} );
+            res.status(200).send( {"status": 200, "message": "retrieve all attitude data points", 
+              "vehicleId": vehicleId,
+              "nLimit": limitResultset,
+              "data": data} );
         }
       });
     });
@@ -2293,14 +2297,16 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       ],
       function(err,data) {
         if (err) {
-          res.status(400).send({"message": "Invalid input parameter or option", "type":"client"});
-          console.log(err);
+          return res.status(400).send({"status": 400, "message": "Invalid input parameter or option", "type":"client",
+            "vehicleId": vehicleId, "fromTS": fromTS, "toTS": toTS
+          });
         } else {
-          res.status(200);
-          res.json( {"status": 200, "message": "retrieve all attitude data points", "data": data} );
+          return res.status(200).send( {"status": 200, "message": "retrieve all attitude data points", 
+            "vehicleId": vehicleId, "fromTS": fromTS, "toTS": toTS,
+            "data": data} );
         }
       }
-    );
+    ).limit(nTimesMax);;
   });
 
   /**
@@ -2335,15 +2341,13 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
     Position.find({}, function(err, data) {
       if (err) {
-        res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-        console.log(err);
+        return res.status(500).send({"status": 500,  "message": "Cannot read position data points due to internal system error", "type":"internal"});
       } else {
-         res.status(200);
-         res.json( {"status": 200, "message": "retrieve all position data points", "data": data} );
+        return res.status(200).send( {"status": 200, "message": "retrieve all position data points", "data": data} );
       
       }
-    });
-  })
+    }).limit(nTimesMax);
+  });
 
 /**
   * @api {get} /services/v1/position/:vehicleId/:numberOfItems  position by vehicleId/numberOfItems
@@ -2391,15 +2395,19 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       {$limit: limitResultset }, {$sort: { "timestamp": -1} } ],
       function(err,data) {
         if (err) {
-          res.status(400).send({"message": "Invalid input parameter or option", "type":"client"});
-          console.log(err);
+          return res.status(400).send({"status": 400, "message": "Invalid input parameter or option", "type":"client",
+            "vehicleId": vehicleId,
+            "nLimit": limitResultset
+          });
         } else {
-          res.status(200);
-          res.json( {"status": 200, "message": "retrieve all position data points", "data": data} );
+          return res.status(200).send( {"status": 200, "message": "retrieve all position data points", 
+            "vehicleId": vehicleId,
+            "nLimit": limitResultset,
+            "data": data} );
         }
       }
     );
-  })
+  });
 
 /**
   * @api {get} /services/v1/position/:vehicleId/:fromTime/:toTime  position by vehicleId/from/to
@@ -2454,15 +2462,17 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       ],
       function(err,data) {
         if (err) {
-          res.status(400).send({"message": "Invalid input parameter or option", "type":"client"});
-          console.log(err);
+          return res.status(400).send({"status": 400, "message": "Invalid input parameter or option", "type":"client",
+            "vehicleId": vehicleId, "fromTS": fromTS, "toTS": toTS
+          });
         } else {
-          res.status(200);
-          res.json( {"status": 200, "message": "retrieve all position data points", "data": data} );
+          return res.status(200).send( {"status": 200, "message": "retrieve all position data points", 
+            "vehicleId": vehicleId, "fromTS": fromTS, "toTS": toTS,
+            "data": data} );
         }
       }
-    );
-  })
+    ).limit(nTimesMax);
+  });
 
  /**
   * @api {get} /services/v1/vehicle  vehicle
@@ -2497,14 +2507,12 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
     Vehicle.find({}, function(err, data) {
       if (err) {
-        res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-        console.log(err);
+        return res.status(500).send({"status": 500, "message": "Cannot read vehicle data points due to internal system error", "type":"internal"});
       } else {
-        res.status(200);
-        res.json( {"status": 200, "message": "retrieve all vehicle data points", "data": data} );
+        return res.status(200).send({"status": 200, "message": "retrieve all vehicle data points", "data": data} );
       }
-    });
-  })
+    }).limit(nTimesMax);
+  });
 
 /**
   * @api {get} /services/v1/vehicle/:vehicleId/:numberOfItems  vehicle by vehicleId/numberOfItems
@@ -2553,11 +2561,15 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       {$limit: limitResultset }, {$sort: { "timestamp": -1} } ],
       function(err,data) {
         if (err) {
-          res.status(400).send({"message": "Invalid input parameter or option", "type":"client"});
-          console.log(err);
+          return res.status(400).send({"status": 400, "message": "Invalid input parameter or option", "type":"client",
+            "vehicleId": vehicleId,
+            "nLimit": limitResultset
+          });
         } else {
-          res.status(200);
-          res.json( {"status": 200, "message": "retrieve all vehicle data points", "data": data} );
+          return res.status(200).send({"status": 200, "message": "retrieve all vehicle data points", 
+            "vehicleId": vehicleId,
+            "nLimit": limitResultset,
+            "data": data} );
         }
       }
     );
@@ -2617,15 +2629,17 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       ],
       function(err,data) {
         if (err) {
-          res.send(400).send({"message": "Invalid input parameter or option", "type":"client"});
-          console.log(err);
+          return res.send(400).send({"status": 400, "message": "Invalid input parameter or option", "type":"client",
+            "vehicleId": vehicleId, "fromTS": fromTS, "toTS": toTS
+          });
         } else {
-          res.status(200);
-          res.json( {"status": 200, "message": "retrieve all vehicle data points", "data": data} );
+          return res.status(200),sebd({"status": 200, "message": "retrieve all vehicle data points", 
+            "vehicleId": vehicleId, "fromTS": fromTS, "toTS": toTS,
+            "data": data} );
         }
       }
-    );
-  })
+    ).limit(nTimesMax);
+  });
 
 /**
   * @api {get} /services/v1/orbit  orbit
@@ -2659,13 +2673,11 @@ app.get('/services/v1/orbit', function(req, res) {
 
   Orbit.find({}, function(err, data) {
     if (err) {
-      res.status(500).send({"message": "Internal system error encountered", "type":"internal"});
-      console.log(err);
+      return res.status(500).send({"status": 500, "message": "Cannot read orbit data points due to internal system error", "type":"internal"});
     } else {
-      res.status(200);
-      res.json( {"status": 200, "message": "retrieve all orbit data points", "data": data} );
+      return res.status(200).send({"status": 200, "message": "retrieve all orbit data points", "data": data} );
     }
-  }).sort({'timestamp': -1});
+  }).sort({'timestamp': -1}).limit(nTimesMax);
 });
 
 /**
@@ -2714,11 +2726,15 @@ app.get('/services/v1/orbit/:vId/:nLimit', function(req, res) {
       {$limit: limitResultset }, {$sort: { "timestamp": -1} } ],
       function(err,data) {
         if (err) {
-          res.status(400).send({"message": "Invalid input parameter or option", "type":"client"});
-          console.log(err);
+          return res.status(400).send({"status": 400, "message": "Invalid input parameter or option", "type":"client",
+            "vehicleId": vehicleId,
+            "nLimit": limitResultset
+          });
         } else {
-          res.status(200);
-          res.json( {"status": 200, "message": "retrieve all position data points", "data": data} );
+          return res.status(200).send({"status": 200, "message": "retrieve all position data points", 
+            "vehicleId": vehicleId,
+            "nLimit": limitResultset,
+            "data": data} );
         }
       }
     );
@@ -2776,15 +2792,17 @@ app.get('/services/v1/orbit/:vId/:nLimit', function(req, res) {
       ],
       function(err,data) {
         if (err) {
-          res.status(400).send({"message": "Invalid input parameter or option", "type":"client"});
-          console.log(err);
+          return res.status(400).send({"status": 400, "message": "Invalid input parameter or option", "type":"client",
+            "vehicleId": vehicleId, "fromTS": fromTS, "toTS": toTS
+          });
         } else {
-          res.status(200);
-          res.json( {"status": 200, "message": "retrieve all orbit data points", "data": data} );
+          return res.status(200).send({"status": 200, "message": "retrieve all orbit data points", 
+            "vehicleId": vehicleId, "fromTS": fromTS, "toTS": toTS,
+            "data": data} );
         }
       }
-    );
-  })
+    ).limit(nTimesMax);
+  });
 
 
 // end of module
