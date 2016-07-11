@@ -1,5 +1,5 @@
 #!/bin/bash
-# Program: autotest01.sh
+# Program: smoketest01.sh
 # Purpose: automated test using curl
 # Author:  Ray Lai
 # Updated: Jul 6, 2016
