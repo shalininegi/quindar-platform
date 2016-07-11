@@ -120,7 +120,6 @@ if (systemSettings.serverStartupOptions.socketHttps) {
 };
 
 require('./app/scripts/verifyMe.js')(app);
-require('./app/scripts/telemetryRead.js')(app, mongoose, syslogger, logger);
 require('./app/scripts/coreAdmin.js')(app, bodyParser, mongoose, fs, syslogger, logger, helper);
 require('./app/scripts/messageQueue.js')(app, bodyParser, fs, syslogger, logger, helper);
 require('./app/scripts/webSocket.js')(app, socketPort, syslogger, logger, helper);
