@@ -1,7 +1,7 @@
 // Program: coreAdmin.js 
 // Purpose: Data API to write telemetry data into MongoDB
 // Author:  Ray Lai
-// Updated: Jul 11, 2016
+// Updated: Jul 14, 2016
 // License: MIT license
 //
 module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, helper) {
@@ -98,7 +98,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   })
 
   /**
-  * @api {post} /services/v1/attitude/:vehicleId/:numberOfItems  attitude by vehicleId/numberOfItems
+  * @api {post} /services/v1/simulation/attitude/:nTimes  attitude by vehicleId/nTimes
   * @apiVersion 0.1.0
   * @apiName postAttitude(vehicleId, numberOfItems)
   * @apiDescription upsert attitude data points by vehicleId limited by numberOfItems
@@ -228,7 +228,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   })
 
   /**
-  * @api {post} /services/v1/position/:vehicleId/:numberOfItems  position by vehicleId/numberOfItems
+  * @api {post} /services/v1/simulation/position/:nTimes  position by vehicleId/nTimes
   * @apiVersion 0.1.0
   * @apiName postPosition(vehicleId, numberOfItems)
   * @apiDescription upsert position data points by vehicleId limited by numberOfItems
@@ -364,7 +364,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   })
 
   /**
-  * @api {post} /services/v1/vehicle/:vehicleId/:numberOfItems  vehicle by vehicleId/numberOfItems
+  * @api {post} /services/v1/simulation/vehicle/:nTimes  vehicle by vehicleId/nTimes
   * @apiVersion 0.1.0
   * @apiName postVehicle(vehicleId, numberOfItems)
   * @apiDescription upsert vehicle data points by vehicleId limited by numberOfItems
@@ -499,7 +499,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
 
   /**
-  * @api {post} /services/v1/orbit/:vehicleId/:numberOfItems  orbit by vehicleId/numberOfItems
+  * @api {post} /services/v1/simulation/orbit/:nTimes  orbit by vehicleId/nTimes
   * @apiVersion 0.1.0
   * @apiName postOrbit
   * @apiDescription upserts orbit trajectory data points by vehicleId, limited by numberOfItems
@@ -2184,7 +2184,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   });
 
   /**
-  * @api {get} /services/v1/attitude/:vehicleId/:numberOfItems  attitude by vehicleId/numberOfItems
+  * @api {get} /services/v1/attitude/:vId/:nLimit  attitude by vehicleId/number of Items
   * @apiVersion 0.1.0
   * @apiName getAttitude(vehicleId, numberOfItems)
   * @apiDescription return attitude data points by vehicleId limited by numberOfItems
@@ -2242,7 +2242,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
     });
 
  /**
-  * @api {get} /services/v1/attitude/:vehicleId/:fromTime/:toTime attitude by vehicleId/from/to
+  * @api {get} /services/v1/attitude/:vId/:fromTS/:toTS attitude by vehicleId/from/to
   * @apiVersion 0.1.0
   * @apiName getAttitude(vehicleId, fromTime, toTime)
   * @apiDescription return attitude data points from time/to time by vehicleId
@@ -2350,7 +2350,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   });
 
 /**
-  * @api {get} /services/v1/position/:vehicleId/:numberOfItems  position by vehicleId/numberOfItems
+  * @api {get} /services/v1/position/:vId/:nLimit  position by vehicleId/number of Items
   * @apiVersion 0.1.0
   * @apiName getPosition(vehicleId, numberOfItems)
   * @apiDescription return position data points by vehicleId limited by numberOfItems
@@ -2410,7 +2410,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   });
 
 /**
-  * @api {get} /services/v1/position/:vehicleId/:fromTime/:toTime  position by vehicleId/from/to
+  * @api {get} /services/v1/position/:vId/:fromTS/:toTS  position by vehicleId/from/to
   * @apiVersion 0.1.0
   * @apiName getPosition(vehicleId, fromTime, toTime)
   * @apiDescription return position data points from time/to time by vehicleId
@@ -2515,7 +2515,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   });
 
 /**
-  * @api {get} /services/v1/vehicle/:vehicleId/:numberOfItems  vehicle by vehicleId/numberOfItems
+  * @api {get} /services/v1/vehicle/:vId/:nLimit  vehicle by vehicleId/number of Items 
   * @apiVersion 0.1.0
   * @apiName getVehicle(vehicleId, numberOfItems)
   * @apiDescription return vehicle data points by vehicleId limited by numberOfItems
@@ -2576,7 +2576,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   })
 
 /**
-  * @api {get} /services/v1/vehicle/:vehicleId/:fromTime/:toTime  vehicle by vehicleId/from/to
+  * @api {get} /services/v1/vehicle/:vId/:fromTS/:toTS  vehicle by vehicleId/from/to
   * @apiVersion 0.1.0
   * @apiName getVegucke(vehicleId, fromTime, toTime)
   * @apiDescription return vehicle data points from time/to time by vehicleId
@@ -2633,7 +2633,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
             "vehicleId": vehicleId, "fromTS": fromTS, "toTS": toTS
           });
         } else {
-          return res.status(200),send({"status": 200, "message": "retrieve all vehicle data points", 
+          return res.status(200).send({"status": 200, "message": "retrieve all vehicle data points", 
             "vehicleId": vehicleId, "fromTS": fromTS, "toTS": toTS,
             "data": data} );
         }
@@ -2681,7 +2681,7 @@ app.get('/services/v1/orbit', function(req, res) {
 });
 
 /**
-  * @api {get} /services/v1/orbit/:vehicleId/:numberOfItems  orbit by vehicleId/numberOfItems
+  * @api {get} /services/v1/orbit/:vId/:nLimit  orbit by vehicleId/number of Items
   * @apiVersion 0.1.0
   * @apiName getOrbit
   * @apiDescription return all orbit trajectory data points by vehicleId, limited by numberOfItems
@@ -2741,7 +2741,7 @@ app.get('/services/v1/orbit/:vId/:nLimit', function(req, res) {
   })
 
 /**
-  * @api {get} /services/v1/orbit/:vehicleId/:numberOfItems  orbit by vehicleId/numberOfItems
+  * @api {get} /services/v1/orbit/:vId/:fromTS/:toTS  orbit by vehicleId/number of Items
   * @apiVersion 0.1.0
   * @apiName getOrbit(vehicleId, numberOfItems)
   * @apiDescription return orbit data points by vehicleId limited by numberOfItems
