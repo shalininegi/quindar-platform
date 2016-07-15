@@ -58,6 +58,15 @@ This Quindar-platform project provides the platform services to support Quindar 
 * Start NodeJS server, e.g. node server.js
 
 ## Step-by-step installation
+* Pre-requisites
+  - You need to install NodeJS (which comes with Node Package Manager, or npm) on your target host. Refer to https://nodejs.org/en/download/package-manager/ for details.
+  - For example, you can install NodeJS on Windows by downloading the binaries from http://nodejs.org/#download.
+  - You can install NodeJS and npm on Linux by:
+```
+curl --silent --location https://rpm.nodesource.com/setup_6.x | bash -
+sudo yum -y install nodejs
+```
+
 * Git clone the platform project from Github, e.g. git clone https://github.com/audacyDevOps/quindar-platform
 * Install NodeJS depencencies
 ```
