@@ -7,6 +7,10 @@ To test your Quindar platform, you need to seed (aka generate test data for init
 
 generateXXXSeedData.sh <database username> <database password>
 
+## Pre-reqeuisites
+* You need to install mongo shell.
+Refer to https://docs.mongodb.com/manual/mongo/ for details.
+
 ## When to Run
 * After you install Quindar platform, you can change directory to /test/generate, and run the following commands:
 
