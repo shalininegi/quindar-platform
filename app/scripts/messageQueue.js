@@ -21,7 +21,7 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
 
   console.log("/messageQueue.js RabbitMQ API loaded.");
   /**
-  * @api {post} /services/v1/simulation/messaging/attitude/:topic/:numberOfItems  attitude/topic/numberOfItems
+  * @api {post} /services/v1/simulation/messaging/attitude/:topic/:nTimes  attitude/topic/numberOfItems
   * @apiVersion 0.1.0
   * @apiName postAttitudeSimulation(topic, numberOfItems)
   * @apiDescription send to MQ with numberOfItems of attitude data points 
@@ -36,6 +36,11 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   * @apiParam {Number} numberOfItems  number of data elements to return
   *
   * @apiSuccess {array} data array of attitude quaternion q1/q2/q3/q4 data points
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X POST -H "Content-type: application/json" -d '{"_id":"56f312e98caf28f687482b5f","vehicleId":"IBEX","timestamp":1457726400,
+  * "q1":0.651781,"q2":-0.29526,"q3":-0.268266,"q4":0.645009}'
+  *        http://localhost:3000/services/v1/simulation/messaging/attitude/audacy.telemetry.position/3
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -84,7 +89,7 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   });
 
   /**
-  * @api {post} /services/v1/simulation/messaging/position/:topic/:numberOfItems  position/topic/numberOfItems
+  * @api {post} /services/v1/simulation/messaging/position/:topic/:nTimes  position/topic/numberOfItems
   * @apiVersion 0.1.0
   * @apiName postPositionSimulation(topic, numberOfItems)
   * @apiDescription send to MQ with numberOfItems of position data points 
@@ -101,6 +106,11 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   * @apiParam {Number} numberOfItems  number of data elements to return
   *
   * @apiSuccess {array} data array of position data points (x,y,z,vx,vy,vz)
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X POST -H "Content-type: application/json" -d '{"_id":"56f3123e8caf28f687480f42","vehicleId":"IBEX","timestamp":1457640420,"x":236294.1956,
+  * "y":116196.8879,"z":-34379.67682,"vx":-0.675287,"vy":0.508343,"vz":0.434496}'
+  *        http://localhost:3000/services/v1/simulation/messaging/position/audacy.telemetry.position/3
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -149,7 +159,7 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   });
 
   /**
-  * @api {post} /services/v1/simulation/messaging/vehicle/:topic/:numberOfItems  vehicle/topic/numberOfItems
+  * @api {post} /services/v1/simulation/messaging/vehicle/:topic/:nTimes vehicle/topic/numberOfItems
   * @apiVersion 0.1.0
   * @apiName postVehicleSimulation(topic, numberOfItems)
   * @apiDescription send to MQ with numberOfItems of vehicle data points
@@ -170,6 +180,12 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   * @apiParam {Number} deviceId device identifier
   *
   * @apiSuccess {array} data array of vehicle data points from sensors in the satellite , e.g. temperature value, warnHigh, alertHigh
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X POST -H "Content-type: application/json" -d '{"_id":"56f315e98caf28f687483228","vehicleId":"IBEX","timestamp":1457726400,
+  * "value":315,"calibrationFactor":"T = 3*x - 4*x^2 + 2","uom":"Kelvin","alertHigh":330,
+  * "warnHigh":321,"alertLow":280,"warnLow":274,"deviceId":"Battery01Temp"}'
+  *        http://localhost:3000/services/v1/simulation/messaging/vehicle/audacy.telemetry.position/3
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -219,7 +235,7 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   });
 
   /**
-  * @api {post} /services/v1/simulation/messaging/orbit/:topic/:numberOfItems orbit/topic/numberOfItems
+  * @api {post} /services/v1/simulation/messaging/orbit/:topic/:nTimes orbit/topic/numberOfItems
   * @apiVersion 0.1.0
   * @apiName postOrbitSimulation(topic, numberOfItems)
   * @apiDescription send to MQ with numberOfItems of orbit trajectory data points 
@@ -231,6 +247,11 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   * @apiParam {Array}  orbit trajectory array (array of longitutde, latitude)
   *
   * @apiSuccess {array} data array of orbit data points (which are a series of longitude and latitude data points, sometimes like a sine wave)
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X POST -H "Content-type: application/json" -d '{"_id":"56f315e98caf28f687483230","vehicleId":"IBEX","timestamp":1457726400,
+  * "value": [ 10,20...]}'
+  *  http://localhost:3000/services/v1/simulation/messaging/orbit/audacy.telemetry.position/3
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -290,6 +311,11 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   *
   * @apiSuccess {array} data array of attitude quaternion q1/q2/q3/q4 data points
   *
+  * @apiExample {curl} Example usage:
+  * curl -X POST -H "Content-type: application/json" -d '{"_id":"56f312e98caf28f687482b5f","vehicleId":"IBEX","timestamp":1457726400,
+  * "q1":0.651781,"q2":-0.29526,"q3":-0.268266,"q4":0.645009}'
+  *  http://localhost:3000/services/v1/messaging/attitude/audacy.telemetry.position
+  *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
   * {"status":200,"message":"upsert attitude data points",
@@ -339,6 +365,11 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   * @apiParam {Number} vz velocity for z
   *
   * @apiSuccess {array} data array of position data points (x,y,z,vx,vy,vz)
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X POST -H "Content-type: application/json" -d '{"_id":"56f3123e8caf28f687480f42","vehicleId":"IBEX","timestamp":1457640420,"x":236294.1956,
+  * "y":116196.8879,"z":-34379.67682,"vx":-0.675287,"vy":0.508343,"vz":0.434496}'
+  *  http://localhost:3000/services/v1/messaging/position/audacy.telemetry.position
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -393,6 +424,12 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   *
   * @apiSuccess {array} data array of vehicle data points from sensors in the satellite , e.g. temperature value, warnHigh, alertHigh
   *
+  * @apiExample {curl} Example usage:
+  * curl -X POST -H "Content-type: application/json" -d '{"_id":"56f315e98caf28f687483228","vehicleId":"IBEX","timestamp":1457726400,
+  * "value":315,"calibrationFactor":"T = 3*x - 4*x^2 + 2","uom":"Kelvin","alertHigh":330,
+  * "warnHigh":321,"alertLow":280,"warnLow":274,"deviceId":"Battery01Temp"}'
+  *  http://localhost:3000/services/v1/messaging/vehicle/audacy.telemetry.position
+  *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
   *     {"status":200,"message":"retrieve all vehicle data points",
@@ -438,6 +475,11 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
   * @apiParam {Array}  orbit trajectory array (array of longitutde, latitude)
   *
   * @apiSuccess {array} data array of orbit data points (which are a series of longitude and latitude data points, sometimes like a sine wave)
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X POST -H "Content-type: application/json" -d '{"_id":"56f315e98caf28f687483230","vehicleId":"IBEX","timestamp":1457726400,
+  * "value": [ 10,20...] }'
+  *  http://localhost:3000/services/v1/messaging/orbit/audacy.telemetry.position
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK

@@ -16,7 +16,7 @@ module.exports = function(app, secureSocketServer, secureSocketPort, io, syslogg
 
   console.log("/webSocketSSL.js webSocket server SSL loaded.");
   io.on('connection', function(socket) {
-    console.log("socket.io Server connected.")
+    console.log("socket.io Server connected.");
 
     // broadcast telemetry data from sender
     socket.on('position', function(data) {
