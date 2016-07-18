@@ -1,5 +1,5 @@
 # Quindar Platform
-Updated: Jul 14, 2016
+Updated: Jul 18, 2016 by Ray Lai
 
 The Quindar-platform project is the backend module that generates test data for mission operations application (Quindar widgets) to consume. It adopts an API-centric architecture with the integration with WebSockets (for real time data streaming), RabbitMQ messaging (for reliable and resilient transaction handling) and distributed data management.
 
@@ -10,8 +10,8 @@ The overall Quindar project aims to create a modern, browser based, real time da
 
 # Features
 This Quindar-platform project provides the platform services to support Quindar widgetes to consume, e.g.
-* Telemetry data generator - this plugin will generate random data for mission operations application and Quindar widgets (there is separate Ephemeris data generator using GMAT (http://gmatcentral.org/) which will provide real orbit trajectory data points).
-* Data services REST API - read/write events and telemetry data to MongoDB 
+* Telemetry data generator - generates random data for mission operations application and Quindar widgets (there is separate Ephemeris data generator using GMAT (http://gmatcentral.org/) which will provide real orbit trajectory data points). Refer to quindar-gmat (https://github.com/audacyDevOps/quindar-gmat) for details.
+* Data services REST APIs - read/write events and telemetry data to MongoDB 
 * WebSockets server - data streaming of telemetry data
 * RabbitMQ gateway - guaranteed messaging for data generator 
 * REST API documentation generator and API console for testing
@@ -46,20 +46,19 @@ This Quindar-platform project provides the platform services to support Quindar 
 
 
 # Security
-* Always use HTTPS. You can turn on/off different modules (e.g. http) by setting the flag to False in config/.systemSettings.js. It is perfectly acceptable to use http for early development and testing.
-* Credentials.  We have made a small change not to disclose system user credentials which are defined in .systemSettings.js.  Before you run the application, you need to run the build/deploy script buildme.sh, which will install NPM dependencies, and also create a copy of .systemSettings.js based on the template config/systemSettings.js.
-* Access token. We plan to use JSON Web Token for both REST API and webSockets.
+* Always use HTTPS: You can turn on/off different modules (e.g. http) by setting the flag to False in config/.systemSettings.js. It is perfectly acceptable to use http for early development and testing, but not for staging/production.
+* Credentials: We have made a small change not to disclose system user credentials which are defined in .systemSettings.js.  Before you run the application, you need to run the build/deploy script buildme.sh, which will install NPM dependencies, and also create a copy of .systemSettings.js based on the template config/systemSettings.js.
+* Access token: We plan to use JSON Web Token for both REST API and webSockets.
 
-# Installation Guide
-## Overview
-* Git clone the platform project from Github, e.g. git clone https://github.com/audacyDevOps/quindar-platform
-* Install NodeJS dependencies - use buildme.sh to create a /log subfolder for logging, and to install npm packages
-* Create SSL keys and self-signed certificates for NodeJS with HTTPS - use buildssl.sh to create keys under /keys
-* Start NodeJS server, e.g. node server.js
+# How to Install Quindar Platform
+## Pre-requisites
+* You need to install NodeJS on your target host (e.g. laptop, Linux host) first.
 
-## Step-by-step installation
-* Pre-requisites
-  - You need to install NodeJS (which comes with Node Package Manager, or npm) on your target host. Refer to https://nodejs.org/en/download/package-manager/ for details.
+You can refer to the installation instructions under https://nodejs.org/en/download or https://nodejs.org/en/download/package-manager.
+
+* You need "git" binaries installed on your target host. 
+  - Git is pre-installed on MacOS.
+  - On Linux host, you can install Git by "sudo yum install git" (for CentOS, Redhat, Fedora), or "sudo apt-get install git" (for Ubuntu).
   - For example, you can install NodeJS on Windows by downloading the binaries from http://nodejs.org/#download.
   - You can install NodeJS and npm on Linux by:
 ```
@@ -67,17 +66,52 @@ curl --silent --location https://rpm.nodesource.com/setup_6.x | bash -
 sudo yum -y install nodejs
 ```
 
-* Git clone the platform project from Github, e.g. git clone https://github.com/audacyDevOps/quindar-platform
-* Install NodeJS depencencies
+* You need to create a local copy of this project. For example,
 ```
+git clone https://github.com/audacyDevOps/quindar-platform.git
+``` 
+
+## Dependencies
+* AngularJS
+* NodeJS
+
+Once you download the quindar-platform project, you need to run buildme.sh in the example folder to install required module. Refer to the "How to Run the Demo" section for details. 	
+
+## How to Run the Demo
+* After creating a local copy of this project, run the script "buildme.sh" to install NodeJS dependencies and libraries:
+
+```
+cd quindar-platform
 ./buildme.sh
 ```
 
-If you run on Windows, you can run:
+If you use Windows machine, you can run the following commands as an alternative:
 ```
+cd quindar-platform
 npm install
 mkdir -p log
 ```
+
+* Go to the example folder and run server.js to start the HTTP Web server: 
+```
+node server.js
+```
+
+You can also use:
+```
+nodemon server.js
+```
+
+The utility "nodemon" is similar to "node" (HTTP Web server), and it will automatically reload the Web pages whenever any Web page is updated.
+
+* Open a Web browser with the URL http://localhost:3000. You should see a Web page with an administration user interface.
+
+## Verify installation
+* Open your web browser, and enter http://your-host-name:port/verifyMe
+e.g. http://localhost:3000/verifyMe
+
+This should tell you quindar platform is alive.
+
 * If you need to set up SSL, you may want to create your own SSL keys. An example has been created for you under the folder /keys.
   - You can also create a self-signed certificate and SSL keys by running the command "buildssl.sh", which will output the SSL keys under the folder /keys.
 
@@ -88,25 +122,6 @@ mkdir -p log
 
   - This assumes that you have the NPM package "apidoc" installed with root privilege.  You may need to run "buildme.sh" with root privilege if you run into issues of root privilege permission issue.
   - You can access and browse your REST API documentation under the URI /api, e.g. http://localhost:3000/api.
-
-* To run your local instance of platform server, 
-```
-node server.js
-```
-
-Alternatively, you can run:
-```
-nodemon server.js
-```
-
-Open a Web browser with the URL http://localhost:3000 and you should see an admininstration console.
-
-
-## Verify installation
-* Open your web browser, and enter http://your-host-name:port/verifyMe
-e.g. http://localhost:3000/verifyMe
-
-This should tell you quindar platform is alive.
 
 ## Discovering Quindar platform REST API
 * Open your web browser, and enter http://your-host-name:port/api to list the REST APIs available
@@ -131,10 +146,10 @@ The smoke test will run a quick automated test of each REST API.  It can quickly
 * automatedTest-log-YYYY-MM-DD.log - a list of tests with successful results.
 * automatedTest-err-YYYY-MM-DD.log - a list of tests that failed.
 
-# For More Information
+# Additional Information
 * For license (terms of use), please refer to the file license.md.
 * For Quindar widgets, please refer to https://github.com/audacyDevOps/quindar-angular for details.
-* If you want to contribute, or to extend the framework, you may want to refer to the "How to Contribute" document (contributing.md).
+* To contribute, or to extend the framework, you may want to refer to the "How to Contribute" document (contributing.md).
 * For developers who want to modify or extend the framework, they may start with development guidelines (e.g. coding style, testing checklist) document in the contributing.md, and also additional checklists under the /docs folder. 
 * The document features.md outlines the technical features and a list of widgets.
 * The document frameworkDesign.md provides a high level summary of the software architecture.
