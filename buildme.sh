@@ -10,5 +10,6 @@ if [ -d "log" ]; then
 else
    echo "...creating /log subfolder"
    mkdir log
+   touch log/.verifyMeSystemAccess
 fi
 echo "...complete"
