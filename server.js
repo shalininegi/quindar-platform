@@ -45,14 +45,14 @@ var sslOptions = {
 
 // logging
 //app.use(syslogger('dev')); // log every request to the console
-var logDirectory = __dirname + '/log'
+var logDirectory = __dirname + '/log';
 var accessLogStream = FileStreamRotator.getStream({
   date_format: 'YYYYMMDD',
   filename: logDirectory + '/access-%DATE%.log',
   frequency: 'daily',
   verbose: false
-})
-app.use(syslogger('combined', {stream: accessLogStream}))
+});
+app.use(syslogger('combined', {stream: accessLogStream}));
 
 app.use(cookieParser()); // read cookies (needed for auth)
 
