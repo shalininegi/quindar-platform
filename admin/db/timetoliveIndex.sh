@@ -16,7 +16,7 @@ else
   DBPORT=11001
   
   mongo -u $1 -p $2 --authenticationDatabase $MONGOADMINDB --host $DBHOST --port $DBPORT << leftcurlybracket
-  use telemetry0
+  use telemetry
   db.postion.dropIndex("autoPurge");
   db.position.createIndex({ "createdAt": 1 }, { background: true, name: "autoPurge", expireAfterSeconds: 15552000 });
   exit
