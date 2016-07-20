@@ -1,7 +1,7 @@
 // Program: coreAdmin.js 
 // Purpose: Data API to write telemetry data into MongoDB
 // Author:  Ray Lai
-// Updated: Jul 14, 2016
+// Updated: Jul 11, 2016
 // License: MIT license
 //
 module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, helper) {
@@ -95,10 +95,10 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       };   
       return res.status(200).send( {"status": 200, "message": "insert attitude data points", "data": attitudeData} );
     });
-  })
+  });
 
   /**
-  * @api {post} /services/v1/simulation/attitude/:nTimes  attitude by vehicleId/nTimes
+  * @api {post} /services/v1/simulation/attitude/:nTimes  attitude by vehicleId/numberOfItems
   * @apiVersion 0.1.0
   * @apiName postAttitude(vehicleId, numberOfItems)
   * @apiDescription upsert attitude data points by vehicleId limited by numberOfItems
@@ -112,6 +112,11 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   * @apiParam {Number} numberOfItems  number of data elements to return
   *
   * @apiSuccess {array} data array of attitude quaternion q1/q2/q3/q4 data points
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X POST -H "Content-type: application/json" -d '{"vehicleId":"IBEX",
+  *        "timestamp":1457726400,"q1":0.651781,"q2":-0.29526,"q3":-0.268266,"q4":0.645009}'
+  *        http://localhost:3000/services/v1/simulation/attitude/3
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -228,7 +233,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   })
 
   /**
-  * @api {post} /services/v1/simulation/position/:nTimes  position by vehicleId/nTimes
+  * @api {post} /services/v1/simulation/position/:nTimes  position by vehicleId/numberOfItems
   * @apiVersion 0.1.0
   * @apiName postPosition(vehicleId, numberOfItems)
   * @apiDescription upsert position data points by vehicleId limited by numberOfItems
@@ -244,6 +249,11 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   * @apiParam {Number} numberOfItems  number of data elements to return
   *
   * @apiSuccess {array} data array of position data points (x,y,z,vx,vy,vz)
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X POST -H "Content-type: application/json" -d '{"vehicleId":"IBEX","timestamp":1457640420,"x":236294.1956,
+  * "y":116196.8879,"z":-34379.67682,"vx":-0.675287,"vy":0.508343,"vz":0.434496}'
+  *        http://localhost:3000/services/v1/simulation/position/2
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -364,7 +374,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   })
 
   /**
-  * @api {post} /services/v1/simulation/vehicle/:nTimes  vehicle by vehicleId/nTimes
+  * @api {post} /services/v1/simulation/vehicle/:nTimes  vehicle by vehicleId/numberOfItems
   * @apiVersion 0.1.0
   * @apiName postVehicle(vehicleId, numberOfItems)
   * @apiDescription upsert vehicle data points by vehicleId limited by numberOfItems
@@ -384,6 +394,12 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   * @apiParam {Number} deviceId device identifier
   *
   * @apiSuccess {array} data array of vehicle data points from sensors in the satellite , e.g. temperature value, warnHigh, alertHigh
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X POST -H "Content-type: application/json" -d '{"_id":"56f315e98caf28f687483228","vehicleId":"IBEX","timestamp":1457726400,
+  * "value":315,"calibrationFactor":"T = 3*x - 4*x^2 + 2","uom":"Kelvin","alertHigh":330,
+  * "warnHigh":321,"alertLow":280,"warnLow":274,"deviceId":"Battery01Temp"}]}'
+  *        http://localhost:3000/services/v1/simulation/vehicle/3
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -495,11 +511,11 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
       // if no error
       return res.status(200).send( {"status": 200, "message": "retrieve all orbit data points", "data": orbitData} );
     });
-  })
+  });
 
 
   /**
-  * @api {post} /services/v1/simulation/orbit/:nTimes  orbit by vehicleId/nTimes
+  * @api {post} /services/v1/simulation/orbit/:nTimes  orbit by vehicleId/numberOfItems
   * @apiVersion 0.1.0
   * @apiName postOrbit
   * @apiDescription upserts orbit trajectory data points by vehicleId, limited by numberOfItems
@@ -510,6 +526,11 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   * @apiParam {Array}  orbit trajectory array (array of longitutde, latitude)
   *
   * @apiSuccess {array} data array of orbit data points (which are a series of longitude and latitude data points, sometimes like a sine wave)
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X POST -H "Content-type: application/json" -d '{"data":[{"_id":"56f315e98caf28f687483230","vehicleId":"IBEX","timestamp":1457726400,
+  * "value": [ 10,20...]}'
+  *        http://localhost:3000/services/v1/simulation/orbit/6
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -583,6 +604,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   * @apiSuccess {boolean} success
   *
+  * @apiExample {curl} Example usage:
+  * curl -X POST -H "Content-type: application/json" http://localhost:3000/services/v1/admin/cleanup/attitude
+  *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
   *     {"status":200,"message":"collection dropped"}
@@ -618,6 +642,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   *
   * @apiSuccess {boolean} success
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X POST -H "Content-type: application/json" http://localhost:3000/services/v1/admin/cleanup/position
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -655,6 +682,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   * @apiSuccess {boolean} success
   *
+  * @apiExample {curl} Example usage:
+  * curl -X POST -H "Content-type: application/json" http://localhost:3000/services/v1/admin/cleanup/vehicle
+  *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
   *     {"status":200,"message":"collection dropped"}
@@ -691,6 +721,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   * @apiSuccess {boolean} success
   *
+  * @apiExample {curl} Example usage:
+  * curl -X POST -H "Content-type: application/json" http://localhost:3000/services/v1/admin/cleanup/orbit
+  *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
   *     {"status":200,"message":"collection dropped"}
@@ -726,6 +759,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   *
   * @apiSuccess {boolean} success
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/attitude/total/all
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -773,6 +809,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   * @apiSuccess {boolean} success
   *
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/attitude/total/IBEX
+  *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
   *     {"status":200,"message":"Quindar attitude metrics updated successfully."}
@@ -817,6 +856,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   *
   * @apiSuccess {boolean} success
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/attitude/total/IBEX/14258020640/1425600632
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -880,6 +922,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   * @apiSuccess {boolean} success
   *
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/position/total/all
+  *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
   *     {"status":200,"message":"Quindar position metrics updated successfully."}
@@ -925,6 +970,10 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   * @apiSuccess {boolean} success
   *
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/position/total/IBEX
+  *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
   *     {"status":200,"message":"Quindar position metrics updated successfully."}
@@ -969,6 +1018,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   *
   * @apiSuccess {boolean} success
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/position/total/IBEX/1425806200/142580678
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -1032,6 +1084,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   * @apiSuccess {boolean} success
   *
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/vehicle/total/all
+  *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
   *     {"status":200,"message":"Quindar vehicle metrics updated successfully."}
@@ -1077,6 +1132,10 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   * @apiSuccess {boolean} success
   *
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/vehicle/total/IBEX
+  *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
   *     {"status":200,"message":"Quindar vehicle metrics updated successfully."}
@@ -1121,6 +1180,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   *
   * @apiSuccess {boolean} success
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/vehicle/total/IBEX/1425806245/1425802076
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -1184,6 +1246,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   * @apiSuccess {boolean} success
   *
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/orbit/total/all
+  *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
   *     {"status":200,"message":"Quindar orbit metrics updated successfully."}
@@ -1229,6 +1294,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   * @apiSuccess {boolean} success
   *
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/orbit/total/IBEX
+  *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
   *     {"status":200,"message":"Quindar orbit metrics updated successfully."}
@@ -1273,6 +1341,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   *
   * @apiSuccess {boolean} success
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/orbit/total/IBEX/1425802002/14256064289
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -1333,6 +1404,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   * @apiSuccess {boolean} success
   *
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/trend/attitude/all
+  *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
   *     {"status":200,"message":"Quindar attitude trending metrics updated successfully."}
@@ -1372,7 +1446,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
 
    // --- Data Aggregation framework example
   /**
-  * @api {get} /services/v1/admin/metrics/trend/attitude/nLimit attitude usage trend nLimit
+  * @api {get} /services/v1/admin/metrics/trend/attitude/:nLimit attitude usage trend nLimit
   * @apiVersion 0.1.0
   * @apiName getMetricsAttitudeTrendAll
   * @apiDescription get attitude collection metrics trend in ascending order
@@ -1380,6 +1454,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   *
   * @apiSuccess {boolean} success
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/trend/attitude/4
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -1437,6 +1514,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   * @apiSuccess {boolean} success
   *
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/trend/attitude/by/IBEX
+  *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
   *     {"status":200,"message":"Quindar attitude trending metrics by vehicleId updated successfully."}
@@ -1486,6 +1566,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   *
   * @apiSuccess {boolean} success
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/trend/attitude/IBEX/2
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -1543,6 +1626,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   * @apiSuccess {boolean} success
   *
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/trend/position/all
+  *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
   *     {"status":200,"message":"Quindar attitude trending metrics updated successfully."}
@@ -1587,6 +1673,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   *
   * @apiSuccess {boolean} success
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/trend/position/5
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -1633,7 +1722,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   });
 
   /**
-  * @api {get} /services/v1/admin/metrics/trend/position/by/:vehicleId positionusage trend by vehicleId
+  * @api {get} /services/v1/admin/metrics/trend/position/by/:vehicleId position usage trend by vehicleId
   * @apiVersion 0.1.0
   * @apiName getMetricsPositionTrendByVehicleId
   * @apiDescription get position collection metrics trend by vehicleId  in ascending order
@@ -1641,6 +1730,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   *
   * @apiSuccess {boolean} success
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/trend/position/by/IBEX
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -1688,6 +1780,8 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   *
   * @apiSuccess {boolean} success
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/trend/position/IBEX/2
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -1745,6 +1839,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   * @apiSuccess {boolean} success
   *
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/trend/vehicle/all
+  *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
   *     {"status":200,"message":"Quindar vehicle trending metrics updated successfully."}
@@ -1789,6 +1886,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   *
   * @apiSuccess {boolean} success
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/trend/vehicle/5
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -1844,6 +1944,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   * @apiSuccess {boolean} success
   *
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/trend/vehicle/by/IBEX
+  *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
   *     {"status":200,"message":"Quindar vehicle trending metrics by vehicleId updated successfully."}
@@ -1891,6 +1994,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   *
   * @apiSuccess {boolean} success
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/trend/vehicle/IBEX/2
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -1949,6 +2055,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   * @apiSuccess {boolean} success
   *
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/trend/orbit/all
+  *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
   *     {"status":200,"message":"Quindar orbit trending metrics updated successfully."}
@@ -1993,6 +2102,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   *
   * @apiSuccess {boolean} success
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/trend/orbit/6
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -2048,6 +2160,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   * @apiSuccess {boolean} success
   *
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/trend/orbit/by/IBEX
+  *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
   *     {"status":200,"message":"Quindar orbit trending metrics by vehicleId updated successfully."}
@@ -2094,6 +2209,9 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   *
   *
   * @apiSuccess {boolean} success
+  *
+  * @apiExample {curl} Example usage:
+  * curl -X GET http://localhost:3000/services/v1/admin/metrics/trend/orbit/IBEX/6
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -2184,7 +2302,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   });
 
   /**
-  * @api {get} /services/v1/attitude/:vId/:nLimit  attitude by vehicleId/number of Items
+  * @api {get} /services/v1/attitude/:vId/:nLimit  attitude by vehicleId/numberOfItems
   * @apiVersion 0.1.0
   * @apiName getAttitude(vehicleId, numberOfItems)
   * @apiDescription return attitude data points by vehicleId limited by numberOfItems
@@ -2350,7 +2468,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   });
 
 /**
-  * @api {get} /services/v1/position/:vId/:nLimit  position by vehicleId/number of Items
+  * @api {get} /services/v1/position/:vId/:nLimit  position by vehicleId/numberOfItems
   * @apiVersion 0.1.0
   * @apiName getPosition(vehicleId, numberOfItems)
   * @apiDescription return position data points by vehicleId limited by numberOfItems
@@ -2515,7 +2633,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
   });
 
 /**
-  * @api {get} /services/v1/vehicle/:vId/:nLimit  vehicle by vehicleId/number of Items 
+  * @api {get} /services/v1/vehicle/:vId/:nLimit vehicle by vehicleId/numberOfItems
   * @apiVersion 0.1.0
   * @apiName getVehicle(vehicleId, numberOfItems)
   * @apiDescription return vehicle data points by vehicleId limited by numberOfItems
@@ -2633,7 +2751,7 @@ module.exports = function(app, bodyParser, mongoose, fs, syslogger, logger, help
             "vehicleId": vehicleId, "fromTS": fromTS, "toTS": toTS
           });
         } else {
-          return res.status(200).send({"status": 200, "message": "retrieve all vehicle data points", 
+          return res.status(200),send({"status": 200, "message": "retrieve all vehicle data points", 
             "vehicleId": vehicleId, "fromTS": fromTS, "toTS": toTS,
             "data": data} );
         }
@@ -2681,7 +2799,7 @@ app.get('/services/v1/orbit', function(req, res) {
 });
 
 /**
-  * @api {get} /services/v1/orbit/:vId/:nLimit  orbit by vehicleId/number of Items
+  * @api {get} /services/v1/orbit/:vId/:nLimit  orbit by vehicleId/numberOfItems
   * @apiVersion 0.1.0
   * @apiName getOrbit
   * @apiDescription return all orbit trajectory data points by vehicleId, limited by numberOfItems
@@ -2741,7 +2859,7 @@ app.get('/services/v1/orbit/:vId/:nLimit', function(req, res) {
   })
 
 /**
-  * @api {get} /services/v1/orbit/:vId/:fromTS/:toTS  orbit by vehicleId/number of Items
+  * @api {get} /services/v1/orbit/:vId/:fromTS/:toTS  orbit by vehicleId/numberOfItems
   * @apiVersion 0.1.0
   * @apiName getOrbit(vehicleId, numberOfItems)
   * @apiDescription return orbit data points by vehicleId limited by numberOfItems
