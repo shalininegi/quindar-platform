@@ -3,6 +3,7 @@
 # Purpose: add time to live index so that MongoDB can auto-purge old data (> 3 months)
 # Author:  Ray Lai
 # Updated: Jun 30, 2016
+# Remark:  running this script will auto purge old records after 6 months (15552000 seconds)
 #
 if [ $# -eq 0 ]; then
   echo "Syntax: timetoliveIndex.sh <MongoDB username> <MongoDB password>"
@@ -17,7 +18,7 @@ else
   mongo -u $1 -p $2 --authenticationDatabase $MONGOADMINDB --host $DBHOST --port $DBPORT << leftcurlybracket
   use telemetry0
   db.postion.dropIndex("autoPurge");
-  db.position.createIndex({ "createdAt": 1 }, { background: true, name: "autoPurge", expireAfterSeconds: 5 });
+  db.position.createIndex({ "createdAt": 1 }, { background: true, name: "autoPurge", expireAfterSeconds: 15552000 });
   exit
 leftcurlybracket
 fi
