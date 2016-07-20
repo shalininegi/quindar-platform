@@ -46,8 +46,8 @@ This Quindar-platform project provides the platform services to support Quindar 
 
 
 # Security
-* Always use HTTPS: You can turn on/off different modules (e.g. http) by setting the flag to False in config/.systemSettings.js. It is perfectly acceptable to use http for early development and testing, but not for staging/production.
-* Credentials: We have made a small change not to disclose system user credentials which are defined in .systemSettings.js.  Before you run the application, you need to run the build/deploy script buildme.sh, which will install NPM dependencies, and also create a copy of .systemSettings.js based on the template config/systemSettings.js.
+* Always use HTTPS: You can turn on/off different modules (e.g. http) by setting the flag to False in config/systemSettings.js. It is perfectly acceptable to use http for early development and testing, but not for staging/production.
+* Credentials: Always change your username and password in the config/systemSettings.js.
 * Access token: We plan to use JSON Web Token for both REST API and webSockets.
 
 # How to Install Quindar Platform
