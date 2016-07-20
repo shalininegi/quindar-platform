@@ -515,8 +515,12 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
 
   // retrieve message queue config, e.g. endpoints
   function initiate(mqAccessConfig) {
+    // 7/20/2016 RayL: fix the confusion: mqAccessConfig.queue != virtual host
+    /**
     serverEndpoint = "amqp://" + mqAccessConfig.user + ":" + mqAccessConfig.pass + "@" 
        + mqAccessConfig.server + "/" + mqAccessConfig.queue;
+    **/
+    serverEndpoint = mqAccessConfig.serverEndpoint;
     console.log("server endpoint = " + serverEndpoint);
   }
 

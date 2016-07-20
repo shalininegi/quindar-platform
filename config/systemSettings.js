@@ -25,8 +25,7 @@ module.exports = {
   'mqConfig': {
     'user': 'audacyapp',
     'pass': 'quindar',
-    'server': 'data04.audacy.space',
-    'queue': 'develop'
+    'server': 'data04.audacy.space'
   },
   // when starting NodeJS server, we can disable/enable modules
   'serverStartupOptions': {
