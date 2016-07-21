@@ -520,7 +520,7 @@ module.exports = function(app, bodyParser, fs, syslogger, logger, helper) {
     serverEndpoint = "amqp://" + mqAccessConfig.user + ":" + mqAccessConfig.pass + "@" 
        + mqAccessConfig.server + "/" + mqAccessConfig.queue;
     **/
-    serverEndpoint = mqAccessConfig.serverEndpoint;
+    serverEndpoint = systemSettings.serverEndpoint;
     console.log("server endpoint = " + serverEndpoint);
   }
 
