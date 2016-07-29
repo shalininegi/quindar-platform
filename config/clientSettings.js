@@ -1,3 +1,3 @@
 {
-  serviceHost: "http://platform.audacy.space:7902"
+  serviceHost: "http://devops02.audacy.space:4101"
 }

@@ -9,7 +9,7 @@
 'use strict';
 app.factory('adminFactory', ['$http', '$q', function($http, $q) {
   var admFactory = {};
-  const serviceHost = 'http://platform.audacy.space:7902';
+  const serviceHost = 'http://devops02.audacy.space:4101';
 
 /** 7/20/2016 RayL: unsuccessful changes to replace serviceHost endpoint variable by a file
 
