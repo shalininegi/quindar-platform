@@ -12,7 +12,7 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
 
   // 8/4/2016 RayL: test reading server endpoint from config file
   var serviceHost = ""; // default
-  $http.get('/config/clientSettings.js').then((res)=>{
+  $http.get('/config/platformFactorySettings.js').then((res)=>{
      serviceHost = res.data.serviceHost;
      console.log("...reading clientSettings.js for factory. serviceHost=" + serviceHost);
   });
