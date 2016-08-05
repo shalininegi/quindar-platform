@@ -1,3 +1,3 @@
 {
-  "serviceHost": "http://localhost:3000"
+  "serviceHost": "http://devops02.audacy.space:4101"
 }
