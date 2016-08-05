@@ -1,7 +1,7 @@
 module.exports = {
-  'dbUrl': 'mongodb://data01.audacy.space:11001/telemetry',
+  'dbUrl': 'mongodb://data02.audacy.space:3101/telemetry',
   'dbOptions': {
-    'user': 'audacyapp',
+    'user': 'audacy',
     'pass': 'quindar',
     'auth': {
       'authdb': 'admin'
@@ -21,11 +21,11 @@ module.exports = {
   'exchange':'quindarExchange04',
   'exchangeType': 'topic',
   'serverURL': 'data04.audacy.space/develop',
-  'serverEndpoint': 'amqp://audacyapp:quindar@data04.audacy.space/develop',
+  'serverEndpoint': 'amqp://audacy:quindar@data02.audacy.space/develop',
   'mqConfig': {
-    'user': 'audacyapp',
+    'user': 'audacy',
     'pass': 'quindar',
-    'server': 'data04.audacy.space'
+    'server': 'data02.audacy.space'
   },
   // when starting NodeJS server, we can disable/enable modules
   'serverStartupOptions': {

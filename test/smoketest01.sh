@@ -3,8 +3,9 @@
 # Purpose: automated test using curl
 # Author:  Ray Lai
 # Updated: Jul 11, 2016
-#
-SERVERENDPOINT='http://platform.audacy.space:7902'
+# Remark:  make sure you change SERVERENDPOINT to the right URL
+#SERVERENDPOINT='http://localhost:3000'
+SERVERENDPOINT='http://devops02.audacy.space:4101'
 NOW=$(date +"%Y-%m-%d")
 TESTOKRESULT="automatedTest-log-$NOW.log"
 TESTERR="automatedTest-err-$NOW.log"

@@ -9,27 +9,13 @@
 'use strict';
 app.factory('adminFactory', ['$http', '$q', function($http, $q) {
   var admFactory = {};
-  const serviceHost = 'http://platform.audacy.space:7902';
 
-/** 7/20/2016 RayL: unsuccessful changes to replace serviceHost endpoint variable by a file
-
-  var serviceHostJsonFile = "../config/clientSettings.js";
-  const defaultServiceHost = 'http://platform.audacy.space:7902';
-
-  // read service host
-  admFactory.getServiceHost = $http.get(serviceHostJsonFile)
-    .then(function(response){
-      if ((!response.data) || (0 === response.data.length)) {
-        serviceHost = defaultServiceHost;
-      } else {
-        serviceHost = response.data.serviceHost;
-      };
-      return response.data;
-    });
-
-  var serviceHost = admFactory.getServiceHost();
-  console.log("Service Host from clientSettings.js=" + serviceHost);
-**/
+  // 8/4/2016 RayL: test reading server endpoint from config file
+  var serviceHost = ""; // default
+  $http.get('/config/clientSettings.js').then((res)=>{
+     serviceHost = res.data.serviceHost;
+     console.log("...reading clientSettings.js for factory. serviceHost=" + serviceHost);
+  });
 
   // ------ Category:  random data generation ----------
 
@@ -366,7 +352,7 @@ app.factory('adminFactory', ['$http', '$q', function($http, $q) {
     var serviceEndpoint = serviceHost + '/services/v1/simulation/attitude/' + nTimes;
     return $http.post(serviceEndpoint)
     .success(function(response) {
-      //console.log("admFactory.generateAttitudeSimulated() response.data=" + JSON.stringify(response));
+      console.log("admFactory.generateAttitudeSimulated() response.data=" + JSON.stringify(response));
     })
     .error(function(err) {
        console.error('Sorry, Quindar platform cannot serve admFactory.generateAttitudeSimulated() immediately. Please retry later.');
